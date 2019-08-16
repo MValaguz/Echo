@@ -1,10 +1,8 @@
-rmdir o:\Install\MChat\ /S /Q
-echo Creo un unico file seguendo le specifiche di MChat.Spec
-pyinstaller --windowed --onefile --icon=..\\icons\MChat.ico --clean MChat.spec
-cd dist
-xcopy  MChat.exe o:\Install\MChat\ /S /H /I
-cd ..
+echo on
 rmdir build /S /Q
 rmdir dist /S /Q
-echo FILE ESEGUIBILE MCHAT.EXE CREATO IN o:\Install\MChat!
+echo I create a unique file using the MChat.spec file 
+pyinstaller --windowed --onefile --icon=..\\icons\MChat.ico --clean MChat.spec
+rmdir build /S /Q
+echo I CREATED THE MCHAT.EXE FILE IN "DIST" DIRECTORY
 pause
