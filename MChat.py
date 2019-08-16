@@ -224,8 +224,9 @@ class class_tools_chat(object):
         self.actionConnect.setIcon(icon1)
         self.actionConnect.setObjectName("actionConnect")
         self.actionConnect.setText("Connect")
-        self.actionConnect.setToolTip("Connect to a server PC as a client")
-        self.actionCreate_Server = QtWidgets.QAction(MainWindow)
+        self.actionConnect.setToolTip("Connect to a server PC as a client")        
+        
+        self.actionCreate_Server = QtWidgets.QAction(MainWindow)                
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("icons/create_server.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCreate_Server.setIcon(icon2)
@@ -269,7 +270,15 @@ class class_tools_chat(object):
         self.actionHelp.setObjectName("actionHelp")
         self.actionHelp.setText("Help")
         self.actionHelp.setToolTip("Help")
-
+        
+        self.actionOptions = QtWidgets.QAction(MainWindow)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("icons/gears.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionOptions.setIcon(icon7)
+        self.actionOptions.setObjectName("actionOptions")
+        self.actionOptions.setText("Options")
+        self.actionOptions.setToolTip("Options")        
+        
         self.toolBar.addAction(self.actionCreate_Server)
         self.toolBar.addSeparator()
         self.toolBar.addWidget(self.nomi_pc)
@@ -279,6 +288,7 @@ class class_tools_chat(object):
         self.toolBar.addAction(self.actionReduce_to_systray)
         self.toolBar.addAction(self.actionProgram_Info)
         self.toolBar.addAction(self.actionHelp)
+        self.toolBar.addAction(self.actionOptions)
         # collego logicamente l'etichetta con item di testo (per avere l'effetto responsive dell'interfaccia)
         self.label.setBuddy(self.o_messaggi)
         self.label_2.setBuddy(self.e_invia_messaggio)
