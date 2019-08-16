@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>261</width>
+    <height>318</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MChat 1.1</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>C:/Users/MValaguz/.designer/backup/icon/MChat.ico</normaloff>C:/Users/MValaguz/.designer/backup/icon/MChat.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Messages:</string>
+      </property>
+      <property name="buddy">
+       <cstring>o_messaggi</cstring>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="o_messaggi">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Send:</string>
+      </property>
+      <property name="buddy">
+       <cstring>e_invia_messaggio</cstring>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="e_invia_messaggio"/>
+    </item>
+    <item>
+     <widget class="QComboBox" name="nomi_pc"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionCreate_Server"/>
+   <addaction name="actionConnect"/>
+   <addaction name="separator"/>
+   <addaction name="actionClear_my_chat"/>
+   <addaction name="actionReduce_to_systray"/>
+   <addaction name="actionProgram_Info"/>
+   <addaction name="actionHelp"/>
+  </widget>
+  <action name="actionConnect">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/connect.gif</normaloff>icon/connect.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect to a server PC as a client</string>
+   </property>
+  </action>
+  <action name="actionCreate_Server">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/create_server.gif</normaloff>icon/create_server.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Create Server</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a server connection on my own computer</string>
+   </property>
+  </action>
+  <action name="actionClear_my_chat">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/clear.gif</normaloff>icon/clear.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Clear my chat</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear my chat (F1 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="actionReduce_to_systray">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/systray.gif</normaloff>icon/systray.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Reduce to systray</string>
+   </property>
+   <property name="toolTip">
+    <string>Reduce to systray</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="actionProgram_Info">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/info.gif</normaloff>icon/info.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Program Info</string>
+   </property>
+   <property name="toolTip">
+    <string>Program Info</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/help.gif</normaloff>icon/help.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>toolBar</sender>
+   <signal>actionTriggered(QAction*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slot_Connessione()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>102</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>e_invia_messaggio</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slot_Connessione()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slot_Connessione()</slot>
+ </slots>
+</ui>
