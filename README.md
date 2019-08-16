@@ -8,3 +8,7 @@ List of files:
 - icons: icons dir
 - help: help dir
 - compile: scripts for compile the program in Windows OS
+
+System requirements:
+- Python 3.6 or highter
+- PyQt5 gui library
