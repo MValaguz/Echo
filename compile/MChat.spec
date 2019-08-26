@@ -9,7 +9,7 @@ a = Analysis(['..\\MChat.py'],
              datas=[
 					('..\\icons\\*.*','icons'),
 					('..\\help\\*.*','help'),
-					('..\\elenco_pc.txt','.')
+					('..\\computer_list.txt','.')
 			       ],
              hiddenimports=[],
              hookspath=[],
