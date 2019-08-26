@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>139</height>
+    <width>384</width>
+    <height>178</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>110</y>
+     <x>290</x>
+     <y>130</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -33,29 +33,29 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>30</y>
-     <width>58</width>
-     <height>60</height>
+     <y>10</y>
+     <width>100</width>
+     <height>118</height>
     </rect>
    </property>
    <property name="text">
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../icon/MChat.ico</pixmap>
+    <pixmap>../icons/qt.gif</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>20</y>
+     <x>120</x>
+     <y>30</y>
      <width>214</width>
      <height>88</height>
     </rect>
    </property>
    <property name="text">
-    <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MChat&lt;/p&gt;&lt;p&gt;is a little chat program for ethernet network.&lt;/p&gt;&lt;p&gt;Developed by Marco Valaguzza &lt;/p&gt;&lt;p&gt;2019&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MChat&lt;/p&gt;&lt;p&gt;is a little chat program for ethernet network.&lt;/p&gt;&lt;p&gt;Developed by Marco Valaguzza (C) 2019&lt;/p&gt;&lt;p&gt;with Phyton and QT library&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>

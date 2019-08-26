@@ -183,9 +183,8 @@ class class_tools_chat(object):
         MainWindow.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons/MChat.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        MainWindow.setWindowIcon(icon)
-        self.nome_finestra = u"MChat 1.1"
-        MainWindow.setWindowTitle(self.nome_finestra)
+        MainWindow.setWindowIcon(icon)        
+        MainWindow.setWindowTitle("MChat 1.1")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)

@@ -1,1 +1,1 @@
-pyuic5 -x mchat_ui.ui -o mchat_ui.py
+pyuic5 -x dialog.ui -o dialog.py

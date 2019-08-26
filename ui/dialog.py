@@ -1,28 +1,48 @@
-import sys
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import QSize    
+# -*- coding: utf-8 -*-
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        QMainWindow.__init__(self)
+# Form implementation generated from reading ui file 'dialog.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.3
+#
+# WARNING! All changes made in this file will be lost!
 
-        self.setMinimumSize(QSize(300, 200))    
-        self.setWindowTitle("PyQt messagebox example - pythonprogramminglanguage.com") 
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-        pybutton = QPushButton('Show messagebox', self)
-        pybutton.clicked.connect(self.clickMethod)
-        pybutton.resize(200,64)
-        pybutton.move(50, 50)        
+class Ui_window_about(object):
+    def setupUi(self, window_about):
+        window_about.setObjectName("window_about")
+        window_about.resize(384, 178)
+        window_about.setWindowTitle("About MChat")
+        self.buttonBox = QtWidgets.QDialogButtonBox(window_about)
+        self.buttonBox.setGeometry(QtCore.QRect(290, 130, 75, 23))
+        self.buttonBox.setOrientation(QtCore.Qt.Vertical)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Close)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QtWidgets.QLabel(window_about)
+        self.label.setGeometry(QtCore.QRect(10, 10, 100, 118))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap("../icons/qt.gif"))
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(window_about)
+        self.label_2.setGeometry(QtCore.QRect(120, 30, 214, 88))
+        self.label_2.setText("<html><head/><body><p>MChat</p><p>is a little chat program for ethernet network.</p><p>Developed by Marco Valaguzza (C) 2019</p><p>with Phyton and QT library</p></body></html>")
+        self.label_2.setObjectName("label_2")
 
-    def clickMethod(self):
-        QMessageBox.about(self, "Title", "Message")
+        self.retranslateUi(window_about)
+        self.buttonBox.accepted.connect(window_about.accept)
+        self.buttonBox.rejected.connect(window_about.reject)
+        QtCore.QMetaObject.connectSlotsByName(window_about)
+
+    def retranslateUi(self, window_about):
+        pass
+
 
 if __name__ == "__main__":
+    import sys
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = MainWindow()
-    mainWin.show()
-    sys.exit( app.exec_() )
+    window_about = QtWidgets.QDialog()
+    ui = Ui_window_about()
+    ui.setupUi(window_about)
+    window_about.show()
+    sys.exit(app.exec_())
 
