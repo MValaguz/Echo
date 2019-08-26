@@ -427,7 +427,7 @@ class class_tools_chat(object):
         if not v_error:
             # try to locate using socket
             soc.listen(1)
-            self.statusbar.showMessage('Waiting for incoming connections...')
+            self.statusbar.showMessage('Waiting for incoming connection (ip address ' + str(self.ip) + ' port 1234)...')
             self.connection, self.addr = soc.accept()
             self.statusbar.showMessage('Received connection from ' + str(self.addr[0]) + ' (' + str(self.addr[1]) + ')')
             time.sleep(1)
