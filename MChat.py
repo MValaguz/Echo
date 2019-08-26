@@ -159,7 +159,7 @@ class ui_window_about(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
         self.label_2.setSizePolicy(sizePolicy)
-        self.label_2.setText("<html><head/><body><p>MChat</p><p>is a little chat program for ethernet network.</p><p>Developed by Marco Valaguzza (C) 2019</p><p>with Phyton and QT library</p></body></html>")
+        self.label_2.setText("<html><head/><body><p>MChat</p><p>is a little chat program for ethernet network.</p><p>Developed by Marco Valaguzza (C) 2019</p><p>with Python and QT library</p></body></html>")
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
         self.buttonBox = QtWidgets.QDialogButtonBox(window_about)

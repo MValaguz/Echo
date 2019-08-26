@@ -46,7 +46,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MChat&lt;/p&gt;&lt;p&gt;is a little chat program for ethernet network.&lt;/p&gt;&lt;p&gt;Developed by Marco Valaguzza (C) 2019&lt;/p&gt;&lt;p&gt;with Phyton and QT library&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MChat&lt;/p&gt;&lt;p&gt;is a little chat program for ethernet network.&lt;/p&gt;&lt;p&gt;Developed by Marco Valaguzza (C) 2019&lt;/p&gt;&lt;p&gt;with Python and QT library&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

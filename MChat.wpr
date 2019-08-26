@@ -461,14 +461,16 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
         133),
         ('ui_window_about|0|.setupUi|0|',
          134)],
-                                'code-line': '        icon = QtGui.QIcon()\r'\
-        '\n',
+                                'code-line': '        self.label_2.setText("'\
+        '<html><head/><body><p>MChat</p><p>is a little chat program for ethe'\
+        'rnet network.</p><p>Developed by Marco Valaguzza (C) 2019</p><p>wit'\
+        'h Python and QT library</p></body></html>")\r\n',
                                 'first-line': 149L,
                                 'folded-linenos': [],
-                                'sel-line': 145L,
-                                'sel-line-start': 6263L,
-                                'selection_end': 6271L,
-                                'selection_start': 6271L,
+                                'sel-line': 161L,
+                                'sel-line-start': 7186L,
+                                'selection_end': 7350L,
+                                'selection_start': 7350L,
                                 'zoom': 0L})],
         'has-focus': True,
         'locked': False},
