@@ -83,9 +83,11 @@ def message_error(p_message):
     """
     msg = QtWidgets.QMessageBox()
     msg.setIcon(QtWidgets.QMessageBox.Critical)
-    msg.setText("Error")
-    msg.setInformativeText(p_message)
-    msg.setWindowTitle("Error")
+    msg.setText(p_message)    
+    msg.setWindowTitle("Error")    
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap("icons/MChat.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)    
+    msg.setWindowIcon(icon)
     msg.exec_()
 
 # --------------------------
