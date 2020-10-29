@@ -37,7 +37,6 @@
 """
 # Librerie sistema
 import os
-import time
 import socket
 import sys
 #from threading import Thread
@@ -128,6 +127,7 @@ class class_mchat_thread(QThread):
             # restituisco il messaggio
             self.signal.emit(message)
 
+
 # ------------------------------------------------
 # CLASSE VISUALIZZAZIONE FINESTRA INFO PROGRAMMA
 # ------------------------------------------------
@@ -203,7 +203,7 @@ class class_tools_chat(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons/MChat.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)        
-        MainWindow.setWindowTitle("MChat 1.1")
+        MainWindow.setWindowTitle("MChat 1.2")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -235,6 +235,8 @@ class class_tools_chat(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         self.toolBar.setWindowTitle("toolBar")
+        # definisco la dimensione delle icone all'interno della toolbar
+        self.toolBar.setIconSize(QtCore.QSize(20,30))
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionConnect = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
@@ -272,19 +274,28 @@ class class_tools_chat(object):
         self.actionReduce_to_systray.setText("Reduce to systray")
         self.actionReduce_to_systray.setToolTip("Reduce to systray (F2 shortcut key)")
         self.actionReduce_to_systray.setShortcut("F2")
+        
+        self.actionSplash_Window = QtWidgets.QAction(MainWindow)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("icons/dexclamation.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSplash_Window.setIcon(icon5)
+        self.actionSplash_Window.setObjectName("actionSplash_Window")
+        self.actionSplash_Window.setText("Activate/Deactivate splash window when a new message was received")
+        self.actionSplash_Window.setToolTip("Activate/Deactivate splash window when a new message was received (F3 shortcut key)")
+        self.actionSplash_Window.setShortcut("F3")        
 
         self.actionProgram_Info = QtWidgets.QAction(MainWindow)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("icons/info.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionProgram_Info.setIcon(icon5)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("icons/info.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionProgram_Info.setIcon(icon6)
         self.actionProgram_Info.setObjectName("actionProgram_Info")
         self.actionProgram_Info.setText("Program Info")
         self.actionProgram_Info.setToolTip("Program Info")
 
         self.actionHelp = QtWidgets.QAction(MainWindow)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("icons/help.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionHelp.setIcon(icon6)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("icons/help.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionHelp.setIcon(icon7)
         self.actionHelp.setObjectName("actionHelp")
         self.actionHelp.setText("Help")
         self.actionHelp.setToolTip("Help")
@@ -296,6 +307,7 @@ class class_tools_chat(object):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear_my_chat)
         self.toolBar.addAction(self.actionReduce_to_systray)
+        self.toolBar.addAction(self.actionSplash_Window)
         self.toolBar.addAction(self.actionProgram_Info)
         self.toolBar.addAction(self.actionHelp)        
         # collego logicamente l'etichetta con item di testo (per avere l'effetto responsive dell'interfaccia)
@@ -305,6 +317,7 @@ class class_tools_chat(object):
         self.actionClear_my_chat.triggered.connect(self.pulisci_chat)
         self.actionProgram_Info.triggered.connect(self.show_program_info)
         self.actionReduce_to_systray.triggered.connect(self.riduci_a_systray)
+        self.actionSplash_Window.triggered.connect(self.imposta_splash_window)
         self.actionHelp.triggered.connect(self.visualizza_help)
         self.actionCreate_Server.triggered.connect(self.crea_server_chat)
         self.actionConnect.triggered.connect(self.crea_client_chat)
@@ -328,10 +341,28 @@ class class_tools_chat(object):
 
         # imposto la var che controlla se la systray è utilizzata o meno
         self.systray_attiva = False
+        
+        # imposto la var che indica se lo splash window è attivo
+        self.splash_window = True
 
         # imposto la funzione che si attiva alla chiusura del programma
         app.aboutToQuit.connect(self.chiusura_programma)
 
+    def imposta_splash_window(self):
+        """
+           Attiva o disattiva l'opzione che controlla lo splash window
+        """
+        icon1 = QtGui.QIcon()                
+        if self.splash_window:
+            self.splash_window = False
+            icon1.addPixmap(QtGui.QPixmap("icons/exclamation.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)            
+            self.statusbar.showMessage('Splash window deactivated')
+        else:
+            self.splash_window = True
+            icon1.addPixmap(QtGui.QPixmap("icons/dexclamation.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)            
+            self.statusbar.showMessage('Splash window activated')
+        self.actionSplash_Window.setIcon(icon1)                
+    
     def riduci_a_systray(self):
         """
            Riduce programma a systray
@@ -404,52 +435,44 @@ class class_tools_chat(object):
         """
            Attiva l'applicazione lato server in attesa di connessione da parte di un client
         """
-        # emetto messaggio di stato
-        self.statusbar.showMessage('Setup Server...')
-        time.sleep(1)
-        # get the hostname, IP Address from socket and set Port
+        # ricerco il nome del PC di esecuzione del programma
         soc = socket.socket()
-        self.host_name = socket.gethostname()
-        self.ip = socket.gethostbyname(self.host_name)
-        self.port = 1234
-        soc.bind((self.host_name, self.port))
-        self.statusbar.showMessage(self.host_name + ' ({})'.format(self.ip))
-        #self.name = self.host_name
+        self.host_name = socket.gethostname()                
+                
         # nella lista dei pc ricerco il nome del pc per ricavarne l'alias e inviarlo al client che si sta collegando
         self.name = ''
         v_error = False
         for i in range(len(self.nomi_pc)):
             if self.host_name == self.nomi_pc.itemText(i):
-               self.name = self.alias[i]
+                self.name = self.alias[i]
+                self.ip = self.ip_address[i]
 
         if self.name == '':
-           message_error('PC name ' + self.host_name + ' not found in elenco_pc.txt!')
-           v_error = True
-
+            message_error('PC name ' + self.host_name + ' not found in elenco_pc.txt!')
+            v_error = True
+        
+        # l'istruzione di ricerca del proprio ip è stata sostituita in quanto se presenti più schede di rete
+        # prendeva il primo ip che gli capitava. Ora indirizzo ip viene ricavato dal file della lista pc
+        self.port = 1234        
+        #self.ip = socket.gethostbyname(self.host_name)                        
+        soc.bind((self.ip, self.port))
+                        
         if not v_error:
             # try to locate using socket
-            soc.listen(1)
-            self.statusbar.showMessage('Waiting for incoming connection (ip address ' + str(self.ip) + ' port 1234)...')
-            self.connection, self.addr = soc.accept()
-            self.statusbar.showMessage('Received connection from ' + str(self.addr[0]) + ' (' + str(self.addr[1]) + ')')
-            time.sleep(1)
-            self.statusbar.showMessage('Connection Established!')
-            time.sleep(1)
-            self.statusbar.showMessage('Connected From: ' + '({})'.format(self.addr[0], self.addr[0]))
-            time.sleep(1)
-            # in qualsiasi caso faccio lampeggiare la finestra (nel caso fosse dietro a tutte le altre l'utente capisce che è successo qualcosa)
-            MainWindow.activateWindow()
+            soc.listen(1)            
+            self.statusbar.showMessage('Waiting on...(' + str(self.ip) + ' , 1234)')
+            MainWindow.repaint()
+            # da questo punto il programma entra in attesa di una connessione da parte di un client
+            self.connection, self.addr = soc.accept()            
             # get a connection from client side
             self.client_name = self.connection.recv(1024)
             self.client_name = self.client_name.decode()
-            self.statusbar.showMessage(self.client_name.upper() + ' has connected')
-            # in qualsiasi caso faccio lampeggiare la finestra (nel caso fosse dietro a tutte le altre l'utente capisce che è successo qualcosa)
-            MainWindow.activateWindow()
+            self.statusbar.showMessage(self.client_name + ' has connected')
             # invio l'alias di chi fa da server
-            self.connection.send(self.name.encode())
-
+            self.connection.send(self.name.encode())            
+            
             self.tipo_connessione = 'server'
-
+            
             # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
             # viene passato al thread l'oggetto chat
             self.thread_in_attesa = class_mchat_thread(self)
@@ -468,9 +491,6 @@ class class_tools_chat(object):
             v_error = True
 
         if not v_error:
-            # creazione dlla wait window
-            self.statusbar.showMessage('Client Server...')
-            time.sleep(1)
             # Get the hostname, IP Address from socket and set Port
             self.soc = socket.socket()
             self.client_name = socket.gethostname()
@@ -492,10 +512,8 @@ class class_tools_chat(object):
                     message_error('PC name not found in elenco_pc.txt!')
                     v_error = True
 
-            if not v_error:
+            if not v_error:                
                 self.port = 1234
-                self.statusbar.showMessage('Trying to connect to the server: {}, ({})'.format(self.server_host, self.port))
-                time.sleep(1)
                 try:
                     self.soc.connect((self.server_host, self.port))
                 except:
@@ -503,7 +521,6 @@ class class_tools_chat(object):
                     v_error = True
 
                 if not v_error:
-                    self.statusbar.showMessage('Connected...')
                     self.soc.send(self.alias_client_name.encode())
                     # mi metto in attesa che il server mi restituisca il suo alias
                     self.alias_server_name = self.soc.recv(1024)
@@ -533,7 +550,8 @@ class class_tools_chat(object):
             self.o_messaggi.setCurrentCharFormat(self.pennello_blu)
             self.o_messaggi.append(p_messaggio)
             # in qualsiasi caso faccio lampeggiare la finestra (nel caso fosse dietro a tutte le altre l'utente capisce che è successo qualcosa)
-            MainWindow.activateWindow()
+            if self.splash_window:
+                MainWindow.activateWindow()
             # se programma è ridotto a systray manda messaggio
             if self.systray_attiva:
                 self.systray_icon.showMessage('MChat', 'You have a new message :-)')
