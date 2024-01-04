@@ -1,1 +1,0 @@
-pyuic5 -x dialog.ui -o dialog.py

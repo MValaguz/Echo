@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>preferences_window</class>
+ <widget class="QMainWindow" name="preferences_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>356</width>
+    <height>637</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Preferences</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/icons/icons/gears.gif</normaloff>:/icons/icons/gears.gif</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Remember window position:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_remember_window_pos</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Default font:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_default_font_editor</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Splash screen activated:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_default_splash</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QCheckBox" name="e_remember_window_pos"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="e_default_font_editor">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="e_default_splash">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="b_default_font_editor">
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/icons/icons/font_type.gif</normaloff>:/icons/icons/font_type.gif</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>Server:</string>
+          </property>
+          <property name="buddy">
+           <cstring>o_server</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="b_server_add">
+          <property name="toolTip">
+           <string>Add a server</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/icons/icons/add.gif</normaloff>:/icons/icons/add.gif</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="b_server_remove">
+          <property name="toolTip">
+           <string>Remove selected server</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/icons/icons/failed.gif</normaloff>:/icons/icons/failed.gif</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="o_server">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="3" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>Users:</string>
+          </property>
+          <property name="buddy">
+           <cstring>o_users</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="b_user_add">
+          <property name="toolTip">
+           <string>Add user</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/icons/icons/add.gif</normaloff>:/icons/icons/add.gif</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="b_user_remove">
+          <property name="toolTip">
+           <string>Remove selected user</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/icons/icons/failed.gif</normaloff>:/icons/icons/failed.gif</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="o_users">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QPushButton" name="b_restore">
+        <property name="text">
+         <string>Restore default preferences</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/icons/icons/undo.gif</normaloff>:/icons/icons/undo.gif</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_save">
+        <property name="text">
+         <string>Save preferences</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/icons/icons/disk.gif</normaloff>:/icons/icons/disk.gif</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>e_remember_window_pos</tabstop>
+  <tabstop>e_default_font_editor</tabstop>
+  <tabstop>b_default_font_editor</tabstop>
+  <tabstop>e_default_splash</tabstop>
+  <tabstop>b_save</tabstop>
+  <tabstop>b_restore</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>b_default_font_editor</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_default_font_editor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>420</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_save</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>435</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>47</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_restore</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_restore()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>220</x>
+     <y>509</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_server_add</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_server_add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_server_remove</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_server_remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>374</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>442</x>
+     <y>73</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_user_add</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_user_add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>261</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_user_remove</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_user_remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>443</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slot_b_default_font_editor()</slot>
+  <slot>slot_b_default_font_result()</slot>
+  <slot>slot_b_default_open_dir()</slot>
+  <slot>slot_b_default_save_dir()</slot>
+  <slot>slot_b_save()</slot>
+  <slot>slot_b_default_color_prod()</slot>
+  <slot>slot_b_default_color_dev()</slot>
+  <slot>slot_b_restore()</slot>
+  <slot>slot_b_server_add()</slot>
+  <slot>slot_b_server_remove()</slot>
+  <slot>slot_b_user_add()</slot>
+  <slot>slot_b_user_remove()</slot>
+ </slots>
+</ui>

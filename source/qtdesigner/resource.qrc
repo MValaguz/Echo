@@ -1,0 +1,29 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/font_type.gif</file>
+    <file>icons/folder.gif</file>
+    <file>icons/add.gif</file>
+    <file>icons/color.gif</file>
+    <file>icons/disk.gif</file>
+    <file>icons/failed.gif</file>
+    <file>icons/undo.gif</file>
+    <file>icons/python.gif</file>
+    <file>icons/gears.gif</file>
+    <file>icons/call.gif</file>
+    <file>icons/call_stop.gif</file>
+    <file>icons/clear.gif</file>
+    <file>icons/connect.gif</file>
+    <file>icons/create_server.gif</file>
+    <file>icons/dexclamation.gif</file>
+    <file>icons/exclamation.gif</file>
+    <file>icons/help.gif</file>
+    <file>icons/info.gif</file>
+    <file>icons/MChat.ico</file>
+    <file>icons/qt.gif</file>
+    <file>icons/systray.gif</file>
+    <file>icons/connect.gif</file>
+    <file>icons/qt.gif</file>
+    <file>icons/help.gif</file>
+    <file>icons/info.gif</file>
+  </qresource>
+</RCC>

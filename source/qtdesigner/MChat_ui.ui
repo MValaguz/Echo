@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MChat_window</class>
+ <widget class="QMainWindow" name="MChat_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>332</width>
+    <height>406</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MChat 1.3</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/icons/icons/MChat.ico</normaloff>:/icons/icons/MChat.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>7</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>7</number>
+    </property>
+    <property name="bottomMargin">
+     <number>5</number>
+    </property>
+    <property name="spacing">
+     <number>5</number>
+    </property>
+    <item row="1" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Send:</string>
+        </property>
+        <property name="buddy">
+         <cstring>e_invia_messaggio</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="e_invia_messaggio"/>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Messages:</string>
+        </property>
+        <property name="buddy">
+         <cstring>o_messaggi</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="o_messaggi">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>20</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionStart_as_server"/>
+   <addaction name="actionClient_connection"/>
+   <addaction name="separator"/>
+   <addaction name="actionPreferences"/>
+   <addaction name="separator"/>
+   <addaction name="actionClear_my_chat"/>
+   <addaction name="actionReduce_to_systray"/>
+   <addaction name="actionSplash_window"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>332</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuAs_Server">
+    <property name="title">
+     <string>Server</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAs_Client">
+    <property name="title">
+     <string>Client</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionProgram_Info"/>
+   </widget>
+   <addaction name="menuAs_Server"/>
+   <addaction name="menuAs_Client"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionClear_my_chat">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/clear.gif</normaloff>:/icons/icons/clear.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Clear my chat</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear my chat (F1 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionReduce_to_systray">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/systray.gif</normaloff>:/icons/icons/systray.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Reduce to systray</string>
+   </property>
+   <property name="toolTip">
+    <string>Reduce to systray (F2 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="actionProgram_Info">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/info.gif</normaloff>:/icons/icons/info.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Program Info</string>
+   </property>
+   <property name="toolTip">
+    <string>Program Info</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/help.gif</normaloff>:/icons/icons/help.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionSplash_window">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/dexclamation.gif</normaloff>:/icons/icons/dexclamation.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Splash window</string>
+   </property>
+   <property name="toolTip">
+    <string>Activate/Deactivate splash window when a new message was received (F3 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/gears.gif</normaloff>:/icons/icons/gears.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+   <property name="toolTip">
+    <string>Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="actionStart_as_server">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/create_server.gif</normaloff>:/icons/icons/create_server.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Start as server</string>
+   </property>
+   <property name="toolTip">
+    <string>Starts MCat waiting for a user connection</string>
+   </property>
+  </action>
+  <action name="actionClient_connection">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/call.gif</normaloff>:/icons/icons/call.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Client connection</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect to a MChat server </string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>o_messaggi</tabstop>
+  <tabstop>e_invia_messaggio</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>e_invia_messaggio</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_invia_il_messaggio()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionProgram_Info</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_program_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHelp</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_visualizza_help()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPreferences</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_preferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_my_chat</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_pulisci_chat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStart_as_server</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_crea_server_chat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>203</x>
+     <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReduce_to_systray</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_riduci_a_systray()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSplash_window</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_splash_window()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClient_connection</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_crea_client_chat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slot_program_info()</slot>
+  <slot>slot_visualizza_help()</slot>
+  <slot>slot_preferences()</slot>
+  <slot>slot_pulisci_chat()</slot>
+  <slot>slot_crea_server_chat()</slot>
+  <slot>slot_invia_il_messaggio()</slot>
+  <slot>slot_riduci_a_systray()</slot>
+  <slot>slot_splash_window()</slot>
+  <slot>slot_crea_client_chat()</slot>
+ </slots>
+</ui>

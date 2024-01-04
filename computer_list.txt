@@ -1,5 +1,0 @@
-PC-MVALAGUZ Vala 10.0.47.9
-pc-aberlend .. 10.0.47.1
-PC-MARIANNM Mary 10.0.47.2
-PC-MLEIDI Mat 10.0.47.3
-PC-TRAINIM Marco 10.0.47.17 
