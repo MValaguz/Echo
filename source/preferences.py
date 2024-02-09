@@ -63,8 +63,7 @@ class preferences_class():
                                   ('SERVER TWO','1300','#dfffff')]
             # elenco users è composto da Titolo, User, Password
             self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9'),
-                                ('pc-aberlend','..','10.0.47.1'),
-                                ('PC-MARIANNM','Mary','10.0.47.2'),                                
+                                ('pc-aberlend','Solo','10.0.47.1'),                                
                                 ('PC-TRAINIM','Marco','10.0.47.17')]
             # creo la dir dove andranno le preferenze              
             if not os.path.isdir('C:\\MChat'):
@@ -72,7 +71,7 @@ class preferences_class():
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
-        Gestione delle preferenze di MSql
+        Gestione delle preferenze di MChat
     """                
     def __init__(self, p_nome_file_preferences):
         super(win_preferences_class, self).__init__()        
@@ -89,7 +88,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
 
         # preparo elenco server        
         self.o_server.setColumnCount(4)
-        self.o_server.setHorizontalHeaderLabels(['Server title','ip Port','Color',''])           
+        self.o_server.setHorizontalHeaderLabels(['Server title','IP port','Color',''])           
         v_rig = 1                
         for record in self.preferences.elenco_server:                                    
             self.o_server.setRowCount(v_rig) 
@@ -142,7 +141,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                 os.remove(self.nome_file_preferences)
 
             # emetto messaggio di fine
-            message_info('Preferences restored! Restart MSql to see the changes ;-)')
+            message_info('Preferences restored! Restart MChat to see the changes ;-)')
             # esco dal programma delle preferenze
             self.close()
     

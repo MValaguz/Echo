@@ -43,7 +43,7 @@ import base64
 from MChat_ui import Ui_MChat_window
 from program_info_ui import Ui_Program_info
 from preferences import preferences_class, win_preferences_class
-from utilita import message_error
+from utilita import message_error, message_question_yes_no
 
 def cripta_messaggio(messaggio):
     """
@@ -151,8 +151,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_USER')
                 self.action_elenco_user.append(v_qaction)
-                self.menuAs_Client.addAction(v_qaction)               
-
+                self.menuAs_Client.addAction(v_qaction)   
+            
         # impostazione delle var dell'oggetto
         self.record_server = []
         self.record_user = []
@@ -330,7 +330,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
     def slot_crea_server_chat(self):
         """
            Attiva l'applicazione lato server in attesa di connessione da parte di un client                      
-        """        
+        """     
+        if message_question_yes_no('Do you want to put yourself in a server position?') == 'No':
+            return 'ko'
+
         # prendo la voce del menu server che è stata selezionata, per capire con quale modalità server mi devo mettere in attesa
         v_found = False
         for action in self.action_elenco_server:            
@@ -386,10 +389,14 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.client_name = self.client_name.decode()
             # ripristino icona freccia del mouse
             QApplication.restoreOverrideCursor()    
-            # indico l'utente che si è connesso
-            self.statusbar.showMessage(self.client_name + ' has connected')
+            # indico l'utente che si è connesso            
+            self.statusbar.showMessage(self.client_name + ' has connected')            
+            self.l_invia_messaggio.setText('Send to ' + self.client_name + ':')
             # invio l'alias di chi fa da server
             self.connection.send(self.name.encode())            
+            # disattivo i button di server e client
+            self.actionStart_as_server.setEnabled(False)
+            self.actionClient_connection.setEnabled(False)
             
             self.tipo_connessione = 'server'
             
@@ -454,6 +461,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             if not v_error:
                 # alias..lo prendo per inviarlo al server a cui mi sto collegando
                 self.alias_client_name = self.record_user[1]
+                # nella lista degli user ricerco il nome del mio pc per ricavarne l'alias e inviarlo al server a cui mi sto collegando
+                self.alias_client_name = ''
+                for rec in self.preferences.elenco_user:
+                    if self.client_name == rec[0]:
+                        self.alias_client_name = rec[1]
 
                 if self.alias_client_name == '':
                     message_error('Alias name not valid!')
@@ -473,7 +485,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     # mi metto in attesa che il server mi restituisca il suo alias
                     self.alias_server_name = self.soc.recv(1024)
                     self.alias_server_name = self.alias_server_name.decode()
-                    self.statusbar.showMessage('{} has joined...'.format(self.alias_server_name))
+                    self.statusbar.showMessage('{} has joined...'.format(self.alias_server_name))                                                            
+                    self.l_invia_messaggio.setText('Send to ' + self.alias_server_name + ':')
+                    # disattivo i button di server e client
+                    self.actionStart_as_server.setEnabled(False)
+                    self.actionClient_connection.setEnabled(False)
 
                     self.tipo_connessione = 'client'
 
