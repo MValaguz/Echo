@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>332</width>
-    <height>406</height>
+    <width>245</width>
+    <height>223</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,19 +26,19 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
-     <number>7</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>4</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>7</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>5</number>
+     <number>0</number>
     </property>
     <property name="spacing">
-     <number>5</number>
+     <number>0</number>
     </property>
     <item row="1" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -50,6 +50,11 @@
       </property>
       <item>
        <widget class="QLabel" name="l_invia_messaggio">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Send:</string>
         </property>
@@ -59,7 +64,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="e_invia_messaggio"/>
+       <widget class="QLineEdit" name="e_invia_messaggio">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -70,6 +81,11 @@
       </property>
       <item>
        <widget class="QLabel" name="l_messaggi">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Messages:</string>
         </property>
@@ -86,6 +102,11 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
         <property name="textInteractionFlags">
          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
         </property>
@@ -95,15 +116,24 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
    <property name="iconSize">
     <size>
-     <width>30</width>
-     <height>20</height>
+     <width>16</width>
+     <height>16</height>
     </size>
    </property>
    <attribute name="toolBarArea">
@@ -112,6 +142,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionExit"/>
+   <addaction name="actionMinimize"/>
+   <addaction name="separator"/>
    <addaction name="actionStart_as_server"/>
    <addaction name="actionClient_connection"/>
    <addaction name="separator"/>
@@ -126,27 +159,62 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>332</width>
-     <height>26</height>
+     <width>245</width>
+     <height>21</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
    <widget class="QMenu" name="menuAs_Server">
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Server</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuAs_Client">
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Client</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="actionHelp"/>
     <addaction name="actionProgram_Info"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionMinimize"/>
+    <addaction name="actionReset_window_position"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuAs_Server"/>
    <addaction name="menuAs_Client"/>
    <addaction name="menuHelp"/>
@@ -154,37 +222,37 @@
   <action name="actionClear_my_chat">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/clear.gif</normaloff>:/icons/icons/clear.gif</iconset>
+     <normaloff>:/icons/icons/clear.png</normaloff>:/icons/icons/clear.png</iconset>
    </property>
    <property name="text">
     <string>Clear my chat</string>
    </property>
    <property name="toolTip">
-    <string>Clear my chat (F1 shortcut key)</string>
-   </property>
-   <property name="shortcut">
-    <string>F1</string>
-   </property>
-  </action>
-  <action name="actionReduce_to_systray">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/systray.gif</normaloff>:/icons/icons/systray.gif</iconset>
-   </property>
-   <property name="text">
-    <string>Reduce to systray</string>
-   </property>
-   <property name="toolTip">
-    <string>Reduce to systray (F2 shortcut key)</string>
+    <string>Clear my chat (F2 shortcut key)</string>
    </property>
    <property name="shortcut">
     <string>F2</string>
    </property>
   </action>
+  <action name="actionReduce_to_systray">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/systray.png</normaloff>:/icons/icons/systray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reduce to systray</string>
+   </property>
+   <property name="toolTip">
+    <string>Reduce to systray (F3 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
   <action name="actionProgram_Info">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/info.gif</normaloff>:/icons/icons/info.gif</iconset>
+     <normaloff>:/icons/icons/info.png</normaloff>:/icons/icons/info.png</iconset>
    </property>
    <property name="text">
     <string>Program Info</string>
@@ -196,7 +264,7 @@
   <action name="actionHelp">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/help.gif</normaloff>:/icons/icons/help.gif</iconset>
+     <normaloff>:/icons/icons/help.png</normaloff>:/icons/icons/help.png</iconset>
    </property>
    <property name="text">
     <string>Help</string>
@@ -208,22 +276,22 @@
   <action name="actionSplash_window">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/dexclamation.gif</normaloff>:/icons/icons/dexclamation.gif</iconset>
+     <normaloff>:/icons/icons/exclamation.png</normaloff>:/icons/icons/exclamation.png</iconset>
    </property>
    <property name="text">
     <string>Splash window</string>
    </property>
    <property name="toolTip">
-    <string>Activate/Deactivate splash window when a new message was received (F3 shortcut key)</string>
+    <string>Activate/Deactivate splash window when a new message was received (F4 shortcut key)</string>
    </property>
    <property name="shortcut">
-    <string>F3</string>
+    <string>F4</string>
    </property>
   </action>
   <action name="actionPreferences">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/gears.gif</normaloff>:/icons/icons/gears.gif</iconset>
+     <normaloff>:/icons/icons/gears.png</normaloff>:/icons/icons/gears.png</iconset>
    </property>
    <property name="text">
     <string>Preferences</string>
@@ -231,14 +299,11 @@
    <property name="toolTip">
     <string>Preferences</string>
    </property>
-   <property name="shortcut">
-    <string>F3</string>
-   </property>
   </action>
   <action name="actionStart_as_server">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/create_server.gif</normaloff>:/icons/icons/create_server.gif</iconset>
+     <normaloff>:/icons/icons/create_server.png</normaloff>:/icons/icons/create_server.png</iconset>
    </property>
    <property name="text">
     <string>Start as server</string>
@@ -250,13 +315,46 @@
   <action name="actionClient_connection">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/call.gif</normaloff>:/icons/icons/call.gif</iconset>
+     <normaloff>:/icons/icons/call.png</normaloff>:/icons/icons/call.png</iconset>
    </property>
    <property name="text">
     <string>Client connection</string>
    </property>
    <property name="toolTip">
     <string>Connect to a MChat server </string>
+   </property>
+  </action>
+  <action name="actionMinimize">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/window.png</normaloff>:/icons/icons/window.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minimize</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimize (F1 shortcut key)</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/kill.png</normaloff>:/icons/icons/kill.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionReset_window_position">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/window2.png</normaloff>:/icons/icons/window2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset window position</string>
    </property>
   </action>
  </widget>
@@ -401,6 +499,38 @@
    <signal>triggered()</signal>
    <receiver>MChat_window</receiver>
    <slot>slot_crea_client_chat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMinimize</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

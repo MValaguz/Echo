@@ -1,29 +1,28 @@
 <RCC>
   <qresource prefix="icons">
-    <file>icons/font_type.gif</file>
-    <file>icons/folder.gif</file>
-    <file>icons/add.gif</file>
-    <file>icons/color.gif</file>
-    <file>icons/disk.gif</file>
-    <file>icons/failed.gif</file>
-    <file>icons/undo.gif</file>
-    <file>icons/python.gif</file>
-    <file>icons/gears.gif</file>
-    <file>icons/call.gif</file>
-    <file>icons/call_stop.gif</file>
-    <file>icons/clear.gif</file>
-    <file>icons/connect.gif</file>
-    <file>icons/create_server.gif</file>
-    <file>icons/dexclamation.gif</file>
-    <file>icons/exclamation.gif</file>
-    <file>icons/help.gif</file>
-    <file>icons/info.gif</file>
+    <file>icons/window2.png</file>
+    <file>icons/add.png</file>
+    <file>icons/call.png</file>
+    <file>icons/call_stop.png</file>
+    <file>icons/clear.png</file>
+    <file>icons/color.png</file>
+    <file>icons/connect.png</file>
+    <file>icons/create_server.png</file>
+    <file>icons/dexclamation.png</file>
+    <file>icons/disk.png</file>
+    <file>icons/exclamation.png</file>
+    <file>icons/failed.png</file>
+    <file>icons/folder.png</file>
+    <file>icons/font_type.png</file>
+    <file>icons/gears.png</file>
+    <file>icons/help.png</file>
+    <file>icons/info.png</file>
+    <file>icons/kill.png</file>
     <file>icons/MChat.ico</file>
+    <file>icons/python.gif</file>
     <file>icons/qt.gif</file>
-    <file>icons/systray.gif</file>
-    <file>icons/connect.gif</file>
-    <file>icons/qt.gif</file>
-    <file>icons/help.gif</file>
-    <file>icons/info.gif</file>
+    <file>icons/systray.png</file>
+    <file>icons/undo.png</file>
+    <file>icons/window.png</file>
   </qresource>
 </RCC>

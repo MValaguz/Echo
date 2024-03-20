@@ -42,6 +42,16 @@ class preferences_class():
                 self.remember_window_pos = True
             else:
                 self.remember_window_pos = False
+            # il bordo delle finestre viene nascosto
+            if v_json['hide_window_border']==1:
+                self.hide_window_border = True
+            else:
+                self.hide_window_border = False
+            # tema scuro
+            if v_json['dark_theme']==1:
+                self.dark_theme = True
+            else:
+                self.dark_theme = False
             # font
             self.font_editor = v_json['font_editor']            
             # splash screen
@@ -54,8 +64,10 @@ class preferences_class():
             # users
             self.elenco_user = v_json['users']
         # imposto valori di default senza presenza dello specifico file
-        else:
+        else:            
             self.remember_window_pos = True            
+            self.hide_window_border = True
+            self.dark_theme = True
             self.font_editor = 'MS Shell Dlg 2, 8'            
             self.splash = True
             # elenco server è composto da Titolo, TNS e Colore
@@ -83,8 +95,10 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.preferences = preferences_class(self.nome_file_preferences)        
         # le preferenze caricate vengono riportate a video
         self.e_remember_window_pos.setChecked(self.preferences.remember_window_pos)        
+        self.e_hide_window_border.setChecked(self.preferences.hide_window_border)        
         self.e_default_font_editor.setText(self.preferences.font_editor)
         self.e_default_splash.setChecked(self.preferences.splash)           
+        self.e_dark_theme.setChecked(self.preferences.dark_theme)
 
         # preparo elenco server        
         self.o_server.setColumnCount(4)
@@ -98,7 +112,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             # come quarta colonna metto il pulsante per la scelta del colore
             v_color_button = QPushButton()            
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap(":/icons/icons/color.gif"), QIcon.Normal, QIcon.Off)
+            v_icon.addPixmap(QPixmap(":/icons/icons/color.png"), QIcon.Normal, QIcon.Off)
             v_color_button.setIcon(v_icon)
             v_color_button.clicked.connect(self.slot_set_color_server)
 
@@ -193,6 +207,18 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             v_remember_window_pos = 1
         else:
             v_remember_window_pos = 0
+
+        # flag indicante se i bordi della finestra vanno nascosti
+        if self.e_hide_window_border.isChecked():
+            v_hide_window_border = 1
+        else:
+            v_hide_window_border = 0
+            
+        # flag indicante se attivare il tema scuro
+        if self.e_dark_theme.isChecked():
+            v_dark_theme = 1
+        else:
+            v_dark_theme = 0
         
         # splash screen
         if self.e_default_splash.isChecked():
@@ -212,6 +238,8 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
 	
 		# scrivo nel file un elemento json contenente le informazioni inseriti dell'utente
         v_json ={'remember_window_pos': v_remember_window_pos,                 
+                 'hide_window_border': v_hide_window_border,                 
+                 'dark_theme': v_dark_theme,
 		         'font_editor' :self.e_default_font_editor.text(),
                  'splash' : v_splash,                 
                  'server': v_server,

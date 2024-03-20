@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>637</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,13 +15,13 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
-    <normaloff>:/icons/icons/gears.gif</normaloff>:/icons/icons/gears.gif</iconset>
+    <normaloff>:/icons/icons/gears.png</normaloff>:/icons/icons/gears.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+      <item row="0" column="0" rowspan="7">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QLabel" name="label_10">
@@ -53,13 +53,30 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Hide window border:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_hide_window_border</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Dark theme:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_dark_theme</cstring>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
-      <item row="0" column="1">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QCheckBox" name="e_remember_window_pos"/>
-        </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLineEdit" name="e_default_font_editor">
           <property name="readOnly">
@@ -68,19 +85,36 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="e_default_splash">
-          <property name="text">
-           <string/>
+         <widget class="QPushButton" name="b_default_font_editor">
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/icons/icons/font_type.png</normaloff>:/icons/icons/font_type.png</iconset>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="b_default_font_editor">
-        <property name="icon">
-         <iconset resource="resource.qrc">
-          <normaloff>:/icons/icons/font_type.gif</normaloff>:/icons/icons/font_type.gif</iconset>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="e_remember_window_pos"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="e_default_splash">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QCheckBox" name="e_dark_theme">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="e_hide_window_border">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -130,7 +164,7 @@
           </property>
           <property name="icon">
            <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/add.gif</normaloff>:/icons/icons/add.gif</iconset>
+            <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
           </property>
          </widget>
         </item>
@@ -144,7 +178,7 @@
           </property>
           <property name="icon">
            <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/failed.gif</normaloff>:/icons/icons/failed.gif</iconset>
+            <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
           </property>
          </widget>
         </item>
@@ -196,7 +230,7 @@
           </property>
           <property name="icon">
            <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/add.gif</normaloff>:/icons/icons/add.gif</iconset>
+            <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
           </property>
          </widget>
         </item>
@@ -210,7 +244,7 @@
           </property>
           <property name="icon">
            <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/failed.gif</normaloff>:/icons/icons/failed.gif</iconset>
+            <normaloff>:/icons/icons/kill.png</normaloff>:/icons/icons/kill.png</iconset>
           </property>
          </widget>
         </item>
@@ -234,7 +268,7 @@
         </property>
         <property name="icon">
          <iconset resource="resource.qrc">
-          <normaloff>:/icons/icons/undo.gif</normaloff>:/icons/icons/undo.gif</iconset>
+          <normaloff>:/icons/icons/undo.png</normaloff>:/icons/icons/undo.png</iconset>
         </property>
        </widget>
       </item>
@@ -245,7 +279,7 @@
         </property>
         <property name="icon">
          <iconset resource="resource.qrc">
-          <normaloff>:/icons/icons/disk.gif</normaloff>:/icons/icons/disk.gif</iconset>
+          <normaloff>:/icons/icons/disk.png</normaloff>:/icons/icons/disk.png</iconset>
         </property>
        </widget>
       </item>
@@ -259,8 +293,16 @@
   <tabstop>e_default_font_editor</tabstop>
   <tabstop>b_default_font_editor</tabstop>
   <tabstop>e_default_splash</tabstop>
-  <tabstop>b_save</tabstop>
+  <tabstop>e_hide_window_border</tabstop>
+  <tabstop>e_dark_theme</tabstop>
+  <tabstop>b_server_add</tabstop>
+  <tabstop>b_server_remove</tabstop>
+  <tabstop>o_server</tabstop>
+  <tabstop>b_user_add</tabstop>
+  <tabstop>b_user_remove</tabstop>
+  <tabstop>o_users</tabstop>
   <tabstop>b_restore</tabstop>
+  <tabstop>b_save</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
@@ -273,8 +315,8 @@
    <slot>slot_b_default_font_editor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>420</x>
-     <y>259</y>
+     <x>343</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>417</x>
@@ -289,8 +331,8 @@
    <slot>slot_b_save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>435</x>
-     <y>511</y>
+     <x>343</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -305,8 +347,8 @@
    <slot>slot_b_restore()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>509</y>
+     <x>203</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -321,8 +363,8 @@
    <slot>slot_b_server_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>287</x>
-     <y>65</y>
+     <x>302</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -337,8 +379,8 @@
    <slot>slot_b_server_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>374</x>
-     <y>57</y>
+     <x>342</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>442</x>
@@ -353,8 +395,8 @@
    <slot>slot_b_user_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>297</x>
-     <y>265</y>
+     <x>302</x>
+     <y>391</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -369,8 +411,8 @@
    <slot>slot_b_user_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>404</x>
-     <y>266</y>
+     <x>342</x>
+     <y>391</y>
     </hint>
     <hint type="destinationlabel">
      <x>443</x>

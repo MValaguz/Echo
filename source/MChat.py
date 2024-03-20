@@ -44,6 +44,8 @@ from MChat_ui import Ui_MChat_window
 from program_info_ui import Ui_Program_info
 from preferences import preferences_class, win_preferences_class
 from utilita import message_error, message_question_yes_no
+# Definizione del solo tema dark
+from dark_theme import dark_theme_definition
 
 def cripta_messaggio(messaggio):
     """
@@ -123,7 +125,14 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.preferences = preferences_class('C:\\MChat\\MChat.ini')
 
         # carico posizione e dimensione window
+        self.default_window_pos = self.geometry().getRect()                    
         self.carico_posizione_window()
+
+        # tolgo i bordi alla window (in modo che sia più invisibile) cambio anche il titolo in modo che 
+        # se ridotto ad icona non sia visibile
+        if self.preferences.hide_window_border:
+            self.setWindowFlags(Qt.CustomizeWindowHint)
+            self.setWindowTitle(' ')
 
         ###
         # Dalle preferenze carico il menu con elenco dei server e degli user
@@ -184,6 +193,12 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # per smistare i segnali che arrivano dal menù, utilizzo un apposito connettore
         # attenzione! eventi come la selezione di help, info, passa tramite i segnali standard
         self.menuBar.triggered[QAction].connect(self.smistamento_voci_menu)        
+            
+        # se è stato scelto di avere il tema dei colori scuro, lo carico
+        # Attenzione! La parte principale del tema colori rispetta il meccanismo di QT library
+        #             Mentre per la parte di QScintilla ho dovuto fare le impostazioni manuali (v. definizione del lexer)
+        if self.preferences.dark_theme:                    
+            self.setStyleSheet(dark_theme_definition())                    
 
     def smistamento_voci_menu(self, p_slot):
         """
@@ -214,7 +229,16 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             # attivo la posizione di menu che è stata selezionata (user)
             for action in self.action_elenco_user:            
                 if action.text() == p_slot.text():
-                    action.setChecked(True)       
+                    action.setChecked(True)    
+
+        if str(p_slot.text()) == 'Reset window position':            
+            # reimposto la dimensione della window con le dimensioni definite a designer
+            self.resize(self.default_window_pos[2], self.default_window_pos[3])                       
+            # centratura della window
+            qr = self.frameGeometry()                
+            cp = QDesktopWidget().availableGeometry().center()                
+            qr.moveCenter(cp)                
+            self.move(qr.topLeft())            
 
     def closeEvent(self, event):
         """
@@ -227,7 +251,20 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # se la systray è stata aperta, la chiudo
         if self.systray_attiva:
             self.systray_icon.hide()
-        
+
+    def changeEvent(self, event):
+        """
+           Intercetto l'evento che indica alla finestra di riaprirsi dalla barra delle window
+        """        
+        if event.type() == QEvent.WindowStateChange:
+            if event.type() == QEvent.WindowStateChange:
+                if event.oldState() and Qt.WindowMinimized:
+                    if self.windowTitle() == '... ':
+                        self.setWindowTitle(' ')                    
+                elif event.oldState() == Qt.WindowNoState or self.windowState() == Qt.WindowMaximized:
+                    print("WindowMaximized")
+
+
     def carico_posizione_window(self):
         """
             Leggo dal file la posizione della window (se richiesto dalle preferenze)
@@ -250,7 +287,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
     def salvo_posizione_window(self):
         """
            Salvo in un file la posizione della window (se richiesto dalle preferenze)
-           Questo salvataggio avviene automaticamente alla chiusura di MSql
+           Questo salvataggio avviene automaticamente alla chiusura di MChat
         """
         # se utente ha richiesto di salvare la posizione della window...
         if self.preferences.remember_window_pos:
@@ -270,11 +307,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         icon1 = QIcon()                
         if self.splash_window:
             self.splash_window = False
-            icon1.addPixmap(QPixmap(":/icons/icons/exclamation.gif"), QIcon.Normal, QIcon.Off)            
+            icon1.addPixmap(QPixmap(":/icons/icons/exclamation.png"), QIcon.Normal, QIcon.Off)            
             self.statusbar.showMessage('Splash window deactivated')
         else:
             self.splash_window = True
-            icon1.addPixmap(QPixmap(":/icons/icons/dexclamation.gif"), QIcon.Normal, QIcon.Off)            
+            icon1.addPixmap(QPixmap(":/icons/icons/dexclamation.png"), QIcon.Normal, QIcon.Off)            
             self.statusbar.showMessage('Splash window activated')
         self.actionSplash_window.setIcon(icon1)                
     
@@ -312,7 +349,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
            Gestione delle preferenze
         """
-        self.my_app = win_preferences_class('C:\\MChat\\MSql.ini')        
+        self.my_app = win_preferences_class('C:\\MChat\\MChat.ini')        
         self.my_app.show()   
     
     def slot_pulisci_chat(self):
@@ -516,6 +553,9 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             # se programma è ridotto a systray manda messaggio
             if self.systray_attiva:
                 self.systray_icon.showMessage('MChat', 'You have a new message :-)')
+            # se il titolo della window è vuoto (modalità minimize) ... indico con dei puntini nel titolo che ho ricevuto un messaggio
+            if self.windowTitle() == ' ':
+                self.setWindowTitle('...')
 
     def slot_invia_il_messaggio(self):
         """
