@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
-    <height>463</height>
+    <width>481</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" rowspan="7">
+      <item row="0" column="0" rowspan="6">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QLabel" name="label_10">
@@ -30,16 +30,6 @@
           </property>
           <property name="buddy">
            <cstring>e_remember_window_pos</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Default font:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_default_font_editor</cstring>
           </property>
          </widget>
         </item>
@@ -75,44 +65,25 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLineEdit" name="e_default_font_editor">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_default_font_editor">
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/font_type.png</normaloff>:/icons/icons/font_type.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="0" column="1">
        <widget class="QCheckBox" name="e_remember_window_pos"/>
       </item>
-      <item row="2" column="1">
+      <item row="1" column="1">
        <widget class="QCheckBox" name="e_default_splash">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QCheckBox" name="e_dark_theme">
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="e_hide_window_border">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QCheckBox" name="e_hide_window_border">
+       <widget class="QCheckBox" name="e_dark_theme">
         <property name="text">
          <string/>
         </property>
@@ -244,7 +215,7 @@
           </property>
           <property name="icon">
            <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/kill.png</normaloff>:/icons/icons/kill.png</iconset>
+            <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
           </property>
          </widget>
         </item>
@@ -290,8 +261,6 @@
  </widget>
  <tabstops>
   <tabstop>e_remember_window_pos</tabstop>
-  <tabstop>e_default_font_editor</tabstop>
-  <tabstop>b_default_font_editor</tabstop>
   <tabstop>e_default_splash</tabstop>
   <tabstop>e_hide_window_border</tabstop>
   <tabstop>e_dark_theme</tabstop>
@@ -309,22 +278,6 @@
  </resources>
  <connections>
   <connection>
-   <sender>b_default_font_editor</sender>
-   <signal>clicked()</signal>
-   <receiver>preferences_window</receiver>
-   <slot>slot_b_default_font_editor()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>343</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>417</x>
-     <y>140</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>b_save</sender>
    <signal>clicked()</signal>
    <receiver>preferences_window</receiver>
@@ -332,7 +285,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>343</x>
-     <y>624</y>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -348,7 +301,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
-     <y>624</y>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -364,7 +317,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>302</x>
-     <y>157</y>
+     <y>147</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -380,7 +333,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>342</x>
-     <y>157</y>
+     <y>147</y>
     </hint>
     <hint type="destinationlabel">
      <x>442</x>
@@ -396,7 +349,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>302</x>
-     <y>391</y>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -412,7 +365,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>342</x>
-     <y>391</y>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>443</x>
@@ -422,13 +375,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>slot_b_default_font_editor()</slot>
-  <slot>slot_b_default_font_result()</slot>
-  <slot>slot_b_default_open_dir()</slot>
-  <slot>slot_b_default_save_dir()</slot>
   <slot>slot_b_save()</slot>
-  <slot>slot_b_default_color_prod()</slot>
-  <slot>slot_b_default_color_dev()</slot>
   <slot>slot_b_restore()</slot>
   <slot>slot_b_server_add()</slot>
   <slot>slot_b_server_remove()</slot>

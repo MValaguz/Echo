@@ -7,8 +7,7 @@ a = Analysis(['..\\source\\MChat.py'],
              pathex=[],
              binaries=[],
              datas=[
-					('..\\source\\qtdesigner\\icons\\*.*','icons'),
-					('..\\source\\help\\*.*','help'),
+					('..\\source\\qtdesigner\\icons\\*.*','icons'),					
 					('..\\source\\qtdesigner\\*.py','.'),					
 			        ('..\\source\\*.py','.')		
 			       ],

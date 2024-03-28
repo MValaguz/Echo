@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>245</width>
-    <height>223</height>
+    <width>199</width>
+    <height>189</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,54 +26,20 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="topMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="rightMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="spacing">
-     <number>0</number>
+     <number>3</number>
     </property>
-    <item row="1" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="l_invia_messaggio">
-        <property name="font">
-         <font>
-          <pointsize>7</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Send:</string>
-        </property>
-        <property name="buddy">
-         <cstring>e_invia_messaggio</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="e_invia_messaggio">
-        <property name="font">
-         <font>
-          <pointsize>7</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
@@ -114,14 +80,35 @@
       </item>
      </layout>
     </item>
+    <item row="1" column="0">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="l_invia_messaggio">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Send:</string>
+        </property>
+        <property name="buddy">
+         <cstring>e_invia_messaggio</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="e_invia_messaggio">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusbar">
-   <property name="font">
-    <font>
-     <pointsize>7</pointsize>
-    </font>
-   </property>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -144,12 +131,9 @@
    </attribute>
    <addaction name="actionExit"/>
    <addaction name="actionMinimize"/>
-   <addaction name="separator"/>
    <addaction name="actionStart_as_server"/>
    <addaction name="actionClient_connection"/>
-   <addaction name="separator"/>
    <addaction name="actionPreferences"/>
-   <addaction name="separator"/>
    <addaction name="actionClear_my_chat"/>
    <addaction name="actionReduce_to_systray"/>
    <addaction name="actionSplash_window"/>
@@ -159,7 +143,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>245</width>
+     <width>199</width>
      <height>21</height>
     </rect>
    </property>
@@ -188,18 +172,6 @@
      <string>Client</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionHelp"/>
-    <addaction name="actionProgram_Info"/>
-   </widget>
    <widget class="QMenu" name="menuFile">
     <property name="font">
      <font>
@@ -209,6 +181,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionProgram_Info"/>
     <addaction name="actionMinimize"/>
     <addaction name="actionReset_window_position"/>
     <addaction name="separator"/>
@@ -217,7 +190,6 @@
    <addaction name="menuFile"/>
    <addaction name="menuAs_Server"/>
    <addaction name="menuAs_Client"/>
-   <addaction name="menuHelp"/>
   </widget>
   <action name="actionClear_my_chat">
    <property name="icon">
@@ -274,6 +246,9 @@
    </property>
   </action>
   <action name="actionSplash_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/icons/exclamation.png</normaloff>:/icons/icons/exclamation.png</iconset>
@@ -282,7 +257,7 @@
     <string>Splash window</string>
    </property>
    <property name="toolTip">
-    <string>Activate/Deactivate splash window when a new message was received (F4 shortcut key)</string>
+    <string>Activate splash window when receive a message (F4 shortcut key)</string>
    </property>
    <property name="shortcut">
     <string>F4</string>
@@ -309,7 +284,7 @@
     <string>Start as server</string>
    </property>
    <property name="toolTip">
-    <string>Starts MCat waiting for a user connection</string>
+    <string>Starts waiting service</string>
    </property>
   </action>
   <action name="actionClient_connection">
@@ -321,7 +296,7 @@
     <string>Client connection</string>
    </property>
    <property name="toolTip">
-    <string>Connect to a MChat server </string>
+    <string>Connect to a waiting service</string>
    </property>
   </action>
   <action name="actionMinimize">
@@ -373,12 +348,12 @@
    <slot>slot_invia_il_messaggio()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>374</y>
+     <x>157</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
-     <y>292</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -394,23 +369,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>134</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionHelp</sender>
-   <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
-   <slot>slot_visualizza_help()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>134</x>
-     <y>208</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -426,7 +385,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>134</x>
-     <y>208</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -442,7 +401,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>134</x>
-     <y>208</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -458,7 +417,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>203</x>
-     <y>239</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -474,23 +433,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
-     <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSplash_window</sender>
-   <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
-   <slot>slot_splash_window()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>165</x>
-     <y>202</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -506,7 +449,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
-     <y>202</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -522,7 +465,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
-     <y>202</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -538,20 +481,18 @@
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
-     <y>202</y>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>slot_program_info()</slot>
-  <slot>slot_visualizza_help()</slot>
   <slot>slot_preferences()</slot>
   <slot>slot_pulisci_chat()</slot>
   <slot>slot_crea_server_chat()</slot>
   <slot>slot_invia_il_messaggio()</slot>
   <slot>slot_riduci_a_systray()</slot>
-  <slot>slot_splash_window()</slot>
   <slot>slot_crea_client_chat()</slot>
  </slots>
 </ui>

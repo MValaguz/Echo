@@ -19,6 +19,7 @@ import json
 #Amplifico la pathname dell'applicazione in modo veda il contenuto della directory qtdesigner dove sono contenuti i layout
 sys.path.append('qtdesigner')
 #Librerie grafiche
+from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 #Definizioni interfaccia
@@ -51,9 +52,7 @@ class preferences_class():
             if v_json['dark_theme']==1:
                 self.dark_theme = True
             else:
-                self.dark_theme = False
-            # font
-            self.font_editor = v_json['font_editor']            
+                self.dark_theme = False            
             # splash screen
             if v_json['splash'] == 1:
                 self.splash = True
@@ -67,16 +66,15 @@ class preferences_class():
         else:            
             self.remember_window_pos = True            
             self.hide_window_border = True
-            self.dark_theme = True
-            self.font_editor = 'MS Shell Dlg 2, 8'            
-            self.splash = True
+            self.dark_theme = True            
+            self.splash = False
             # elenco server è composto da Titolo, TNS e Colore
-            self.elenco_server = [('SERVER ONE','1250','#ffffff'),
-                                  ('SERVER TWO','1300','#dfffff')]
+            self.elenco_server = [('SERVER ONE','1250','1'),
+                                  ('SERVER TWO','1300','0')]
             # elenco users è composto da Titolo, User, Password
-            self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9'),
-                                ('pc-aberlend','Solo','10.0.47.1'),                                
-                                ('PC-TRAINIM','Marco','10.0.47.17')]
+            self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9','1'),
+                                ('pc-aberlend','Solo','10.0.47.1','0'),                                
+                                ('PC-TRAINIM','Marco','10.0.47.17','0')]
             # creo la dir dove andranno le preferenze              
             if not os.path.isdir('C:\\MChat'):
                 os.makedirs('C:\\MChat')
@@ -95,40 +93,62 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.preferences = preferences_class(self.nome_file_preferences)        
         # le preferenze caricate vengono riportate a video
         self.e_remember_window_pos.setChecked(self.preferences.remember_window_pos)        
-        self.e_hide_window_border.setChecked(self.preferences.hide_window_border)        
-        self.e_default_font_editor.setText(self.preferences.font_editor)
+        self.e_hide_window_border.setChecked(self.preferences.hide_window_border)                
         self.e_default_splash.setChecked(self.preferences.splash)           
         self.e_dark_theme.setChecked(self.preferences.dark_theme)
 
         # preparo elenco server        
-        self.o_server.setColumnCount(4)
-        self.o_server.setHorizontalHeaderLabels(['Server title','IP port','Color',''])           
+        self.o_server.setColumnCount(3)
+        self.o_server.setHorizontalHeaderLabels(['Server title','IP port','Default (check only one)'])           
         v_rig = 1                
         for record in self.preferences.elenco_server:                                    
             self.o_server.setRowCount(v_rig) 
             self.o_server.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
-            self.o_server.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                               
-            self.o_server.setItem(v_rig-1,2,QTableWidgetItem(record[2]))                                           
-            # come quarta colonna metto il pulsante per la scelta del colore
-            v_color_button = QPushButton()            
-            v_icon = QIcon()
-            v_icon.addPixmap(QPixmap(":/icons/icons/color.png"), QIcon.Normal, QIcon.Off)
-            v_color_button.setIcon(v_icon)
-            v_color_button.clicked.connect(self.slot_set_color_server)
-
-            self.o_server.setCellWidget(v_rig-1,3,v_color_button)                               
+            self.o_server.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                                                                     
+            # la terza colonna è una check-box per la selezione del server di default
+            # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
+            # attivare la centratura 
+            v_checkbox = QCheckBox()          
+            v_widget = QWidget()      
+            v_layout = QHBoxLayout(v_widget)
+            v_layout.addWidget(v_checkbox)
+            v_layout.setAlignment(Qt.AlignCenter)
+            v_layout.setContentsMargins(0,0,0,0)
+            v_widget.setLayout(v_layout)
+            if record[2] == '1':
+                v_checkbox.setChecked(True)                                            
+            else:
+                v_checkbox.setChecked(False)                                                        
+            self.o_server.setCellWidget(v_rig-1,2,v_widget)                               
+            
             v_rig += 1
         self.o_server.resizeColumnsToContents()
 
         # preparo elenco user        
-        self.o_users.setColumnCount(3)
-        self.o_users.setHorizontalHeaderLabels(['PC-NAME','Title name','IP'])   
+        self.o_users.setColumnCount(4)
+        self.o_users.setHorizontalHeaderLabels(['PC-NAME','Title name','IP','Default (check only one)'])   
         v_rig = 1                
         for record in self.preferences.elenco_user:                                    
             self.o_users.setRowCount(v_rig) 
             self.o_users.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
             self.o_users.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                               
             self.o_users.setItem(v_rig-1,2,QTableWidgetItem(record[2]))                               
+            # la quarta colonna è una check-box per la selezione del server di default
+            # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
+            # attivare la centratura 
+            v_checkbox = QCheckBox()          
+            v_widget = QWidget()      
+            v_layout = QHBoxLayout(v_widget)
+            v_layout.addWidget(v_checkbox)
+            v_layout.setAlignment(Qt.AlignCenter)
+            v_layout.setContentsMargins(0,0,0,0)
+            v_widget.setLayout(v_layout)
+            if record[3] == '1':
+                v_checkbox.setChecked(True)                                            
+            else:
+                v_checkbox.setChecked(False)                                                        
+            self.o_users.setCellWidget(v_rig-1,3,v_widget)                               
+
             v_rig += 1
         self.o_users.resizeColumnsToContents()
 
@@ -159,21 +179,6 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             # esco dal programma delle preferenze
             self.close()
     
-    def slot_b_default_font_editor(self):
-        """
-           Scelta del font
-        """
-        # apro la dialog di scelta del font partendo da quello eventualmente già settato
-        v_split = self.e_default_font_editor.text().split(',')
-        v_font_pref = QFont(str(v_split[0]),int(v_split[1]))
-
-        font, ok = QFontDialog.getFont(v_font_pref)
-        if ok:
-            v_text = font.family() + ', '+ str(font.pointSize())            
-            if font.bold():
-                v_text += ', BOLD'
-            self.e_default_font_editor.setText(v_text)            
-
     def slot_b_server_add(self):
         """
            Crea una riga vuota dove poter inserire informazioni connessioni al server
@@ -229,18 +234,39 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         # elenco dei server
         v_server = []
         for i in range(0,self.o_server.rowCount()):
-            v_server.append( ( self.o_server.item(i,0).text(), self.o_server.item(i,1).text(), self.o_server.item(i,2).text() ) )            
+            # controllo la checkbox del default (da notare come la checkbox è annegata in un oggetto di layout 
+            # e quindi prima prendo l'oggetto che c'è annegato nella cella della tabella, poi in quell'oggetto
+            # prendo tutti gli oggetti di tipo checkbox e poi prendo il primo checkbox (che è anche l'unico)
+            # e da li prendo il suo stato!
+            v_widget = self.o_server.cellWidget(i,2)
+            v_checkbox = v_widget.findChildren(QCheckBox)
+            if v_checkbox[0].isChecked():                
+                v_default = '1'
+            else:
+                v_default = '0'
+            # preparo l'array con la stringa della riga server
+            v_server.append( ( self.o_server.item(i,0).text(), self.o_server.item(i,1).text(), v_default ) )            
 
         # elenco dei users
         v_users = []
         for i in range(0,self.o_users.rowCount()):
-            v_users.append( ( self.o_users.item(i,0).text(), self.o_users.item(i,1).text() , self.o_users.item(i,2).text()) )            
+            # controllo la checkbox del default (da notare come la checkbox è annegata in un oggetto di layout 
+            # e quindi prima prendo l'oggetto che c'è annegato nella cella della tabella, poi in quell'oggetto
+            # prendo tutti gli oggetti di tipo checkbox e poi prendo il primo checkbox (che è anche l'unico)
+            # e da li prendo il suo stato!
+            v_widget = self.o_users.cellWidget(i,3)
+            v_checkbox = v_widget.findChildren(QCheckBox)
+            if v_checkbox[0].isChecked():                
+                v_default = '1'
+            else:
+                v_default = '0'    
+            # preparo l'array con la stringa della riga server
+            v_users.append( ( self.o_users.item(i,0).text(), self.o_users.item(i,1).text() , self.o_users.item(i,2).text(), v_default) )            
 	
 		# scrivo nel file un elemento json contenente le informazioni inseriti dell'utente
         v_json ={'remember_window_pos': v_remember_window_pos,                 
                  'hide_window_border': v_hide_window_border,                 
-                 'dark_theme': v_dark_theme,
-		         'font_editor' :self.e_default_font_editor.text(),
+                 'dark_theme': v_dark_theme,		         
                  'splash' : v_splash,                 
                  'server': v_server,
                  'users': v_users

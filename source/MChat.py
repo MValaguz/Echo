@@ -131,12 +131,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # tolgo i bordi alla window (in modo che sia più invisibile) cambio anche il titolo in modo che 
         # se ridotto ad icona non sia visibile
         if self.preferences.hide_window_border:
-            self.setWindowFlags(Qt.CustomizeWindowHint)
-            self.setWindowTitle(' ')
+            self.setWindowFlags(Qt.CustomizeWindowHint)            
 
         ###
-        # Dalle preferenze carico il menu con elenco dei server e degli user
-        # Per i primi due server collego lo shortcut F1 e F2
+        # Dalle preferenze carico il menu con elenco dei server e degli user        
+        # e imposto eventuali default
         ###
         self.action_elenco_server = []
         self.action_elenco_user = []
@@ -148,6 +147,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_SERVER')
+                if rec[2] == '1':
+                    v_qaction.setChecked(True)
                 self.action_elenco_server.append(v_qaction)
                 self.menuAs_Server.addAction(v_qaction)               
 
@@ -159,6 +160,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_USER')
+                if rec[3] == '1':
+                    v_qaction.setChecked(True)
                 self.action_elenco_user.append(v_qaction)
                 self.menuAs_Client.addAction(v_qaction)   
             
@@ -166,39 +169,38 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.record_server = []
         self.record_user = []
         self.tipo_connessione = ''
-        self.systray_attiva = False
-        self.splash_window = self.preferences.splash
-        self.slot_splash_window()
+        self.systray_attiva = False        
+
+        # imposto icona della preferenza splash window
+        self.actionSplash_window.setChecked(self.preferences.splash)
 
         # imposto il fuoco sul campo di invio messaggio
         self.e_invia_messaggio.setFocus()
 
         # definizione dei pennelli per scrivere il testo in diversi colori
-        self.pennello_rosso = QTextCharFormat()
-        self.pennello_rosso.setForeground(Qt.red)
-        self.pennello_blu = QTextCharFormat()
-        self.pennello_blu.setForeground(Qt.blue)
-        self.pennello_nero = QTextCharFormat()
-        self.pennello_nero.setForeground(Qt.black)
-
-        # imposto il font per la parte di messaggistica                
-        if self.preferences.font_editor != '':
-            v_split = self.preferences.font_editor.split(',')            
-            v_font = QFont(str(v_split[0]),int(v_split[1]))
-            if len(v_split) > 2 and v_split[2] == ' BOLD':
-                v_font.setBold(True)
-            self.o_messaggi.setFont(v_font)    
-            self.e_invia_messaggio.setFont(v_font)
+        if self.preferences.dark_theme:
+            self.pennello_blu = QTextCharFormat()
+            self.pennello_blu.setForeground(QColor('#3399FF'))
+            self.pennello_nero = QTextCharFormat()
+            self.pennello_nero.setForeground(Qt.white)
+        else:
+            self.pennello_blu = QTextCharFormat()
+            self.pennello_blu.setForeground(Qt.blue)
+            self.pennello_nero = QTextCharFormat()
+            self.pennello_nero.setForeground(Qt.black)
 
         # per smistare i segnali che arrivano dal menù, utilizzo un apposito connettore
-        # attenzione! eventi come la selezione di help, info, passa tramite i segnali standard
+        # attenzione! eventi come la selezione di info, ecc. passa tramite i segnali standard
         self.menuBar.triggered[QAction].connect(self.smistamento_voci_menu)        
             
         # se è stato scelto di avere il tema dei colori scuro, lo carico
         # Attenzione! La parte principale del tema colori rispetta il meccanismo di QT library
         #             Mentre per la parte di QScintilla ho dovuto fare le impostazioni manuali (v. definizione del lexer)
         if self.preferences.dark_theme:                    
-            self.setStyleSheet(dark_theme_definition())                    
+            self.setStyleSheet(dark_theme_definition())     
+
+        # attivo evento di cambiamento di focus sulla window 
+        qApp.focusChanged.connect(self.on_focusChanged)                  
 
     def smistamento_voci_menu(self, p_slot):
         """
@@ -252,18 +254,29 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if self.systray_attiva:
             self.systray_icon.hide()
 
+    def on_focusChanged(self, old, now):
+        """
+           Intercetto evento che indica la perdita del focus sulla window principale
+        """
+        # se la window principale perde il focus, pulisco il titolo; in questo modo all'arrivo 
+        # di un messaggio, sarà possibile da parte dell'utente, capire che è cambiato qualcosa
+        if now == None and self.windowTitle().find('MChat') == -1:
+            self.setWindowTitle(' ')                    
+    
     def changeEvent(self, event):
         """
            Intercetto l'evento che indica alla finestra di riaprirsi dalla barra delle window
+           e ne azzero il titolo. In realtà questo evento prende tutto quello che succede alla window... 
         """        
-        if event.type() == QEvent.WindowStateChange:
+        if event.type() == QEvent.WindowStateChange:            
             if event.type() == QEvent.WindowStateChange:
+                # da minimizzata passa a massimizzata...cambio il titolo
                 if event.oldState() and Qt.WindowMinimized:
-                    if self.windowTitle() == '... ':
+                    if self.windowTitle() == '_____.._____':
                         self.setWindowTitle(' ')                    
+                # da massimizzata passa a minimizzata....azzero il titolo (utente capisce che sono in attesa e non ci sono messaggi)
                 elif event.oldState() == Qt.WindowNoState or self.windowState() == Qt.WindowMaximized:
-                    print("WindowMaximized")
-
+                    self.setWindowTitle(' ')                    
 
     def carico_posizione_window(self):
         """
@@ -299,22 +312,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 o_rect = o_pos.getRect()                        
                 v_file.write("MainWindow " + str(o_rect[0]) + " " + str(o_rect[1]) + " " +  str(o_rect[2]) + " " + str(o_rect[3]))
             v_file.close()
-        
-    def slot_splash_window(self):
-        """
-           Attiva o disattiva l'opzione che controlla lo splash window
-        """
-        icon1 = QIcon()                
-        if self.splash_window:
-            self.splash_window = False
-            icon1.addPixmap(QPixmap(":/icons/icons/exclamation.png"), QIcon.Normal, QIcon.Off)            
-            self.statusbar.showMessage('Splash window deactivated')
-        else:
-            self.splash_window = True
-            icon1.addPixmap(QPixmap(":/icons/icons/dexclamation.png"), QIcon.Normal, QIcon.Off)            
-            self.statusbar.showMessage('Splash window activated')
-        self.actionSplash_window.setIcon(icon1)                
-    
+            
     def slot_riduci_a_systray(self):
         """
            Riduce programma a systray
@@ -358,12 +356,6 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         self.o_messaggi.clear()        
 
-    def slot_visualizza_help(self):
-        """
-           Visualizzo help
-        """
-        os.system("start help/help.html")
-
     def slot_crea_server_chat(self):
         """
            Attiva l'applicazione lato server in attesa di connessione da parte di un client                      
@@ -384,10 +376,6 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if not v_found or self.record_server is None:
             message_error('You must select a server from server-menu!')
             return 'ko'
-
-        # imposto il colore della chat in base alle preferenze
-        self.o_messaggi.setStyleSheet("QPlainTextEdit {background-color: " + self.record_server[2] + ";}")
-        self.e_invia_messaggio.setStyleSheet("QLineEdit {background-color: " + self.record_server[2] + ";}")
 
         # ricerco il nome del PC di esecuzione del programma
         soc = socket.socket()
@@ -415,7 +403,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if not v_error:
             # try to locate using socket
             soc.listen(1)            
-            self.statusbar.showMessage(self.record_server[0] + ' IP=' + str(self.ip) + ', PORT=' + self.record_server[1])
+            self.setWindowTitle('Waiting ' + self.record_server[0] + ' IP=' + str(self.ip) + ', PORT=' + self.record_server[1])
             # sostituisce la freccia del mouse con icona "clessidra"
             QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))       
             self.repaint()
@@ -427,7 +415,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             # ripristino icona freccia del mouse
             QApplication.restoreOverrideCursor()    
             # indico l'utente che si è connesso            
-            self.statusbar.showMessage(self.client_name + ' has connected')            
+            self.setWindowTitle(self.client_name + ' has connected')            
             self.l_invia_messaggio.setText('Send to ' + self.client_name + ':')
             # invio l'alias di chi fa da server
             self.connection.send(self.name.encode())            
@@ -466,10 +454,6 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             message_error('You must select a server from server-menu!')
             return 'ko'
 
-        # imposto il colore della chat in base alla preferenze
-        self.o_messaggi.setStyleSheet("QPlainTextEdit {background-color: " + self.record_server[2] + ";}")
-        self.e_invia_messaggio.setStyleSheet("QLineEdit {background-color: " + self.record_server[2] + ";}")
-
         # prendo la voce del menu client che è stata selezionata, per capire con quale modalità server mi devo mettere in attesa
         v_found = False
         for action in self.action_elenco_user:            
@@ -489,7 +473,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.soc = socket.socket()
             self.client_name = socket.gethostname()
             self.ip = socket.gethostbyname(self.client_name)
-            self.statusbar.showMessage(self.client_name + '({})'.format(self.ip))
+            self.setWindowTitle(self.client_name + '({})'.format(self.ip))
             self.server_host = self.record_user[2]
             if self.server_host == '':
                 message_error('PC not found!')
@@ -522,7 +506,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     # mi metto in attesa che il server mi restituisca il suo alias
                     self.alias_server_name = self.soc.recv(1024)
                     self.alias_server_name = self.alias_server_name.decode()
-                    self.statusbar.showMessage('{} has joined...'.format(self.alias_server_name))                                                            
+                    self.setWindowTitle('{} has joined'.format(self.alias_server_name))                                                            
                     self.l_invia_messaggio.setText('Send to ' + self.alias_server_name + ':')
                     # disattivo i button di server e client
                     self.actionStart_as_server.setEnabled(False)
@@ -543,19 +527,21 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         if p_messaggio == 'CONNECTION_LOST':
             message_error('Connection lost!')
-            self.statusbar.showMessage('')
+            self.setWindowTitle(' ')
         elif p_messaggio != '':
             self.o_messaggi.setCurrentCharFormat(self.pennello_blu)
             self.o_messaggi.appendPlainText(p_messaggio)
-            # in qualsiasi caso faccio lampeggiare la finestra (nel caso fosse dietro a tutte le altre l'utente capisce che è successo qualcosa)
-            if self.splash_window:
+            # se richiesto, faccio lampeggiare la finestra 
+            if self.actionSplash_window.isChecked():
                 self.activateWindow()
+            
             # se programma è ridotto a systray manda messaggio
-            if self.systray_attiva:
-                self.systray_icon.showMessage('MChat', 'You have a new message :-)')
-            # se il titolo della window è vuoto (modalità minimize) ... indico con dei puntini nel titolo che ho ricevuto un messaggio
-            if self.windowTitle() == ' ':
-                self.setWindowTitle('...')
+            # funzione disattivata con la versione 1.3
+            #if self.systray_attiva:
+            #    self.systray_icon.showMessage('MChat', 'New message!')
+            
+            # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
+            self.setWindowTitle('_____.._____')
 
     def slot_invia_il_messaggio(self):
         """
