@@ -127,7 +127,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # carico posizione e dimensione window
         self.default_window_pos = self.geometry().getRect()                    
         self.carico_posizione_window()
-
+        
         # tolgo i bordi alla window (in modo che sia più invisibile) cambio anche il titolo in modo che 
         # se ridotto ad icona non sia visibile
         if self.preferences.hide_window_border:
@@ -170,6 +170,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.record_user = []
         self.tipo_connessione = ''
         self.systray_attiva = False        
+        self.systray_pos_window = self.geometry()  
 
         # imposto icona della preferenza splash window
         self.actionSplash_window.setChecked(self.preferences.splash)
@@ -325,6 +326,9 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.systray_icon.setToolTip("MChat")
             self.systray_icon.show()
 
+        # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
+        self.systray_pos_window = self.geometry()
+
         # nascondo la finestra
         self.hide()
 
@@ -333,6 +337,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
            Rende nuovamente visibile la finestra della chat
         """
         self.show()
+
+        self.setGeometry(self.systray_pos_window)
 
     def slot_program_info(self):
         """

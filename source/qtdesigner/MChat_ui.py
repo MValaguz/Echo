@@ -184,7 +184,7 @@ class Ui_MChat_window(object):
 
     def retranslateUi(self, MChat_window):
         _translate = QtCore.QCoreApplication.translate
-        MChat_window.setWindowTitle(_translate("MChat_window", "MChat 1.3"))
+        MChat_window.setWindowTitle(_translate("MChat_window", "MChat"))
         self.l_messaggi.setText(_translate("MChat_window", "Messages:"))
         self.l_invia_messaggio.setText(_translate("MChat_window", "Send:"))
         self.toolBar.setWindowTitle(_translate("MChat_window", "toolBar"))
