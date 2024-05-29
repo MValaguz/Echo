@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>199</width>
+    <width>235</width>
     <height>189</height>
    </rect>
   </property>
@@ -130,20 +130,24 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionExit"/>
+   <addaction name="actionClear_my_chat"/>
    <addaction name="actionMinimize"/>
+   <addaction name="separator"/>
    <addaction name="actionStart_as_server"/>
    <addaction name="actionClient_connection"/>
-   <addaction name="actionPreferences"/>
-   <addaction name="actionClear_my_chat"/>
+   <addaction name="separator"/>
    <addaction name="actionReduce_to_systray"/>
+   <addaction name="actionMessage_systray"/>
    <addaction name="actionSplash_window"/>
+   <addaction name="separator"/>
+   <addaction name="actionPreferences"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>199</width>
+     <width>235</width>
      <height>21</height>
     </rect>
    </property>
@@ -179,11 +183,23 @@
      </font>
     </property>
     <property name="title">
-     <string>File</string>
+     <string>Action</string>
     </property>
     <addaction name="actionProgram_Info"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
     <addaction name="actionMinimize"/>
+    <addaction name="actionClear_my_chat"/>
+    <addaction name="separator"/>
+    <addaction name="actionStart_as_server"/>
+    <addaction name="actionClient_connection"/>
+    <addaction name="separator"/>
+    <addaction name="actionReduce_to_systray"/>
+    <addaction name="actionSplash_window"/>
+    <addaction name="actionMessage_systray"/>
+    <addaction name="separator"/>
     <addaction name="actionReset_window_position"/>
+    <addaction name="actionHide_toolbar"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -231,18 +247,6 @@
    </property>
    <property name="toolTip">
     <string>Program Info</string>
-   </property>
-  </action>
-  <action name="actionHelp">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/help.png</normaloff>:/icons/icons/help.png</iconset>
-   </property>
-   <property name="text">
-    <string>Help</string>
-   </property>
-   <property name="toolTip">
-    <string>Help</string>
    </property>
   </action>
   <action name="actionSplash_window">
@@ -330,6 +334,33 @@
    </property>
    <property name="text">
     <string>Reset window position</string>
+   </property>
+  </action>
+  <action name="actionMessage_systray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/message.png</normaloff>:/icons/icons/message.png</iconset>
+   </property>
+   <property name="text">
+    <string>Message when MChat is on systray</string>
+   </property>
+   <property name="toolTip">
+    <string>Message when MChat is on systray</string>
+   </property>
+  </action>
+  <action name="actionHide_toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/hide_toolbar.png</normaloff>:/icons/icons/hide_toolbar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hide toolbar</string>
    </property>
   </action>
  </widget>

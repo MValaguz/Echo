@@ -28,6 +28,7 @@
 import os
 import socket
 import sys
+import time
 # Amplifico la pathname dell'applicazione in modo veda il contenuto della directory qtdesigner dove sono contenuti i layout
 # Nota bene! Quando tramite pyinstaller verrà creato l'eseguibile, tutti i file della cartella qtdesigner verranno messi 
 #            nella cartella principale e questa istruzione di cambio path di fatto non avrà alcun senso. Serve dunque solo
@@ -122,7 +123,9 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.setupUi(self)
         
         # carico preferenze
-        self.preferences = preferences_class('C:\\MChat\\MChat.ini')
+        # Attenzione! Questa dir è possibile aprirla dalla gestione delle preferenze e in quel programma è riportata ancora la stessa dir        
+        self.work_dir = os.path.expanduser('~\\AppData\\Local\\MChat\\')
+        self.preferences = preferences_class(self.work_dir + 'MChat.ini')
 
         # carico posizione e dimensione window
         self.default_window_pos = self.geometry().getRect()                    
@@ -132,6 +135,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # se ridotto ad icona non sia visibile
         if self.preferences.hide_window_border:
             self.setWindowFlags(Qt.CustomizeWindowHint)            
+
+        # nascondo la toolbar se richiesto
+        if self.preferences.hide_toolbar:
+            self.actionHide_toolbar.setChecked(True)
+            self.toolBar.hide()
 
         ###
         # Dalle preferenze carico il menu con elenco dei server e degli user        
@@ -174,6 +182,9 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
 
         # imposto icona della preferenza splash window
         self.actionSplash_window.setChecked(self.preferences.splash)
+        
+        # imposto icona della preferenza messaggio quando systray attiva
+        self.actionMessage_systray.setChecked(self.preferences.message_systray)
 
         # imposto il fuoco sul campo di invio messaggio
         self.e_invia_messaggio.setFocus()
@@ -201,7 +212,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.setStyleSheet(dark_theme_definition())     
 
         # attivo evento di cambiamento di focus sulla window 
-        qApp.focusChanged.connect(self.on_focusChanged)                  
+        qApp.focusChanged.connect(self.on_focusChanged)       
 
     def smistamento_voci_menu(self, p_slot):
         """
@@ -243,6 +254,13 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             qr.moveCenter(cp)                
             self.move(qr.topLeft())            
 
+        if str(p_slot.text()) == 'Hide toolbar':            
+            # mostra o nasconde la toolbar        
+            if self.actionHide_toolbar.isChecked():
+                self.toolBar.hide()           
+            else:
+                self.toolBar.show()           
+
     def closeEvent(self, event):
         """
            Intercetto l'evento di chiusura 
@@ -262,7 +280,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # se la window principale perde il focus, pulisco il titolo; in questo modo all'arrivo 
         # di un messaggio, sarà possibile da parte dell'utente, capire che è cambiato qualcosa
         if now == None and self.windowTitle().find('MChat') == -1:
-            self.setWindowTitle(' ')                    
+            self.imposta_titolo_window(False)
     
     def changeEvent(self, event):
         """
@@ -274,10 +292,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 # da minimizzata passa a massimizzata...cambio il titolo
                 if event.oldState() and Qt.WindowMinimized:
                     if self.windowTitle() == '_____.._____':
-                        self.setWindowTitle(' ')                    
+                        self.imposta_titolo_window(False)
                 # da massimizzata passa a minimizzata....azzero il titolo (utente capisce che sono in attesa e non ci sono messaggi)
                 elif event.oldState() == Qt.WindowNoState or self.windowState() == Qt.WindowMaximized:
-                    self.setWindowTitle(' ')                    
+                    self.imposta_titolo_window(False)
 
     def carico_posizione_window(self):
         """
@@ -285,8 +303,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         # se utente ha richiesto di salvare la posizione della window...
         if self.preferences.remember_window_pos:
-            if os.path.isfile('C:\\MChat\\MChat_window_pos.ini'):
-                v_file = open('C:\\MChat\\MChat_window_pos.ini','r')
+            if os.path.isfile(self.work_dir + 'MChat_window_pos.ini'):
+                v_file = open(self.work_dir + 'MChat_window_pos.ini','r')
                 # al momento leggo solo la prima riga che contiene la dimensione della mainwindow
                 v_my_window_pos = v_file.readline().rstrip('\n').split()                                
                 if v_my_window_pos[0] == 'MainWindow':
@@ -305,7 +323,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         # se utente ha richiesto di salvare la posizione della window...
         if self.preferences.remember_window_pos:
-            v_file = open('C:\\MChat\\MChat_window_pos.ini','w')
+            v_file = open(self.work_dir + 'MChat_window_pos.ini','w')
             if self.isMaximized():
                 v_file.write("MainWindow MAXIMIZED")
             else:
@@ -313,7 +331,24 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 o_rect = o_pos.getRect()                        
                 v_file.write("MainWindow " + str(o_rect[0]) + " " + str(o_rect[1]) + " " +  str(o_rect[2]) + " " + str(o_rect[3]))
             v_file.close()
-            
+
+    def imposta_titolo_window(self, p_active):
+        """
+           Imposta il titolo della window e la relativa icona.
+           In pratica quando non ci sono messaggi il titolo della window è vuoto e l'icona della window è grigia
+           mentre quando arriva un messaggio il titolo si riempie e l'icona della window si colora
+        """
+        if p_active:
+            self.setWindowTitle('_____.._____')
+            v_icon = QIcon()
+            v_icon.addPixmap(QPixmap(":/icons/icons/MChat.ico"), QIcon.Normal, QIcon.Off)
+            self.setWindowIcon(v_icon)            
+        else:
+            self.setWindowTitle(' ')
+            v_icon = QIcon()
+            v_icon.addPixmap(QPixmap(":/icons/icons/MChat_grey.ico"), QIcon.Normal, QIcon.Off)
+            self.setWindowIcon(v_icon)            
+
     def slot_riduci_a_systray(self):
         """
            Riduce programma a systray
@@ -353,7 +388,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
            Gestione delle preferenze
         """
-        self.my_app = win_preferences_class('C:\\MChat\\MChat.ini')        
+        self.my_app = win_preferences_class(self.work_dir)        
         self.my_app.show()   
     
     def slot_pulisci_chat(self):
@@ -500,12 +535,22 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
 
             if not v_error:                
                 # prendo numero della porta a cui collegarmi
-                self.port = int(self.record_server[1])                
-                try:
-                    self.soc.connect((self.server_host, self.port))
-                except:
-                    message_error('Error to connect!')
-                    v_error = True
+                self.port = int(self.record_server[1])      
+                # connessione al server
+                v_repeat = True
+                while v_repeat :                         
+                    try:
+                        self.soc.connect((self.server_host, self.port))
+                        v_repeat = False
+                    except:
+                        if not self.preferences.loop_when_connect:
+                            message_error('Error to connect!')
+                            v_error = True
+                            v_repeat = False
+                        else:
+                            # il tentativo è ogni 5 secondi
+                            time.sleep(5)              
+                            pass
 
                 if not v_error:
                     self.soc.send(self.alias_client_name.encode())
@@ -526,14 +571,14 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     # collego il thread con la relativa funzione
                     self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
                     self.thread_in_attesa.start()
-
+    
     def ricevo_il_messaggio(self, p_messaggio):
         """
            Ho ricevuto in messaggio dal thread che è in ascolto
         """
         if p_messaggio == 'CONNECTION_LOST':
             message_error('Connection lost!')
-            self.setWindowTitle(' ')
+            self.imposta_titolo_window(False)
         elif p_messaggio != '':
             self.o_messaggi.setCurrentCharFormat(self.pennello_blu)
             self.o_messaggi.appendPlainText(p_messaggio)
@@ -541,13 +586,12 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             if self.actionSplash_window.isChecked():
                 self.activateWindow()
             
-            # se programma è ridotto a systray manda messaggio
-            # funzione disattivata con la versione 1.3
-            #if self.systray_attiva:
-            #    self.systray_icon.showMessage('MChat', 'New message!')
+            # se programma è ridotto a systray manda e richiesto di mandare un messaggio...            
+            if self.systray_attiva and self.actionMessage_systray.isChecked():
+                self.systray_icon.showMessage('MChat', 'New message!')
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
-            self.setWindowTitle('_____.._____')
+            self.imposta_titolo_window(True)
 
     def slot_invia_il_messaggio(self):
         """

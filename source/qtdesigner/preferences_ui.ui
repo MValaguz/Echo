@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>481</width>
-    <height>556</height>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,10 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" rowspan="6">
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="e_remember_window_pos"/>
+      </item>
+      <item row="0" column="0" rowspan="8">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QLabel" name="label_10">
@@ -63,10 +66,34 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Message when systray is active:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_message_systray</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Hide toolbar:</string>
+          </property>
+          <property name="buddy">
+           <cstring>e_hide_toolbar</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Loop when connect as client:</string>
+          </property>
+         </widget>
+        </item>
        </layout>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="e_remember_window_pos"/>
       </item>
       <item row="1" column="1">
        <widget class="QCheckBox" name="e_default_splash">
@@ -75,15 +102,36 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="e_message_systray">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QCheckBox" name="e_loop_when_connect">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QCheckBox" name="e_hide_window_border">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="3" column="1">
        <widget class="QCheckBox" name="e_dark_theme">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QCheckBox" name="e_hide_toolbar">
         <property name="text">
          <string/>
         </property>
@@ -244,6 +292,17 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="b_open_pref_dir">
+        <property name="text">
+         <string>Open pref. dir</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/icons/icons/folder.png</normaloff>:/icons/icons/folder.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="b_save">
         <property name="text">
          <string>Save preferences</string>
@@ -260,18 +319,20 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>b_restore</tabstop>
   <tabstop>e_remember_window_pos</tabstop>
   <tabstop>e_default_splash</tabstop>
+  <tabstop>b_save</tabstop>
   <tabstop>e_hide_window_border</tabstop>
   <tabstop>e_dark_theme</tabstop>
+  <tabstop>e_message_systray</tabstop>
+  <tabstop>o_server</tabstop>
   <tabstop>b_server_add</tabstop>
   <tabstop>b_server_remove</tabstop>
-  <tabstop>o_server</tabstop>
+  <tabstop>b_open_pref_dir</tabstop>
   <tabstop>b_user_add</tabstop>
   <tabstop>b_user_remove</tabstop>
   <tabstop>o_users</tabstop>
-  <tabstop>b_restore</tabstop>
-  <tabstop>b_save</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
@@ -284,8 +345,8 @@
    <slot>slot_b_save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>343</x>
-     <y>450</y>
+     <x>468</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -301,7 +362,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
-     <y>450</y>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -316,7 +377,7 @@
    <slot>slot_b_server_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>302</x>
+     <x>427</x>
      <y>147</y>
     </hint>
     <hint type="destinationlabel">
@@ -332,7 +393,7 @@
    <slot>slot_b_server_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>342</x>
+     <x>467</x>
      <y>147</y>
     </hint>
     <hint type="destinationlabel">
@@ -348,8 +409,8 @@
    <slot>slot_b_user_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>302</x>
-     <y>299</y>
+     <x>427</x>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -364,12 +425,28 @@
    <slot>slot_b_user_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>342</x>
-     <y>299</y>
+     <x>467</x>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
      <x>443</x>
      <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_open_pref_dir</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_open_pref_dir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>526</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>479</x>
+     <y>483</y>
     </hint>
    </hints>
   </connection>
@@ -381,5 +458,6 @@
   <slot>slot_b_server_remove()</slot>
   <slot>slot_b_user_add()</slot>
   <slot>slot_b_user_remove()</slot>
+  <slot>slot_b_open_pref_dir()</slot>
  </slots>
 </ui>

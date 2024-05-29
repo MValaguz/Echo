@@ -62,12 +62,44 @@ class preferences_class():
             self.elenco_server = v_json['server']
             # users
             self.elenco_user = v_json['users']
+            # messaggio attivo nella systray 
+            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
+            try:
+                if v_json['message_systray'] == 1:
+                    self.message_systray = True
+                else:
+                    self.message_systray = False
+            except:
+                self.message_systray = False
+            # toolbar nascosta
+            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
+            try:
+                if v_json['hide_toolbar'] == 1:
+                    self.hide_toolbar = True
+                else:
+                    self.hide_toolbar = False
+            except:
+                self.hide_toolbar = False
+            # loop quando ci si connette come client
+            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
+            try:
+                if v_json['loop_when_connect'] == 1:
+                    self.loop_when_connect = True
+                else:
+                    self.loop_when_connect = False
+            except:
+                self.loop_when_connect = True
+
         # imposto valori di default senza presenza dello specifico file
         else:            
+            # salvataggio posizione finestra
             self.remember_window_pos = True            
+            # finestra senza bordo
             self.hide_window_border = True
+            # tema scuro
             self.dark_theme = True            
-            self.splash = False
+            # titolo finestra lampeggiante
+            self.splash = False            
             # elenco server è composto da Titolo, TNS e Colore
             self.elenco_server = [('SERVER ONE','1250','1'),
                                   ('SERVER TWO','1300','0')]
@@ -75,19 +107,26 @@ class preferences_class():
             self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9','1'),
                                 ('pc-aberlend','Solo','10.0.47.1','0'),                                
                                 ('PC-TRAINIM','Marco','10.0.47.17','0')]
+            # messaggio attivo nella systray
+            self.message_systray = False
+            # toolbar nascosta
+            self.hide_toolbar = False
+            # loop quando ci si connette come client
+            self.loop_when_connect = True
             # creo la dir dove andranno le preferenze              
-            if not os.path.isdir('C:\\MChat'):
-                os.makedirs('C:\\MChat')
+            if not os.path.isdir(os.path.expanduser('~\\AppData\\Local\\MChat\\')):
+                os.makedirs(os.path.expanduser('~\\AppData\\Local\\MChat\\'))
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
         Gestione delle preferenze di MChat
     """                
-    def __init__(self, p_nome_file_preferences):
+    def __init__(self, p_nome_dir_preferences):
         super(win_preferences_class, self).__init__()        
         self.setupUi(self)
 
-        self.nome_file_preferences = p_nome_file_preferences
+        self.nome_dir_preferences = p_nome_dir_preferences
+        self.nome_file_preferences = p_nome_dir_preferences + 'MChat.ini'
 
         # creo l'oggetto preferenze che automaticamente carica il file o le preferenze di default
         self.preferences = preferences_class(self.nome_file_preferences)        
@@ -96,6 +135,9 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.e_hide_window_border.setChecked(self.preferences.hide_window_border)                
         self.e_default_splash.setChecked(self.preferences.splash)           
         self.e_dark_theme.setChecked(self.preferences.dark_theme)
+        self.e_message_systray.setChecked(self.preferences.message_systray)
+        self.e_hide_toolbar.setChecked(self.preferences.hide_toolbar)
+        self.e_loop_when_connect.setChecked(self.preferences.loop_when_connect)
 
         # preparo elenco server        
         self.o_server.setColumnCount(3)
@@ -133,7 +175,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             self.o_users.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
             self.o_users.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                               
             self.o_users.setItem(v_rig-1,2,QTableWidgetItem(record[2]))                               
-            # la quarta colonna è una check-box per la selezione del server di default
+            # la quarta colonna è una check-box per la selezione del user di default
             # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
             # attivare la centratura 
             v_checkbox = QCheckBox()          
@@ -178,12 +220,29 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             message_info('Preferences restored! Restart MChat to see the changes ;-)')
             # esco dal programma delle preferenze
             self.close()
+
+    def slot_b_open_pref_dir(self):
+        """
+           Apre la cartella che contiene le preferenze
+        """
+        os.startfile(os.path.expanduser(self.nome_dir_preferences))        
     
     def slot_b_server_add(self):
         """
            Crea una riga vuota dove poter inserire informazioni connessioni al server
         """
-        self.o_server.setRowCount(self.o_server.rowCount()+1)
+        # aggiungo una riga
+        self.o_server.setRowCount(self.o_server.rowCount()+1)        
+        # inserisce nella terza colonna la checkbox 
+        v_checkbox = QCheckBox()          
+        v_widget = QWidget()      
+        v_layout = QHBoxLayout(v_widget)
+        v_layout.addWidget(v_checkbox)
+        v_layout.setAlignment(Qt.AlignCenter)
+        v_layout.setContentsMargins(0,0,0,0)
+        v_widget.setLayout(v_layout)
+        v_checkbox.setChecked(False)                                                        
+        self.o_server.setCellWidget(self.o_server.rowCount()-1,2,v_widget)                        
 
     def slot_b_server_remove(self):
         """
@@ -195,7 +254,18 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         """
            Crea una riga vuota dove poter inserire informazioni utente di connessione al server
         """
-        self.o_users.setRowCount(self.o_users.rowCount()+1)
+        # aggiungo una riga
+        self.o_users.setRowCount(self.o_users.rowCount()+1)        
+        # inserisce nella quarta colonna la checkbox 
+        v_checkbox = QCheckBox()          
+        v_widget = QWidget()      
+        v_layout = QHBoxLayout(v_widget)
+        v_layout.addWidget(v_checkbox)
+        v_layout.setAlignment(Qt.AlignCenter)
+        v_layout.setContentsMargins(0,0,0,0)
+        v_widget.setLayout(v_layout)
+        v_checkbox.setChecked(False)                                                        
+        self.o_users.setCellWidget(self.o_users.rowCount()-1,3,v_widget)                        
 
     def slot_b_user_remove(self):
         """
@@ -262,14 +332,35 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                 v_default = '0'    
             # preparo l'array con la stringa della riga server
             v_users.append( ( self.o_users.item(i,0).text(), self.o_users.item(i,1).text() , self.o_users.item(i,2).text(), v_default) )            
-	
+
+        # messaggio nella systray
+        if self.e_message_systray.isChecked():
+            v_message_systray = 1
+        else:
+            v_message_systray = 0
+        
+        # toolbar nascosta
+        if self.e_hide_toolbar.isChecked():
+            v_hide_toolbar = 1
+        else:
+            v_hide_toolbar = 0
+        
+        # loop quando ci si connette come client
+        if self.e_loop_when_connect.isChecked():
+            v_loop_when_connect = 1
+        else:
+            v_loop_when_connect = 0
+
 		# scrivo nel file un elemento json contenente le informazioni inseriti dell'utente
         v_json ={'remember_window_pos': v_remember_window_pos,                 
                  'hide_window_border': v_hide_window_border,                 
                  'dark_theme': v_dark_theme,		         
                  'splash' : v_splash,                 
                  'server': v_server,
-                 'users': v_users
+                 'users': v_users,
+                 'message_systray':v_message_systray,
+                 'hide_toolbar':v_hide_toolbar,
+                 'loop_when_connect':v_loop_when_connect
                 }
 
 		# scrittura nel file dell'oggetto json
@@ -282,6 +373,6 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
 # ----------------------------------------
 if __name__ == "__main__":    
     app = QApplication([])
-    application = win_preferences_class('C:\\MChat\\MChat.ini')
+    application = win_preferences_class(os.path.expanduser('~\\AppData\\Local\\MChat\\'))
     application.show()
     sys.exit(app.exec())        
