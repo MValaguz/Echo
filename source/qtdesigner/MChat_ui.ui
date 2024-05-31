@@ -130,12 +130,12 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionExit"/>
-   <addaction name="actionClear_my_chat"/>
    <addaction name="actionMinimize"/>
    <addaction name="separator"/>
    <addaction name="actionStart_as_server"/>
    <addaction name="actionClient_connection"/>
    <addaction name="separator"/>
+   <addaction name="actionClear_my_chat"/>
    <addaction name="actionReduce_to_systray"/>
    <addaction name="actionMessage_systray"/>
    <addaction name="actionSplash_window"/>
@@ -188,16 +188,15 @@
     <addaction name="actionProgram_Info"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
-    <addaction name="actionMinimize"/>
-    <addaction name="actionClear_my_chat"/>
-    <addaction name="separator"/>
     <addaction name="actionStart_as_server"/>
     <addaction name="actionClient_connection"/>
     <addaction name="separator"/>
+    <addaction name="actionClear_my_chat"/>
     <addaction name="actionReduce_to_systray"/>
     <addaction name="actionSplash_window"/>
     <addaction name="actionMessage_systray"/>
     <addaction name="separator"/>
+    <addaction name="actionMinimize"/>
     <addaction name="actionReset_window_position"/>
     <addaction name="actionHide_toolbar"/>
     <addaction name="separator"/>

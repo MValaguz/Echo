@@ -597,27 +597,27 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
            Invia messaggio al destinatario
         """
-        if self.tipo_connessione == 'server':
-            # invio il messaggio al destinatario in modalità server
-            try:
-                self.connection.send(cripta_messaggio(self.e_invia_messaggio.text()))
-            except:
-                message_error('Connection lost!')
+        if self.e_invia_messaggio.text() != '':
+            if self.tipo_connessione == 'server':
+                # invio il messaggio al destinatario in modalità server
+                try:
+                    self.connection.send(cripta_messaggio(self.e_invia_messaggio.text()))
+                except:
+                    message_error('Connection lost!')
 
-            self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
-            self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
-            self.e_invia_messaggio.clear()
-        elif self.tipo_connessione == 'client':
-            # invio il messaggio al destinatario in modalità client
-            try:
-                self.soc.send(cripta_messaggio(self.e_invia_messaggio.text()))
-            except:
-                message_error('Connection lost!')
+                self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
+                self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
+                self.e_invia_messaggio.clear()
+            elif self.tipo_connessione == 'client':
+                # invio il messaggio al destinatario in modalità client
+                try:
+                    self.soc.send(cripta_messaggio(self.e_invia_messaggio.text()))
+                except:
+                    message_error('Connection lost!')
 
-            self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
-            self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
-            self.e_invia_messaggio.clear()
-
+                self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
+                self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
+                self.e_invia_messaggio.clear()        
 # -------------------
 # AVVIO APPLICAZIONE
 # -------------------
