@@ -289,6 +289,9 @@
    <property name="toolTip">
     <string>Starts waiting service</string>
    </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
   </action>
   <action name="actionClient_connection">
    <property name="icon">
@@ -300,6 +303,9 @@
    </property>
    <property name="toolTip">
     <string>Connect to a waiting service</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
   <action name="actionMinimize">

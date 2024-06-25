@@ -106,7 +106,8 @@ class preferences_class():
             # elenco users è composto da Titolo, User, Password
             self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9','1'),
                                 ('pc-aberlend','Solo','10.0.47.1','0'),                                
-                                ('PC-TRAINIM','Marco','10.0.47.17','0')]
+                                ('PC-TRAINIM','Marco','10.0.47.17','0'),
+                                ('PC-FDAMIANI','Filippo','10.0.47.18','0')]
             # messaggio attivo nella systray
             self.message_systray = False
             # toolbar nascosta
