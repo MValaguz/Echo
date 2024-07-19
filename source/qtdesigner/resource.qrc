@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/zoom_avanti.png</file>
+    <file>icons/zoom_indietro.png</file>
     <file>icons/hide_toolbar.png</file>
     <file>icons/message.png</file>
     <file>icons/MChat_grey.ico</file>

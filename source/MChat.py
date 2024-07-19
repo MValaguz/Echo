@@ -349,6 +349,30 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             v_icon.addPixmap(QPixmap(":/icons/icons/MChat_grey.ico"), QIcon.Normal, QIcon.Off)
             self.setWindowIcon(v_icon)            
 
+    def slot_zoom_in(self):
+        """
+           Zoom dei caratteri
+        """        
+        v_font = self.o_messaggi.font()
+        v_font.setPointSize(v_font.pointSize()+1)        
+        self.o_messaggi.setFont(v_font)
+
+        v_font = self.e_invia_messaggio.font()
+        v_font.setPointSize(v_font.pointSize()+1)        
+        self.e_invia_messaggio.setFont(v_font)
+
+    def slot_zoom_out(self):
+        """
+           Zoom dei caratteri
+        """        
+        v_font = self.o_messaggi.font()
+        v_font.setPointSize(v_font.pointSize()-1)        
+        self.o_messaggi.setFont(v_font)
+
+        v_font = self.e_invia_messaggio.font()
+        v_font.setPointSize(v_font.pointSize()-1)
+        self.e_invia_messaggio.setFont(v_font)
+    
     def slot_riduci_a_systray(self):
         """
            Riduce programma a systray

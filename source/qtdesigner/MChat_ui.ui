@@ -148,7 +148,7 @@
      <x>0</x>
      <y>0</y>
      <width>235</width>
-     <height>21</height>
+     <height>16</height>
     </rect>
    </property>
    <property name="font">
@@ -195,6 +195,9 @@
     <addaction name="actionReduce_to_systray"/>
     <addaction name="actionSplash_window"/>
     <addaction name="actionMessage_systray"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_Out"/>
     <addaction name="separator"/>
     <addaction name="actionMinimize"/>
     <addaction name="actionReset_window_position"/>
@@ -368,6 +371,30 @@
     <string>Hide toolbar</string>
    </property>
   </action>
+  <action name="actionZoom_in">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/zoom_avanti.png</normaloff>:/icons/icons/zoom_avanti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionZoom_Out">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/zoom_indietro.png</normaloff>:/icons/icons/zoom_indietro.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>o_messaggi</tabstop>
@@ -521,6 +548,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionZoom_in</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_zoom_in()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoom_Out</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_zoom_out()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_program_info()</slot>
@@ -530,5 +589,7 @@
   <slot>slot_invia_il_messaggio()</slot>
   <slot>slot_riduci_a_systray()</slot>
   <slot>slot_crea_client_chat()</slot>
+  <slot>slot_zoom_in()</slot>
+  <slot>slot_zoom_out()</slot>
  </slots>
 </ui>

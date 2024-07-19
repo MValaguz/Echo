@@ -73,7 +73,7 @@ class Ui_MChat_window(object):
         self.toolBar.setObjectName("toolBar")
         MChat_window.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.menuBar = QtWidgets.QMenuBar(MChat_window)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 235, 21))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 235, 16))
         font = QtGui.QFont()
         font.setPointSize(7)
         self.menuBar.setFont(font)
@@ -157,6 +157,16 @@ class Ui_MChat_window(object):
         icon12.addPixmap(QtGui.QPixmap(":/icons/icons/hide_toolbar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionHide_toolbar.setIcon(icon12)
         self.actionHide_toolbar.setObjectName("actionHide_toolbar")
+        self.actionZoom_in = QtWidgets.QAction(MChat_window)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap(":/icons/icons/zoom_avanti.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionZoom_in.setIcon(icon13)
+        self.actionZoom_in.setObjectName("actionZoom_in")
+        self.actionZoom_Out = QtWidgets.QAction(MChat_window)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap(":/icons/icons/zoom_indietro.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionZoom_Out.setIcon(icon14)
+        self.actionZoom_Out.setObjectName("actionZoom_Out")
         self.toolBar.addAction(self.actionExit)
         self.toolBar.addAction(self.actionMinimize)
         self.toolBar.addSeparator()
@@ -180,6 +190,9 @@ class Ui_MChat_window(object):
         self.menuFile.addAction(self.actionSplash_window)
         self.menuFile.addAction(self.actionMessage_systray)
         self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionZoom_in)
+        self.menuFile.addAction(self.actionZoom_Out)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionMinimize)
         self.menuFile.addAction(self.actionReset_window_position)
         self.menuFile.addAction(self.actionHide_toolbar)
@@ -201,6 +214,8 @@ class Ui_MChat_window(object):
         self.actionClient_connection.triggered.connect(MChat_window.slot_crea_client_chat) # type: ignore
         self.actionMinimize.triggered.connect(MChat_window.showMinimized) # type: ignore
         self.actionExit.triggered.connect(MChat_window.close) # type: ignore
+        self.actionZoom_in.triggered.connect(MChat_window.slot_zoom_in) # type: ignore
+        self.actionZoom_Out.triggered.connect(MChat_window.slot_zoom_out) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MChat_window)
         MChat_window.setTabOrder(self.o_messaggi, self.e_invia_messaggio)
 
@@ -240,6 +255,10 @@ class Ui_MChat_window(object):
         self.actionMessage_systray.setText(_translate("MChat_window", "Message when MChat is on systray"))
         self.actionMessage_systray.setToolTip(_translate("MChat_window", "Message when MChat is on systray"))
         self.actionHide_toolbar.setText(_translate("MChat_window", "Hide toolbar"))
+        self.actionZoom_in.setText(_translate("MChat_window", "Zoom In"))
+        self.actionZoom_in.setShortcut(_translate("MChat_window", "Ctrl++"))
+        self.actionZoom_Out.setText(_translate("MChat_window", "Zoom Out"))
+        self.actionZoom_Out.setShortcut(_translate("MChat_window", "Ctrl+-"))
 import resource_rc
 
 
