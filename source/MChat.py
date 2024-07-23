@@ -179,6 +179,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.tipo_connessione = ''
         self.systray_attiva = False        
         self.systray_pos_window = self.geometry()  
+        self.alias_client_name = ''
+        self.alias_server_name = ''
 
         # imposto icona della preferenza splash window
         self.actionSplash_window.setChecked(self.preferences.splash)
@@ -382,7 +384,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.systray_attiva = True
             self.systray_icon = QSystemTrayIcon(QIcon(":/icons/icons/MChat.ico"), parent=app)
             self.systray_icon.activated.connect(self.riapri_da_systray)
-            self.systray_icon.setToolTip("MChat")
+            self.systray_icon.setToolTip("MChat with " + self.alias_server_name)
             self.systray_icon.show()
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
