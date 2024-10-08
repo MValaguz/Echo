@@ -148,7 +148,7 @@
      <x>0</x>
      <y>0</y>
      <width>235</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -185,7 +185,6 @@
     <property name="title">
      <string>Action</string>
     </property>
-    <addaction name="actionProgram_Info"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
     <addaction name="actionStart_as_server"/>
@@ -205,9 +204,23 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionProgram_Info"/>
+    <addaction name="actionHelp"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAs_Server"/>
    <addaction name="menuAs_Client"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionClear_my_chat">
    <property name="icon">
@@ -395,6 +408,15 @@
     <string>Ctrl+-</string>
    </property>
   </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/help.png</normaloff>:/icons/icons/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>o_messaggi</tabstop>
@@ -580,6 +602,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionHelp</sender>
+   <signal>triggered()</signal>
+   <receiver>MChat_window</receiver>
+   <slot>slot_help()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_program_info()</slot>
@@ -591,5 +629,6 @@
   <slot>slot_crea_client_chat()</slot>
   <slot>slot_zoom_in()</slot>
   <slot>slot_zoom_out()</slot>
+  <slot>slot_help()</slot>
  </slots>
 </ui>

@@ -96,7 +96,7 @@ QMenu::separator
 
 QMenu::item:disabled
 {
-    color: #555;
+    color: gray;
     background-color: transparent;
     padding: 2px 20px 2px 20px;
 }

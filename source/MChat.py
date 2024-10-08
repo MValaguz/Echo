@@ -43,6 +43,7 @@ import base64
 # Definizione interfaccia QtDesigner
 from MChat_ui import Ui_MChat_window
 from program_info_ui import Ui_Program_info
+from help_ui import Ui_Help
 from preferences import preferences_class, win_preferences_class
 from utilita import message_error, message_question_yes_no
 # Definizione del solo tema dark
@@ -117,7 +118,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                    attesa di un messaggio se ne può inviare un altro. La classe mchat_thread riceve 
                    in ingresso la stessa classe class_tools_chat in modo da avere in pancia le sue variabili.
     """
-    def __init__(self):
+    def __init__(self, p_arg1, p_arg2):
+        # p_arg1 = S = connessione automatica come server
+        #          C = connessione automatica come client
+        # p_arg2 = nome del server o del client 
+        
         # incapsulo la classe grafica da qtdesigner
         super(MChat_window_class, self).__init__()        
         self.setupUi(self)
@@ -140,7 +145,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if self.preferences.hide_toolbar:
             self.actionHide_toolbar.setChecked(True)
             self.toolBar.hide()
-
+                                   
         ###
         # Dalle preferenze carico il menu con elenco dei server e degli user        
         # e imposto eventuali default
@@ -154,8 +159,13 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction = QAction()
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
-                v_qaction.setData('MENU_SERVER')
-                if rec[2] == '1':
+                v_qaction.setData('MENU_SERVER')                
+                # controllo se ho ricevuto dei parametri all'avvio del programma e se si, reimposto le preferenze di menu        
+                if p_arg1 == '-S' and p_arg2 != '':
+                    if p_arg2 == rec[0].upper():                        
+                        v_qaction.setChecked(True)
+                # altrimenti imposto come check quella indicata nelle preferenze
+                elif rec[2] == '1':
                     v_qaction.setChecked(True)
                 self.action_elenco_server.append(v_qaction)
                 self.menuAs_Server.addAction(v_qaction)               
@@ -168,7 +178,12 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_USER')
-                if rec[3] == '1':
+                # controllo se ho ricevuto dei parametri all'avvio del programma e se si, reimposto le preferenze di menu        
+                if p_arg1 == '-C' and p_arg2 != '':
+                    if p_arg2 == rec[0].upper():                        
+                        v_qaction.setChecked(True)
+                # altrimenti imposto come check quella indicata nelle preferenze
+                elif rec[3] == '1':
                     v_qaction.setChecked(True)
                 self.action_elenco_user.append(v_qaction)
                 self.menuAs_Client.addAction(v_qaction)   
@@ -214,8 +229,15 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.setStyleSheet(dark_theme_definition())     
 
         # attivo evento di cambiamento di focus sulla window 
-        qApp.focusChanged.connect(self.on_focusChanged)       
+        qApp.focusChanged.connect(self.on_focusChanged)   
 
+        # se tramite parametri d'ingresso è stato richiesto di avviare in modalità server automatica...
+        if p_arg1 == '-S' and p_arg2 != '':
+            self.slot_crea_server_chat()
+        # se tramite parametri d'ingresso è stato richiesto di avviare in modalità client automatica...
+        if p_arg1 == '-C' and p_arg2 != '':
+            self.slot_crea_client_chat()
+                    
     def smistamento_voci_menu(self, p_slot):
         """
             Contrariamente al solito, le voci di menù non sono pilotate da qtdesigner ma direttamente
@@ -409,6 +431,16 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.win_program_info = Ui_Program_info()
         self.win_program_info.setupUi(self.dialog_program_info)
         self.dialog_program_info.show()
+    
+    def slot_help(self):
+        """
+           Visualizzo la finestra di help (è stato fatto così perché poi il programma viene
+           pacchettizzato in un unico file)
+        """
+        self.dialog_help = QDialog()
+        self.win_help = Ui_Help()
+        self.win_help.setupUi(self.dialog_help)
+        self.dialog_help.show()
 
     def slot_preferences(self):
         """
@@ -426,10 +458,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
     def slot_crea_server_chat(self):
         """
            Attiva l'applicazione lato server in attesa di connessione da parte di un client                      
-        """     
-        if message_question_yes_no('Do you want to put yourself in a server position?') == 'No':
-            return 'ko'
-
+        """             
         # prendo la voce del menu server che è stata selezionata, per capire con quale modalità server mi devo mettere in attesa
         v_found = False
         for action in self.action_elenco_server:            
@@ -644,11 +673,23 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
                 self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
                 self.e_invia_messaggio.clear()        
+                   
 # -------------------
 # AVVIO APPLICAZIONE
 # -------------------
-if __name__ == "__main__":
-    app = QApplication([])    
-    application = MChat_window_class()         
+if __name__ == "__main__":        
+    # controllo se richiamato tramite parametri da riga di comando
+    try:
+        v_arg1 = sys.argv[1].upper()
+    except:
+        v_arg1 = ''
+    try:
+        v_arg2 = sys.argv[2].upper()
+    except:
+        v_arg2 = ''    
+
+    # avvio di Mchat    
+    app = QApplication([])            
+    application = MChat_window_class(v_arg1, v_arg2)         
     application.show()
     sys.exit(app.exec())    
