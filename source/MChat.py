@@ -122,6 +122,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # p_arg1 = S = connessione automatica come server
         #          C = connessione automatica come client
         # p_arg2 = nome del server o del client 
+        self.p_arg1 = p_arg1
+        self.p_arg2 = p_arg2
         
         # incapsulo la classe grafica da qtdesigner
         super(MChat_window_class, self).__init__()        
@@ -161,8 +163,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_SERVER')                
                 # controllo se ho ricevuto dei parametri all'avvio del programma e se si, reimposto le preferenze di menu        
-                if p_arg1 == '-S' and p_arg2 != '':
-                    if p_arg2 == rec[0].upper():                        
+                if self.p_arg1 == '-S' and self.p_arg2 != '':
+                    if self.p_arg2 == rec[0].upper():                        
                         v_qaction.setChecked(True)
                 # altrimenti imposto come check quella indicata nelle preferenze
                 elif rec[2] == '1':
@@ -179,8 +181,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 v_qaction.setText(rec[0])
                 v_qaction.setData('MENU_USER')
                 # controllo se ho ricevuto dei parametri all'avvio del programma e se si, reimposto le preferenze di menu        
-                if p_arg1 == '-C' and p_arg2 != '':
-                    if p_arg2 == rec[0].upper():                        
+                if self.p_arg1 == '-C' and self.p_arg2 != '':
+                    if self.p_arg2 == rec[0].upper():                        
                         v_qaction.setChecked(True)
                 # altrimenti imposto come check quella indicata nelle preferenze
                 elif rec[3] == '1':
@@ -232,10 +234,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         qApp.focusChanged.connect(self.on_focusChanged)   
 
         # se tramite parametri d'ingresso è stato richiesto di avviare in modalità server automatica...
-        if p_arg1 == '-S' and p_arg2 != '':
+        if self.p_arg1 == '-S' and self.p_arg2 != '':
             self.slot_crea_server_chat()
         # se tramite parametri d'ingresso è stato richiesto di avviare in modalità client automatica...
-        if p_arg1 == '-C' and p_arg2 != '':
+        if self.p_arg1 == '-C' and self.p_arg2 != '':
             self.slot_crea_client_chat()
                     
     def smistamento_voci_menu(self, p_slot):
@@ -510,6 +512,9 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.client_name = self.client_name.decode()
             # ripristino icona freccia del mouse
             QApplication.restoreOverrideCursor()    
+            # se lanciato con parametri di input minimizzo la window
+            if self.p_arg1 != '':
+                self.showMinimized()
             # indico l'utente che si è connesso            
             self.setWindowTitle(self.client_name + ' has connected')            
             self.l_invia_messaggio.setText('Send to ' + self.client_name + ':')
@@ -617,9 +622,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     # disattivo i button di server e client
                     self.actionStart_as_server.setEnabled(False)
                     self.actionClient_connection.setEnabled(False)
+                    # se lanciato con parametri di input minimizzo la window
+                    if self.p_arg1 != '':
+                        self.showMinimized()
 
                     self.tipo_connessione = 'client'
-
                     # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
                     # viene passato al thread l'oggetto chat
                     self.thread_in_attesa = class_mchat_thread(self)
