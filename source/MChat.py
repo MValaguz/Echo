@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
 
-"""
- __  __  _____ _           _   
-|  \/  |/ ____| |         | |  
-| \  / | |    | |__   __ _| |_ 
-| |\/| | |    | '_ \ / _` | __|
-| |  | | |____| | | | (_| | |_ 
-|_|  |_|\_____|_| |_|\__,_|\__|
+#  __  __  _____ _           _   
+# |  \/  |/ ____| |         | |  
+# | \  / | |    | |__   __ _| |_ 
+# | |\/| | |    | '_ \ / _` | __|
+# | |  | | |____| | | | (_| | |_ 
+# |_|  |_|\_____|_| |_|\__,_|\__|
 
- Creato da.....: Marco Valaguzza
- Piattaforma...: Python3.6 con libreria PyQt5
- Data..........: 17/07/2019
- Descrizione...: Programma per la gestione di una chat tra due utenti
+#  Creato da.....: Marco Valaguzza
+#  Piattaforma...: Python3.13 con libreria PyQt6
+#  Data..........: 17/07/2019
+#  Descrizione...: Programma per la gestione di una chat tra due utenti
  
- Note..........: Il programma funziona in questo modo. 
-                 Uno dei due utenti deve attivarlo come "Server" e l'altro utente si collega come client a quel server.
-                 Attenzione! L'elenco dei pc deve contenere anche il PC di chi fa da server!
-                 Il formato è il seguente (nome_pc_nella_rete alias_nome_pc indirizzo_ip):
-                 PC-MVALAGUZ Marco 10.0.47.9
-                 PC-ABERLEND Ale 10.0.47.1
+#  Note..........: Il programma funziona in questo modo. 
+#                  Uno dei due utenti deve attivarlo come "Server" e l'altro utente si collega come client a quel server.
+#                  Attenzione! L'elenco dei pc deve contenere anche il PC di chi fa da server!
+#                  Il formato è il seguente (nome_pc_nella_rete alias_nome_pc indirizzo_ip):
+#                  PC-MVALAGUZ Marco 10.0.47.9
+#                  PC-ABERLEND Ale 10.0.47.1
                  
-                 Nel codice del programma si fa riferimento a server per quella parte di programma che si metterà in ascolto
-                 mentre ci si riferisce a client con quella parte di programma che si mette in comunicazione con il server.
-                 Client e server sono ruoli svolti da questo codice e non ci sono procedure esterne ad esso.
-"""
+#                  Nel codice del programma si fa riferimento a server per quella parte di programma che si metterà in ascolto
+#                  mentre ci si riferisce a client con quella parte di programma che si mette in comunicazione con il server.
+#                  Client e server sono ruoli svolti da questo codice e non ci sono procedure esterne ad esso.
+
 # Librerie sistema
 import os
 import socket
@@ -35,9 +34,9 @@ import time
 #            in fase di sviluppo. 
 sys.path.append('qtdesigner')
 # Librerie grafiche 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
 # Libreria per criptare i messaggi
 import base64
 # Definizione interfaccia QtDesigner
@@ -127,6 +126,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         
         # incapsulo la classe grafica da qtdesigner
         super(MChat_window_class, self).__init__()        
+        # creo oggetto settings per salvare posizione della window e delle dock
+        self.settings = QSettings("Marco Valaguzza", "MChat")
         self.setupUi(self)
         
         # carico preferenze
@@ -135,13 +136,13 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.preferences = preferences_class(self.work_dir + 'MChat.ini')
 
         # carico posizione e dimensione window
-        self.default_window_pos = self.geometry().getRect()                    
+        self.default_window_pos = self.geometry()                    
         self.carico_posizione_window()
         
         # tolgo i bordi alla window (in modo che sia più invisibile) cambio anche il titolo in modo che 
         # se ridotto ad icona non sia visibile
         if self.preferences.hide_window_border:
-            self.setWindowFlags(Qt.CustomizeWindowHint)            
+            self.setWindowFlags(Qt.WindowType.CustomizeWindowHint)            
 
         # nascondo la toolbar se richiesto
         if self.preferences.hide_toolbar:
@@ -213,12 +214,12 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.pennello_blu = QTextCharFormat()
             self.pennello_blu.setForeground(QColor('#3399FF'))
             self.pennello_nero = QTextCharFormat()
-            self.pennello_nero.setForeground(Qt.white)
+            self.pennello_nero.setForeground(QColor("white"))
         else:
             self.pennello_blu = QTextCharFormat()
-            self.pennello_blu.setForeground(Qt.blue)
+            self.pennello_blu.setForeground(QColor("blue"))
             self.pennello_nero = QTextCharFormat()
-            self.pennello_nero.setForeground(Qt.black)
+            self.pennello_nero.setForeground(QColor("black"))
 
         # per smistare i segnali che arrivano dal menù, utilizzo un apposito connettore
         # attenzione! eventi come la selezione di info, ecc. passa tramite i segnali standard
@@ -231,7 +232,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.setStyleSheet(dark_theme_definition())     
 
         # attivo evento di cambiamento di focus sulla window 
-        qApp.focusChanged.connect(self.on_focusChanged)   
+        QApplication.instance().focusChanged.connect(self.on_focusChanged)   
 
         # se tramite parametri d'ingresso è stato richiesto di avviare in modalità server automatica...
         if self.p_arg1 == '-S' and self.p_arg2 != '':
@@ -272,13 +273,8 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     action.setChecked(True)    
 
         if str(p_slot.text()) == 'Reset window position':            
-            # reimposto la dimensione della window con le dimensioni definite a designer
-            self.resize(self.default_window_pos[2], self.default_window_pos[3])                       
-            # centratura della window
-            qr = self.frameGeometry()                
-            cp = QDesktopWidget().availableGeometry().center()                
-            qr.moveCenter(cp)                
-            self.move(qr.topLeft())            
+            # reimposto la dimensione della window con le dimensioni definite a designer            
+            self.setGeometry(self.default_window_pos)
 
         if str(p_slot.text()) == 'Hide toolbar':            
             # mostra o nasconde la toolbar        
@@ -313,14 +309,14 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
            Intercetto l'evento che indica alla finestra di riaprirsi dalla barra delle window
            e ne azzero il titolo. In realtà questo evento prende tutto quello che succede alla window... 
         """        
-        if event.type() == QEvent.WindowStateChange:            
-            if event.type() == QEvent.WindowStateChange:
+        if event.type() == QEvent.Type.WindowStateChange:            
+            if event.type() == QEvent.Type.WindowStateChange:
                 # da minimizzata passa a massimizzata...cambio il titolo
-                if event.oldState() and Qt.WindowMinimized:
+                if event.oldState() and Qt.WindowState.WindowMinimized:
                     if self.windowTitle() == '_____.._____':
                         self.imposta_titolo_window(False)
                 # da massimizzata passa a minimizzata....azzero il titolo (utente capisce che sono in attesa e non ci sono messaggi)
-                elif event.oldState() == Qt.WindowNoState or self.windowState() == Qt.WindowMaximized:
+                elif event.oldState() == Qt.WindowState.WindowNoState or self.windowState() == Qt.WindowState.WindowMaximized:
                     self.imposta_titolo_window(False)
 
     def carico_posizione_window(self):
@@ -329,18 +325,14 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         # se utente ha richiesto di salvare la posizione della window...
         if self.preferences.remember_window_pos:
-            if os.path.isfile(self.work_dir + 'MChat_window_pos.ini'):
-                v_file = open(self.work_dir + 'MChat_window_pos.ini','r')
-                # al momento leggo solo la prima riga che contiene la dimensione della mainwindow
-                v_my_window_pos = v_file.readline().rstrip('\n').split()                                
-                if v_my_window_pos[0] == 'MainWindow':
-                    # finestra massimizzata
-                    if v_my_window_pos[1] == 'MAXIMIZED':
-                        self.showMaximized()
-                    # finestra a dimensione specifica
-                    else:
-                        self.setGeometry(int(v_my_window_pos[1]), int(v_my_window_pos[2]), int(v_my_window_pos[3]), int(v_my_window_pos[4]))    
-                v_file.close()
+            # recupero dal registro di sistema (regedit) la posizione della window
+            geometry = self.settings.value("geometry")
+            if geometry:
+                self.restoreGeometry(geometry)                        
+            # recupero dal registro di sistema (regedit) la posizione delle dock                
+            windowstate = self.settings.value("windowstate")
+            if windowstate:
+                self.restoreState(windowstate)                        
                                 
     def salvo_posizione_window(self):
         """
@@ -349,14 +341,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         # se utente ha richiesto di salvare la posizione della window...
         if self.preferences.remember_window_pos:
-            v_file = open(self.work_dir + 'MChat_window_pos.ini','w')
-            if self.isMaximized():
-                v_file.write("MainWindow MAXIMIZED")
-            else:
-                o_pos = self.geometry()            
-                o_rect = o_pos.getRect()                        
-                v_file.write("MainWindow " + str(o_rect[0]) + " " + str(o_rect[1]) + " " +  str(o_rect[2]) + " " + str(o_rect[3]))
-            v_file.close()
+            # salvo nel registro di sistema (regedit) la posizione della window
+            self.settings.setValue("geometry", self.saveGeometry())            
+            # salvo nel registro di sistema (regedit) la posizione delle dock
+            self.settings.setValue("windowstate", self.saveState())                            
 
     def imposta_titolo_window(self, p_active):
         """
@@ -367,12 +355,12 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if p_active:
             self.setWindowTitle('_____.._____')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap(":/icons/icons/MChat.ico"), QIcon.Normal, QIcon.Off)
+            v_icon.addPixmap(QPixmap("icons:MChat.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
         else:
             self.setWindowTitle(' ')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap(":/icons/icons/MChat_grey.ico"), QIcon.Normal, QIcon.Off)
+            v_icon.addPixmap(QPixmap("icons:MChat_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
 
     def slot_zoom_in(self):
@@ -406,9 +394,15 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # creo e attivo la systray solo se non è già attiva
         if not self.systray_attiva:            
             self.systray_attiva = True
-            self.systray_icon = QSystemTrayIcon(QIcon(":/icons/icons/MChat.ico"), parent=app)
-            self.systray_icon.activated.connect(self.riapri_da_systray)
-            self.systray_icon.setToolTip("MChat with " + self.alias_server_name)
+            self.systray_icon = QSystemTrayIcon(QIcon("icons:MChat.ico"), parent=app)
+            self.systray_icon.activated.connect(self.riapri_da_systray)            
+            print('c ' + self.tipo_connessione)
+            print('s ' + self.alias_server_name)
+            print('2' + self.alias_client_name)
+            if self.tipo_connessione == 'server':
+                self.systray_icon.setToolTip("MChat with " + self.alias_server_name)
+            else:
+                self.systray_icon.setToolTip("MChat with " + self.alias_client_name)
             self.systray_icon.show()
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
@@ -503,7 +497,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             soc.listen(1)            
             self.setWindowTitle('Waiting ' + self.record_server[0] + ' IP=' + str(self.ip) + ', PORT=' + self.record_server[1])
             # sostituisce la freccia del mouse con icona "clessidra"
-            QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))       
+            QApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))       
             self.repaint()
             # da questo punto il programma entra in attesa di una connessione da parte di un client
             self.connection, self.addr = soc.accept()            
@@ -525,6 +519,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.actionClient_connection.setEnabled(False)
             
             self.tipo_connessione = 'server'
+            self.alias_server_name = self.client_name
             
             # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
             # viene passato al thread l'oggetto chat
@@ -684,7 +679,17 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
 # -------------------
 # AVVIO APPLICAZIONE
 # -------------------
-if __name__ == "__main__":        
+if __name__ == "__main__":    
+    # se il programma è eseguito da pyinstaller, cambio la dir di riferimento passando a dove si trova l'eseguibile
+    # in questo modo dovrebbe riuscire a trovare tutte le risorse
+    if getattr(sys, 'frozen', False): 
+        v_dir_eseguibile = os.path.dirname(sys.executable)
+        os.chdir(v_dir_eseguibile)
+        
+    # amplifico la pathname per ricercare le icone
+    QDir.addSearchPath('icons', 'qtdesigner/icons/')
+    QDir.addSearchPath('icons', '_internal/icons/')
+    
     # controllo se richiamato tramite parametri da riga di comando
     try:
         v_arg1 = sys.argv[1].upper()

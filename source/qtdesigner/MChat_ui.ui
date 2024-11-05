@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>189</height>
+    <width>240</width>
+    <height>181</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -62,12 +62,6 @@
       </item>
       <item>
        <widget class="QPlainTextEdit" name="o_messaggi">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="font">
          <font>
           <pointsize>7</pointsize>
@@ -147,7 +141,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>235</width>
+     <width>240</width>
      <height>21</height>
     </rect>
    </property>

@@ -2,7 +2,7 @@
 
 """
  Creato da.....: Marco Valaguzza
- Piattaforma...: Python3.11 con libreria pyqt5
+ Piattaforma...: Python3.13 con libreria pyqt5
  Data..........: 29/11/2023
  Descrizione...: Gestione delle preferenze di MChat
  
@@ -19,13 +19,15 @@ import json
 #Amplifico la pathname dell'applicazione in modo veda il contenuto della directory qtdesigner dove sono contenuti i layout
 sys.path.append('qtdesigner')
 #Librerie grafiche
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
 #Definizioni interfaccia
 from preferences_ui import Ui_preferences_window
 #Librerie aggiuntive interne
 from utilita import message_info, message_question_yes_no
+#Amplifico la pathname per ricercare le icone
+QDir.addSearchPath('icons', 'qtdesigner/icons/')
 
 class preferences_class():
     """
@@ -155,7 +157,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             v_widget = QWidget()      
             v_layout = QHBoxLayout(v_widget)
             v_layout.addWidget(v_checkbox)
-            v_layout.setAlignment(Qt.AlignCenter)
+            v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             v_layout.setContentsMargins(0,0,0,0)
             v_widget.setLayout(v_layout)
             if record[2] == '1':
@@ -183,7 +185,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             v_widget = QWidget()      
             v_layout = QHBoxLayout(v_widget)
             v_layout.addWidget(v_checkbox)
-            v_layout.setAlignment(Qt.AlignCenter)
+            v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             v_layout.setContentsMargins(0,0,0,0)
             v_widget.setLayout(v_layout)
             if record[3] == '1':
@@ -239,7 +241,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         v_widget = QWidget()      
         v_layout = QHBoxLayout(v_widget)
         v_layout.addWidget(v_checkbox)
-        v_layout.setAlignment(Qt.AlignCenter)
+        v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         v_layout.setContentsMargins(0,0,0,0)
         v_widget.setLayout(v_layout)
         v_checkbox.setChecked(False)                                                        

@@ -1,17 +1,17 @@
 # -*- mode: python -*-
 
+
 block_cipher = None
 
 
 a = Analysis(['..\\source\\MChat.py'],
              pathex=[],
              binaries=[],
-             datas=[
-					('..\\source\\qtdesigner\\icons\\*.*','icons'),					
-					('..\\source\\qtdesigner\\*.py','.'),					
-			        ('..\\source\\*.py','.')		
-			       ],
-             hiddenimports=[],
+             datas=[					
+		      ('..\\source\\qtdesigner\\*.py','.'),
+			  ('..\\source\\qtdesigner\\icons\\*.*','icons\\'),			  
+	           ],
+             hiddenimports=[],             
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -23,15 +23,19 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
-		  [],
+          [],
+          exclude_binaries=True,
           name='MChat',
           debug=False,
+          bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          runtime_tmpdir=None,
-          console=False,
+          console=False, 
 		  icon='..\\source\\qtdesigner\\icons\\MChat.ico')
-		  
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               name='MChat')
