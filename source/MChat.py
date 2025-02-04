@@ -515,8 +515,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             # invio l'alias di chi fa da server
             self.connection.send(self.name.encode())            
             # disattivo i button di server e client
-            self.actionStart_as_server.setEnabled(False)
-            self.actionClient_connection.setEnabled(False)
+            self.attiva_disattiva_voci_menu_connessione(False)            
             
             self.tipo_connessione = 'server'
             self.alias_server_name = self.client_name
@@ -615,8 +614,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     self.setWindowTitle('{} has joined'.format(self.alias_server_name))                                                            
                     self.l_invia_messaggio.setText('Send to ' + self.alias_server_name + ':')
                     # disattivo i button di server e client
-                    self.actionStart_as_server.setEnabled(False)
-                    self.actionClient_connection.setEnabled(False)
+                    self.attiva_disattiva_voci_menu_connessione(False)
                     # se lanciato con parametri di input minimizzo la window
                     if self.p_arg1 != '':
                         self.showMinimized()
@@ -636,6 +634,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if p_messaggio == 'CONNECTION_LOST':
             message_error('Connection lost!')
             self.imposta_titolo_window(False)
+            self.attiva_disattiva_voci_menu_connessione(True)
         elif p_messaggio != '':
             self.o_messaggi.setCurrentCharFormat(self.pennello_blu)
             self.o_messaggi.appendPlainText(p_messaggio)
@@ -661,6 +660,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     self.connection.send(cripta_messaggio(self.e_invia_messaggio.text()))
                 except:
                     message_error('Connection lost!')
+                    self.attiva_disattiva_voci_menu_connessione(True)
 
                 self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
                 self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
@@ -671,10 +671,18 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     self.soc.send(cripta_messaggio(self.e_invia_messaggio.text()))
                 except:
                     message_error('Connection lost!')
+                    self.attiva_disattiva_voci_menu_connessione(True)
 
                 self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
                 self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
                 self.e_invia_messaggio.clear()        
+
+    def attiva_disattiva_voci_menu_connessione(self, p_flag):
+        """
+           Attiva/disattiva le voci di menu della connessione
+        """        
+        self.actionStart_as_server.setEnabled(p_flag)
+        self.actionClient_connection.setEnabled(p_flag)
                    
 # -------------------
 # AVVIO APPLICAZIONE
