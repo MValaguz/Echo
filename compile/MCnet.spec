@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\source\\MChat.py'],
+a = Analysis(['..\\source\\MCnet.py'],
              pathex=[],
              binaries=[],
              datas=[					
@@ -27,11 +27,11 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
 		  [],
-          name='MChat',
+          name='MCnet',
           debug=False,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False,
-		  icon='..\\source\\qtdesigner\\icons\\MChat.ico')
+          console=True,
+		  icon='..\\source\\qtdesigner\\icons\\MCnet.ico')
 		  

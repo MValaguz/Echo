@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MChat_window</class>
- <widget class="QMainWindow" name="MChat_window">
+ <class>MCnet_window</class>
+ <widget class="QMainWindow" name="MCnet_window">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,11 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MChat</string>
+   <string>MCnet</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
-    <normaloff>:/icons/icons/MChat.ico</normaloff>:/icons/icons/MChat.ico</iconset>
+    <normaloff>:/icons/icons/MCnet.ico</normaloff>:/icons/icons/MCnet.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -142,7 +142,7 @@
      <x>0</x>
      <y>0</y>
      <width>240</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
    <property name="font">
@@ -153,6 +153,7 @@
    <widget class="QMenu" name="menuAs_Server">
     <property name="font">
      <font>
+      <family>MS Shell Dlg 2</family>
       <pointsize>7</pointsize>
      </font>
     </property>
@@ -163,6 +164,7 @@
    <widget class="QMenu" name="menuAs_Client">
     <property name="font">
      <font>
+      <family>MS Shell Dlg 2</family>
       <pointsize>7</pointsize>
      </font>
     </property>
@@ -194,6 +196,7 @@
     <addaction name="separator"/>
     <addaction name="actionMinimize"/>
     <addaction name="actionReset_window_position"/>
+    <addaction name="actionHide_window_border"/>
     <addaction name="actionHide_toolbar"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -257,6 +260,11 @@
    <property name="toolTip">
     <string>Program Info</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionSplash_window">
    <property name="checkable">
@@ -286,6 +294,11 @@
    </property>
    <property name="toolTip">
     <string>Preferences</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionStart_as_server">
@@ -360,10 +373,10 @@
      <normaloff>:/icons/icons/message.png</normaloff>:/icons/icons/message.png</iconset>
    </property>
    <property name="text">
-    <string>Message when MChat is on systray</string>
+    <string>Message when MCnet is on systray</string>
    </property>
    <property name="toolTip">
-    <string>Message when MChat is on systray</string>
+    <string>Message when MCnet is on systray</string>
    </property>
   </action>
   <action name="actionHide_toolbar">
@@ -375,7 +388,7 @@
      <normaloff>:/icons/icons/hide_toolbar.png</normaloff>:/icons/icons/hide_toolbar.png</iconset>
    </property>
    <property name="text">
-    <string>Hide toolbar</string>
+    <string>Show/Hide toolbar</string>
    </property>
   </action>
   <action name="actionZoom_in">
@@ -410,6 +423,20 @@
    <property name="text">
     <string>Help</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionHide_window_border">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/square.png</normaloff>:/icons/icons/square.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show/Hide window border</string>
+   </property>
   </action>
  </widget>
  <tabstops>
@@ -423,7 +450,7 @@
   <connection>
    <sender>e_invia_messaggio</sender>
    <signal>returnPressed()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_invia_il_messaggio()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -439,7 +466,7 @@
   <connection>
    <sender>actionProgram_Info</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_program_info()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -455,7 +482,7 @@
   <connection>
    <sender>actionPreferences</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_preferences()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -471,7 +498,7 @@
   <connection>
    <sender>actionClear_my_chat</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_pulisci_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -487,7 +514,7 @@
   <connection>
    <sender>actionStart_as_server</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_crea_server_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -503,7 +530,7 @@
   <connection>
    <sender>actionReduce_to_systray</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_riduci_a_systray()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -519,7 +546,7 @@
   <connection>
    <sender>actionClient_connection</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_crea_client_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -535,7 +562,7 @@
   <connection>
    <sender>actionMinimize</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -551,7 +578,7 @@
   <connection>
    <sender>actionExit</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -567,7 +594,7 @@
   <connection>
    <sender>actionZoom_in</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_zoom_in()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -583,7 +610,7 @@
   <connection>
    <sender>actionZoom_Out</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_zoom_out()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -599,7 +626,7 @@
   <connection>
    <sender>actionHelp</sender>
    <signal>triggered()</signal>
-   <receiver>MChat_window</receiver>
+   <receiver>MCnet_window</receiver>
    <slot>slot_help()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#  __  __  _____ _           _   
-# |  \/  |/ ____| |         | |  
-# | \  / | |    | |__   __ _| |_ 
-# | |\/| | |    | '_ \ / _` | __|
-# | |  | | |____| | | | (_| | |_ 
-# |_|  |_|\_____|_| |_|\__,_|\__|
-
+#  __  __  ____            _   
+# |  \/  |/ ___|_ __   ___| |_ 
+# | |\/| | |   | '_ \ / _ \ __|
+# | |  | | |___| | | |  __/ |_ 
+# |_|  |_|\____|_| |_|\___|\__|
+                             
 #  Creato da.....: Marco Valaguzza
 #  Piattaforma...: Python3.13 con libreria PyQt6
 #  Data..........: 17/07/2019
@@ -16,8 +15,8 @@
 #                  Uno dei due utenti deve attivarlo come "Server" e l'altro utente si collega come client a quel server.
 #                  Attenzione! L'elenco dei pc deve contenere anche il PC di chi fa da server!
 #                  Il formato è il seguente (nome_pc_nella_rete alias_nome_pc indirizzo_ip):
-#                  PC-MVALAGUZ Marco 10.0.47.9
-#                  PC-ABERLEND Ale 10.0.47.1
+#                  PC-MVALAGUZ Marco  10.0.47.9
+#                  PC-SVITALI  Simone 10.0.47.10
                  
 #                  Nel codice del programma si fa riferimento a server per quella parte di programma che si metterà in ascolto
 #                  mentre ci si riferisce a client con quella parte di programma che si mette in comunicazione con il server.
@@ -28,6 +27,9 @@ import os
 import socket
 import sys
 import time
+import psutil
+# Libreria per pyinstaller che serve per capire dove creata la dir temporanea di esecuzione
+import tempfile
 # Amplifico la pathname dell'applicazione in modo veda il contenuto della directory qtdesigner dove sono contenuti i layout
 # Nota bene! Quando tramite pyinstaller verrà creato l'eseguibile, tutti i file della cartella qtdesigner verranno messi 
 #            nella cartella principale e questa istruzione di cambio path di fatto non avrà alcun senso. Serve dunque solo
@@ -40,20 +42,23 @@ from PyQt6.QtWidgets import *
 # Libreria per criptare i messaggi
 import base64
 # Definizione interfaccia QtDesigner
-from MChat_ui import Ui_MChat_window
+from MCnet_ui import Ui_MCnet_window
 from program_info_ui import Ui_Program_info
 from help_ui import Ui_Help
 from preferences import preferences_class, win_preferences_class
 from utilita import message_error, message_question_yes_no
 # Definizione del solo tema dark
 from dark_theme import dark_theme_definition
+        
+# carico preferenze
+o_global_preferences = preferences_class()
 
 def cripta_messaggio(messaggio):
     """
-       Cripta una stringa con la chiave mchat. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
+       Cripta una stringa con la chiave MCnet. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
        all'invio dei dati su rete
     """
-    key = 'mchat'
+    key = 'MCnet'
     enc = []
     for i in range(len(messaggio)):
         key_c = key[i % len(key)]
@@ -63,10 +68,10 @@ def cripta_messaggio(messaggio):
 
 def decripta_messaggio(messaggio):
     """
-       decripta una stringa con la chiave mchat. Il valore restituito è di tipo stringa, lo stesso che deve essere 
+       decripta una stringa con la chiave MCnet. Il valore restituito è di tipo stringa, lo stesso che deve essere 
        passato ai campi di visualizzazione 
     """
-    key = 'mchat'
+    key = 'MCnet'
     dec = []
     enc = base64.urlsafe_b64decode(messaggio)
     for i in range(len(enc)):
@@ -75,7 +80,7 @@ def decripta_messaggio(messaggio):
         dec.append(dec_c)
     return "".join(dec)
 
-class class_mchat_thread(QThread):
+class class_MCnet_thread(QThread):
     """
        Questa classe serve per creare un thread separato che si metta in ascolto di eventuali messaggi
        al parametro p_tool_chat dovrà essere passata la classe tools_chat (di fatto l'oggetto principale di questo programma
@@ -108,13 +113,13 @@ class class_mchat_thread(QThread):
             # restituisco il messaggio
             self.signal.emit(message)
 
-class MChat_window_class(QMainWindow, Ui_MChat_window):
+class MCnet_window_class(QMainWindow, Ui_MCnet_window):
     """
         Programma per la gestione di una chat tra utenti
-        Nota Bene: E' stata costruita anche la classe mchat_thread
+        Nota Bene: E' stata costruita anche la classe MCnet_thread
                    Questa classe è quella che si occupa di ricevere i messaggi. Perché una classe?
                    Perchè in questo modo il main del programma rimane sempre attivo e mentre si è in 
-                   attesa di un messaggio se ne può inviare un altro. La classe mchat_thread riceve 
+                   attesa di un messaggio se ne può inviare un altro. La classe MCnet_thread riceve 
                    in ingresso la stessa classe class_tools_chat in modo da avere in pancia le sue variabili.
     """
     def __init__(self, p_arg1, p_arg2):
@@ -125,15 +130,19 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.p_arg2 = p_arg2
         
         # incapsulo la classe grafica da qtdesigner
-        super(MChat_window_class, self).__init__()        
+        super(MCnet_window_class, self).__init__()        
         # creo oggetto settings per salvare posizione della window e delle dock
-        self.settings = QSettings("Marco Valaguzza", "MChat")
+        self.settings = QSettings("Marco Valaguzza", "MCnet")
         self.setupUi(self)
-        
-        # carico preferenze
-        # Attenzione! Questa dir è possibile aprirla dalla gestione delle preferenze e in quel programma è riportata ancora la stessa dir        
-        self.work_dir = os.path.expanduser('~\\AppData\\Local\\MChat\\')
-        self.preferences = preferences_class(self.work_dir + 'MChat.ini')
+
+        # imposto opacità della window (Valore tra 0 (trasparente) e 1 (opaco))
+        if o_global_preferences.opacity != 100:            
+            self.setWindowOpacity(o_global_preferences.opacity/100)  
+
+        self._margin = 8  # Spessore della zona sensibile per il ridimensionamento
+        self._resizing = False
+        self._resize_direction = None
+        self._mouse_pos = QPoint()
 
         # carico posizione e dimensione window
         self.default_window_pos = self.geometry()                    
@@ -141,11 +150,11 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         
         # tolgo i bordi alla window (in modo che sia più invisibile) cambio anche il titolo in modo che 
         # se ridotto ad icona non sia visibile
-        if self.preferences.hide_window_border:
-            self.setWindowFlags(Qt.WindowType.CustomizeWindowHint)            
+        if o_global_preferences.hide_window_border:
+            self.setWindowFlags(Qt.WindowType.FramelessWindowHint) 
 
         # nascondo la toolbar se richiesto
-        if self.preferences.hide_toolbar:
+        if o_global_preferences.hide_toolbar:
             self.actionHide_toolbar.setChecked(True)
             self.toolBar.hide()
                                    
@@ -155,10 +164,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         ###
         self.action_elenco_server = []
         self.action_elenco_user = []
-        if len(self.preferences.elenco_server) > 0:            
+        if len(o_global_preferences.elenco_server) > 0:            
             self.menuAs_Server.addSeparator()
             self.action_elenco_server = []
-            for rec in self.preferences.elenco_server:
+            for rec in o_global_preferences.elenco_server:
                 v_qaction = QAction()
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
@@ -173,10 +182,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 self.action_elenco_server.append(v_qaction)
                 self.menuAs_Server.addAction(v_qaction)               
 
-        if len(self.preferences.elenco_user) > 0:
+        if len(o_global_preferences.elenco_user) > 0:
             self.menuAs_Client.addSeparator()
             self.action_elenco_user = []
-            for rec in self.preferences.elenco_user:
+            for rec in o_global_preferences.elenco_user:
                 v_qaction = QAction()
                 v_qaction.setCheckable(True)
                 v_qaction.setText(rec[0])
@@ -201,16 +210,16 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         self.alias_server_name = ''
 
         # imposto icona della preferenza splash window
-        self.actionSplash_window.setChecked(self.preferences.splash)
+        self.actionSplash_window.setChecked(o_global_preferences.splash)
         
         # imposto icona della preferenza messaggio quando systray attiva
-        self.actionMessage_systray.setChecked(self.preferences.message_systray)
+        self.actionMessage_systray.setChecked(o_global_preferences.message_systray)
 
         # imposto il fuoco sul campo di invio messaggio
         self.e_invia_messaggio.setFocus()
 
         # definizione dei pennelli per scrivere il testo in diversi colori
-        if self.preferences.dark_theme:
+        if o_global_preferences.dark_theme:
             self.pennello_blu = QTextCharFormat()
             self.pennello_blu.setForeground(QColor('#3399FF'))
             self.pennello_nero = QTextCharFormat()
@@ -221,6 +230,16 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             self.pennello_nero = QTextCharFormat()
             self.pennello_nero.setForeground(QColor("black"))
 
+        # label che viene visualizzata quando si attiva la maschera 
+        # che nasconde la chat come se fosse un programma di top-sessions
+        # all'avvio è nascosta!
+        self.mask_window_label = QLabel('', self)
+        self.mask_window_label.setStyleSheet("background-color: black; color: white; font-family: 'Courier'; font-size: 8px;")
+        self.mask_window_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.mask_window_label.resize(self.size())  
+        self.mask_window_label.hide()  
+        self.mask_window_timer_active = False
+
         # per smistare i segnali che arrivano dal menù, utilizzo un apposito connettore
         # attenzione! eventi come la selezione di info, ecc. passa tramite i segnali standard
         self.menuBar.triggered[QAction].connect(self.smistamento_voci_menu)        
@@ -228,11 +247,29 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # se è stato scelto di avere il tema dei colori scuro, lo carico
         # Attenzione! La parte principale del tema colori rispetta il meccanismo di QT library
         #             Mentre per la parte di QScintilla ho dovuto fare le impostazioni manuali (v. definizione del lexer)
-        if self.preferences.dark_theme:                    
+        if o_global_preferences.dark_theme:                    
             self.setStyleSheet(dark_theme_definition())     
 
         # attivo evento di cambiamento di focus sulla window 
         QApplication.instance().focusChanged.connect(self.on_focusChanged)   
+
+        # se richiesto dalle preferenze, viene creato un timer per la pulizia automatica della chat
+        if o_global_preferences.clear_chat_timer != 0:             
+            self.clear_chat_timer = QTimer(self)
+            self.clear_chat_timer.setInterval(o_global_preferences.clear_chat_timer*1000) 
+            self.clear_chat_timer.timeout.connect(self.slot_pulisci_chat)
+            
+        # se richiesto dalle preferenze, viene creato un timer per minimizzare la window
+        if o_global_preferences.minimize_window_timer != 0:             
+            self.minimize_window_timer = QTimer(self)
+            self.minimize_window_timer.setInterval(o_global_preferences.minimize_window_timer*1000) 
+            self.minimize_window_timer.timeout.connect(self.slot_minimize_window_timer)            
+
+        # se richiesto dalle preferenze, viene creato un timer per mascherare il contenuto della window, simulando un programma di top-sessions
+        if o_global_preferences.mask_window_timer != 0:             
+            self.mask_window_timer = QTimer(self)
+            self.mask_window_timer.setInterval(o_global_preferences.mask_window_timer*1000) 
+            self.mask_window_timer.timeout.connect(self.slot_mask_window_timer)            
 
         # se tramite parametri d'ingresso è stato richiesto di avviare in modalità server automatica...
         if self.p_arg1 == '-S' and self.p_arg2 != '':
@@ -241,11 +278,36 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if self.p_arg1 == '-C' and self.p_arg2 != '':
             self.slot_crea_client_chat()
                     
+    def event(self, event):
+        """
+           Intercetta qualsiasi attività da parte dell'utente e resetta i timer che minimizzano la window, che puliscono la chat e che mascherano la chat
+           Tramite questo meccanismo i timer iniziano a conteggiare solo a partire dall'ultima inittività dell'utente dentro la window
+        """                
+        # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat
+        if event.type() == QEvent.Type.KeyPress:
+            if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_B and self.mask_window_timer_active:                                            
+                self.mask_window_timer_active = False
+                self.reset_mask_window_timer()
+                self.mask_window_label.hide()
+                return super().event(event)    
+            
+        #if event.type() in (QEvent.Type.MouseMove, QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.WindowActivate):
+        if o_global_preferences.minimize_window_timer != 0:                    
+            self.reset_minimize_window_timer()
+        if o_global_preferences.clear_chat_timer != 0:                    
+            self.reset_clear_chat_timer()
+        if o_global_preferences.mask_window_timer != 0:                    
+            self.reset_mask_window_timer()
+        
+        return super().event(event)    
+    
     def smistamento_voci_menu(self, p_slot):
         """
             Contrariamente al solito, le voci di menù non sono pilotate da qtdesigner ma direttamente
             dal connettore al menu che riporta a questa funzione che poi si occupa di fare lo smistamento.            
-        """        
+        """      
+        global o_global_preferences
+
         #print('Voce di menù --> ' + str(p_slot.data()))    
         #print('Voce di menù --> ' + p_slot.text())    
 
@@ -276,12 +338,22 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             # reimposto la dimensione della window con le dimensioni definite a designer            
             self.setGeometry(self.default_window_pos)
 
-        if str(p_slot.text()) == 'Hide toolbar':            
+        if str(p_slot.text()) == 'Show/Hide toolbar':            
             # mostra o nasconde la toolbar        
             if self.actionHide_toolbar.isChecked():
                 self.toolBar.hide()           
             else:
                 self.toolBar.show()           
+        
+        if str(p_slot.text()) == 'Show/Hide window border':            
+            # mostra o nasconde la toolbar        
+            if o_global_preferences.hide_window_border:                
+                o_global_preferences.hide_window_border = False
+                self.setWindowFlags(Qt.WindowType.WindowTitleHint) 
+            else:                
+                o_global_preferences.hide_window_border = True
+                self.setWindowFlags(Qt.WindowType.FramelessWindowHint) 
+            self.show()
 
     def closeEvent(self, event):
         """
@@ -301,7 +373,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
         # se la window principale perde il focus, pulisco il titolo; in questo modo all'arrivo 
         # di un messaggio, sarà possibile da parte dell'utente, capire che è cambiato qualcosa
-        if now == None and self.windowTitle().find('MChat') == -1:
+        if now == None and self.windowTitle().find('MCnet') == -1:
             self.imposta_titolo_window(False)
     
     def changeEvent(self, event):
@@ -324,7 +396,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             Leggo dal file la posizione della window (se richiesto dalle preferenze)
         """
         # se utente ha richiesto di salvare la posizione della window...
-        if self.preferences.remember_window_pos:
+        if o_global_preferences.remember_window_pos:
             # recupero dal registro di sistema (regedit) la posizione della window
             geometry = self.settings.value("geometry")
             if geometry:
@@ -337,10 +409,10 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
     def salvo_posizione_window(self):
         """
            Salvo in un file la posizione della window (se richiesto dalle preferenze)
-           Questo salvataggio avviene automaticamente alla chiusura di MChat
+           Questo salvataggio avviene automaticamente alla chiusura di MCnet
         """
         # se utente ha richiesto di salvare la posizione della window...
-        if self.preferences.remember_window_pos:
+        if o_global_preferences.remember_window_pos:
             # salvo nel registro di sistema (regedit) la posizione della window
             self.settings.setValue("geometry", self.saveGeometry())            
             # salvo nel registro di sistema (regedit) la posizione delle dock
@@ -355,14 +427,38 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         if p_active:
             self.setWindowTitle('_____.._____')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:MChat.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
         else:
             self.setWindowTitle(' ')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:MChat_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:MCnet_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
 
+    def reset_minimize_window_timer(self):
+        """
+           Avvia/Riavvia il timer che minimizza la window
+        """
+        try:
+            self.minimize_window_timer.start()
+        except:
+            pass
+    
+    def slot_minimize_window_timer(self):
+        """
+           Richiamato dal timer che minimizza la window. Nel caso sia attivo apposito flagh, la window viene minimizzata nella systray
+        """
+        if o_global_preferences.minimize_window_to_systray:
+            self.slot_riduci_a_systray()
+        else:
+            self.slot_minimize_window()
+    
+    def slot_minimize_window(self):
+        """
+           Minizza la window
+        """
+        self.showMinimized()
+    
     def slot_zoom_in(self):
         """
            Zoom dei caratteri
@@ -394,15 +490,15 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # creo e attivo la systray solo se non è già attiva
         if not self.systray_attiva:            
             self.systray_attiva = True
-            self.systray_icon = QSystemTrayIcon(QIcon("icons:MChat.ico"), parent=app)
+            self.systray_icon = QSystemTrayIcon(QIcon("icons:MCnet.ico"), parent=app)
             self.systray_icon.activated.connect(self.riapri_da_systray)            
             print('c ' + self.tipo_connessione)
             print('s ' + self.alias_server_name)
             print('2' + self.alias_client_name)
             if self.tipo_connessione == 'server':
-                self.systray_icon.setToolTip("MChat with " + self.alias_server_name)
+                self.systray_icon.setToolTip("MCnet with " + self.alias_server_name)
             else:
-                self.systray_icon.setToolTip("MChat with " + self.alias_client_name)
+                self.systray_icon.setToolTip("MCnet with " + self.alias_client_name)
             self.systray_icon.show()
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
@@ -442,14 +538,24 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
            Gestione delle preferenze
         """
-        self.my_app = win_preferences_class(self.work_dir)        
+        self.my_app = win_preferences_class()        
         self.my_app.show()   
+        
+    def reset_clear_chat_timer(self):
+        """
+           Avvia/Riavvia il timer che pulisce la char
+        """
+        try:
+            self.clear_chat_timer.start()
+        except:
+            pass
     
     def slot_pulisci_chat(self):
         """
            Pulisco la chat
-        """
+        """                
         self.o_messaggi.clear()        
+        self.e_invia_messaggio.clear()
 
     def slot_crea_server_chat(self):
         """
@@ -461,7 +567,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             if action.isChecked():
                 v_found = True
                 # ricerco i dati del server nelle relative preferenze
-                for rec in self.preferences.elenco_server:
+                for rec in o_global_preferences.elenco_server:
                     if rec[0] == action.text():
                        self.record_server = rec
 
@@ -476,7 +582,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         # nella lista dei pc ricerco il nome del pc per ricavarne l'alias e inviarlo al client che si sta collegando
         self.name = ''
         v_error = False
-        for rec in self.preferences.elenco_user:
+        for rec in o_global_preferences.elenco_user:
             if self.host_name == rec[0]:
                 self.name = rec[1]
                 self.ip = rec[2]
@@ -522,7 +628,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             
             # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
             # viene passato al thread l'oggetto chat
-            self.thread_in_attesa = class_mchat_thread(self)
+            self.thread_in_attesa = class_MCnet_thread(self)
             # collego il thread con la relativa funzione
             self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
             self.thread_in_attesa.start()
@@ -531,7 +637,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """
            Si collega ad un PC dove questa stessa applicazione è stata attivata in modalità server
            Da notare come lato cliente deve essere selezionato un server....questo perché su PC di destinazione 
-           MChat potrebbe essere attivo con più porte server!
+           MCnet potrebbe essere attivo con più porte server!
         """
         v_error = False
 
@@ -541,7 +647,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             if action.isChecked():
                 v_found = True
                 # ricerco i dati del server nelle relative preferenze
-                for rec in self.preferences.elenco_server:
+                for rec in o_global_preferences.elenco_server:
                     if rec[0] == action.text():
                        self.record_server = rec
 
@@ -555,7 +661,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             if action.isChecked():
                 v_found = True
                 # ricerco i dati dello user nelle relative preferenze
-                for rec in self.preferences.elenco_user:
+                for rec in o_global_preferences.elenco_user:
                     if rec[0] == action.text():
                        self.record_user = rec
 
@@ -579,7 +685,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                 self.alias_client_name = self.record_user[1]
                 # nella lista degli user ricerco il nome del mio pc per ricavarne l'alias e inviarlo al server a cui mi sto collegando
                 self.alias_client_name = ''
-                for rec in self.preferences.elenco_user:
+                for rec in o_global_preferences.elenco_user:
                     if self.client_name == rec[0]:
                         self.alias_client_name = rec[1]
 
@@ -597,7 +703,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                         self.soc.connect((self.server_host, self.port))
                         v_repeat = False
                     except:
-                        if not self.preferences.loop_when_connect:
+                        if not o_global_preferences.loop_when_connect:
                             message_error('Error to connect!')
                             v_error = True
                             v_repeat = False
@@ -622,7 +728,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
                     self.tipo_connessione = 'client'
                     # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
                     # viene passato al thread l'oggetto chat
-                    self.thread_in_attesa = class_mchat_thread(self)
+                    self.thread_in_attesa = class_MCnet_thread(self)
                     # collego il thread con la relativa funzione
                     self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
                     self.thread_in_attesa.start()
@@ -644,7 +750,7 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
             
             # se programma è ridotto a systray manda e richiesto di mandare un messaggio...            
             if self.systray_attiva and self.actionMessage_systray.isChecked():
-                self.systray_icon.showMessage('MChat', 'New message!')
+                self.systray_icon.showMessage('MCnet', 'New message!')
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
             self.imposta_titolo_window(True)
@@ -683,7 +789,43 @@ class MChat_window_class(QMainWindow, Ui_MChat_window):
         """        
         self.actionStart_as_server.setEnabled(p_flag)
         self.actionClient_connection.setEnabled(p_flag)
-                   
+
+    def reset_mask_window_timer(self):
+        """
+           Avvia/Riavvia il timer che maschera il contenuto della chat, simulando che sia un programma top-sessions
+        """
+        try:
+            self.mask_window_timer.start()
+        except:
+            pass
+    
+    def slot_mask_window_timer(self):
+        """
+           Crea sopra la window un sorta di top sessions
+        """
+        # ottengo elenco dei processi attivi ...        
+        process_list = []
+        for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
+            try:
+                process_list.append(proc.info)  
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+
+        # ordino per occupazione cpu
+        sorted_processes = sorted(process_list, key=lambda x: x['cpu_percent'], reverse=True)
+
+        # creo un output formattato
+        v_output = f"{'PID':<10}{'Nome Processo':<30}{'CPU (%)':<10}\n"
+        v_output += "-" * 50 + "\n"
+        for proc in sorted_processes:
+            v_output += f"{proc['pid']:<10}{proc['name']:<30}{proc['cpu_percent']:<10}\n"
+
+        # indico che la maschera è attiva
+        self.mask_window_timer_active = True        
+        # imposto la label che occupa tutta la dimensione della window e la visualizzo
+        self.mask_window_label.setText(v_output)  
+        self.mask_window_label.show()        
+
 # -------------------
 # AVVIO APPLICAZIONE
 # -------------------
@@ -691,12 +833,10 @@ if __name__ == "__main__":
     # se il programma è eseguito da pyinstaller, cambio la dir di riferimento passando a dove si trova l'eseguibile
     # in questo modo dovrebbe riuscire a trovare tutte le risorse
     if getattr(sys, 'frozen', False): 
-        v_dir_eseguibile = os.path.dirname(sys.executable)
+        # si usa questa istruzione quando è stato creato un onefile come eseguibile...che quindi viene decompresso al momento
+        v_dir_eseguibile = sys._MEIPASS
         os.chdir(v_dir_eseguibile)
-        
-    # amplifico la pathname per ricercare le icone
-    QDir.addSearchPath('icons', 'qtdesigner/icons/')
-    QDir.addSearchPath('icons', '_internal/icons/')
+        QDir.addSearchPath('icons', 'icons/')        
     
     # controllo se richiamato tramite parametri da riga di comando
     try:
@@ -706,10 +846,13 @@ if __name__ == "__main__":
     try:
         v_arg2 = sys.argv[2].upper()
     except:
-        v_arg2 = ''    
+        v_arg2 = ''            
 
-    # avvio di Mchat    
+    # eventuale preferenza di zoom di tutto il programma
+    os.environ['QT_SCALE_FACTOR'] = str(o_global_preferences.general_zoom / 100)
+
+    # avvio di MCnet    
     app = QApplication([])            
-    application = MChat_window_class(v_arg1, v_arg2)         
-    application.show()
+    application = MCnet_window_class(v_arg1, v_arg2)         
+    application.show()    
     sys.exit(app.exec())    

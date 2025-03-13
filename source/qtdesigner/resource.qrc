@@ -1,11 +1,13 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/square.png</file>
     <file>icons/zoom_avanti.png</file>
     <file>icons/zoom_indietro.png</file>
     <file>icons/hide_toolbar.png</file>
     <file>icons/message.png</file>
-    <file>icons/MChat_grey.ico</file>
     <file>icons/window2.png</file>
+    <file>icons/MCnet.ico</file>
+    <file>icons/MCnet_grey.ico</file>
     <file>icons/add.png</file>
     <file>icons/call_stop.png</file>
     <file>icons/clear.png</file>
@@ -22,7 +24,6 @@
     <file>icons/help.png</file>
     <file>icons/info.png</file>
     <file>icons/kill.png</file>
-    <file>icons/MChat.ico</file>
     <file>icons/python.gif</file>
     <file>icons/qt.gif</file>
     <file>icons/systray.png</file>

@@ -2,9 +2,9 @@
 
 """
  Creato da.....: Marco Valaguzza
- Piattaforma...: Python3.13 con libreria pyqt5
+ Piattaforma...: Python3.13 con libreria pyqt6
  Data..........: 29/11/2023
- Descrizione...: Gestione delle preferenze di MChat
+ Descrizione...: Gestione delle preferenze di MCnet
  
  Note..........: Il layout è stato creato utilizzando qtdesigner e il file preferences.py è ricavato partendo da preferences_ui.ui 
 
@@ -33,13 +33,13 @@ class preferences_class():
     """
         Classe che riporta tutte le preferenze
     """
-    def __init__(self, p_nome_file_preferences):
+    def __init__(self):
         """
            Lettura del file delle preferenze e caricamento nella classe
         """
         # Se esiste il file delle preferenze...le carico nell'oggetto
-        if os.path.isfile(p_nome_file_preferences):
-            v_json = json.load(open(p_nome_file_preferences, 'r'))
+        v_json = QSettings("Marco Valaguzza", "MCnet").value("preferences")                
+        if v_json:
             # posizione finestre        
             if v_json['remember_window_pos']==1:
                 self.remember_window_pos = True
@@ -64,33 +64,36 @@ class preferences_class():
             self.elenco_server = v_json['server']
             # users
             self.elenco_user = v_json['users']
-            # messaggio attivo nella systray 
-            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
-            try:
-                if v_json['message_systray'] == 1:
-                    self.message_systray = True
-                else:
-                    self.message_systray = False
-            except:
+            # messaggio attivo nella systray                         
+            if v_json['message_systray'] == 1:
+                self.message_systray = True
+            else:
                 self.message_systray = False
             # toolbar nascosta
-            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
-            try:
-                if v_json['hide_toolbar'] == 1:
-                    self.hide_toolbar = True
-                else:
-                    self.hide_toolbar = False
-            except:
+            if v_json['hide_toolbar'] == 1:
+                self.hide_toolbar = True
+            else:
                 self.hide_toolbar = False
             # loop quando ci si connette come client
-            # (si è fatta la try perché per alcune installazioni la preferenza potrebbe non esserci)
-            try:
-                if v_json['loop_when_connect'] == 1:
-                    self.loop_when_connect = True
-                else:
-                    self.loop_when_connect = False
-            except:
+            if v_json['loop_when_connect'] == 1:
                 self.loop_when_connect = True
+            else:
+                self.loop_when_connect = False
+            # livello di opacità della window
+            self.opacity = v_json['opacity'] 
+            # timer che pulisce la chat
+            self.clear_chat_timer = v_json['clear_chat_timer']             
+            # timer che minimizza la window
+            self.minimize_window_timer = v_json['minimize_window_timer']             
+            # timer che maschera la window
+            self.mask_window_timer = v_json['mask_window_timer']             
+            # indica di minimizzare la window nella systray
+            if v_json['minimize_window_to_systray'] == 1:
+                self.minimize_window_to_systray = True
+            else:
+                self.minimize_window_to_systray = False
+            # zoom generale
+            self.general_zoom = v_json['general_zoom']             
 
         # imposto valori di default senza presenza dello specifico file
         else:            
@@ -106,33 +109,39 @@ class preferences_class():
             self.elenco_server = [('SERVER ONE','1250','1'),
                                   ('SERVER TWO','1300','0')]
             # elenco users è composto da Titolo, User, Password
-            self.elenco_user = [('PC-MVALAGUZ','Vala','10.0.47.9','1'),
-                                ('pc-aberlend','Solo','10.0.47.1','0'),                                
-                                ('PC-TRAINIM','Marco','10.0.47.17','0'),
-                                ('PC-FDAMIANI','Filippo','10.0.47.18','0')]
+            self.elenco_user = [('PC-MVALAGUZ',';-)','10.0.47.9','1'),
+                                ('pc-aberlend',':-)','10.0.47.1','0'),                                
+                                ('PC-TRAINIM',':-)','10.0.47.17','0'),
+                                ('PC-FDAMIANI',';-)','10.0.47.18','0')]
             # messaggio attivo nella systray
             self.message_systray = False
             # toolbar nascosta
             self.hide_toolbar = False
             # loop quando ci si connette come client
             self.loop_when_connect = True
-            # creo la dir dove andranno le preferenze              
-            if not os.path.isdir(os.path.expanduser('~\\AppData\\Local\\MChat\\')):
-                os.makedirs(os.path.expanduser('~\\AppData\\Local\\MChat\\'))
+            # livello di opacità della window
+            self.opacity = 90
+            # timer che pulisce la chat (10 minuti)
+            self.clear_chat_timer = 600            
+            # timer che minimizza la window (5 minuti)
+            self.minimize_window_timer = 300
+            # timer che maschera la window come se fosse un programma di top-sessions (1 minuto)
+            self.mask_window_timer = 2
+            # indica di minimizzare la window nella systray
+            self.minimize_window_to_systray = True            
+            # zoom generale
+            self.general_zoom = 100
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
-        Gestione delle preferenze di MChat
+        Gestione delle preferenze di MCnet
     """                
-    def __init__(self, p_nome_dir_preferences):
+    def __init__(self):
         super(win_preferences_class, self).__init__()        
         self.setupUi(self)
 
-        self.nome_dir_preferences = p_nome_dir_preferences
-        self.nome_file_preferences = p_nome_dir_preferences + 'MChat.ini'
-
-        # creo l'oggetto preferenze che automaticamente carica il file o le preferenze di default
-        self.preferences = preferences_class(self.nome_file_preferences)        
+        # creo l'oggetto preferenze che automaticamente carica dal registro le preferenze o se non presenti, quelle di default
+        self.preferences = preferences_class()        
         # le preferenze caricate vengono riportate a video
         self.e_remember_window_pos.setChecked(self.preferences.remember_window_pos)        
         self.e_hide_window_border.setChecked(self.preferences.hide_window_border)                
@@ -141,6 +150,12 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.e_message_systray.setChecked(self.preferences.message_systray)
         self.e_hide_toolbar.setChecked(self.preferences.hide_toolbar)
         self.e_loop_when_connect.setChecked(self.preferences.loop_when_connect)
+        self.e_opacity.setValue(self.preferences.opacity)
+        self.e_clear_chat_timer.setValue(self.preferences.clear_chat_timer)
+        self.e_minimize_window_timer.setValue(self.preferences.minimize_window_timer)
+        self.e_general_zoom.setValue(self.preferences.general_zoom)
+        self.e_minimize_window_to_systray.setChecked(self.preferences.minimize_window_to_systray)
+        self.e_mask_window_timer.setValue(self.preferences.mask_window_timer)
 
         # preparo elenco server        
         self.o_server.setColumnCount(3)
@@ -215,20 +230,13 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
            Ripristina tutte preferenze di default
         """
         if message_question_yes_no('Do you want to restore default preferences?') == 'Yes':
-            # cancello il file delle preferenze
-            if os.path.isfile(self.nome_file_preferences):
-                os.remove(self.nome_file_preferences)
-
+             # Se esiste il file delle preferenze...le carico nell'oggetto
+            v_settings = QSettings("Marco Valaguzza", "MCnet")
+            v_settings.remove("preferences")            
             # emetto messaggio di fine
-            message_info('Preferences restored! Restart MChat to see the changes ;-)')
+            message_info('Preferences restored! Restart MCnet to see the changes ;-)')
             # esco dal programma delle preferenze
             self.close()
-
-    def slot_b_open_pref_dir(self):
-        """
-           Apre la cartella che contiene le preferenze
-        """
-        os.startfile(os.path.expanduser(self.nome_dir_preferences))        
     
     def slot_b_server_add(self):
         """
@@ -354,6 +362,12 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         else:
             v_loop_when_connect = 0
 
+        # indica di minimizzare la window nella systray
+        if self.e_minimize_window_to_systray.isChecked():
+            v_minimize_window_to_systray = 1
+        else:
+            v_minimize_window_to_systray = 0
+
 		# scrivo nel file un elemento json contenente le informazioni inseriti dell'utente
         v_json ={'remember_window_pos': v_remember_window_pos,                 
                  'hide_window_border': v_hide_window_border,                 
@@ -363,19 +377,26 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                  'users': v_users,
                  'message_systray':v_message_systray,
                  'hide_toolbar':v_hide_toolbar,
-                 'loop_when_connect':v_loop_when_connect
+                 'loop_when_connect':v_loop_when_connect,
+                 'opacity':self.e_opacity.value(),
+                 'clear_chat_timer': self.e_clear_chat_timer.value(),
+                 'minimize_window_timer': self.e_minimize_window_timer.value(),
+                 'general_zoom': self.e_general_zoom.value(),
+                 'minimize_window_to_systray': v_minimize_window_to_systray,
+                 'mask_window_timer': self.e_mask_window_timer.value(),
                 }
-
-		# scrittura nel file dell'oggetto json
-        with open(self.nome_file_preferences, 'w') as outfile:json.dump(v_json, outfile)
         
-        message_info('Preferences saved! Restart MChat to see the changes ;-)')
+        # scrittura delle preferenze (nel registro nel caso di Windows)        
+        v_settings = QSettings("Marco Valaguzza", "MCnet")
+        v_settings.setValue("preferences", v_json)   
+        
+        message_info('Preferences saved! Restart MCnet to see the changes ;-)')
 
 # ----------------------------------------
 # TEST APPLICAZIONE
 # ----------------------------------------
 if __name__ == "__main__":    
     app = QApplication([])
-    application = win_preferences_class(os.path.expanduser('~\\AppData\\Local\\MChat\\'))
+    application = win_preferences_class()
     application.show()
     sys.exit(app.exec())        
