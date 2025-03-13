@@ -4,7 +4,7 @@
  Creato da.....: Marco Valaguzza
  Piattaforma...: Python3.13 con libreria pyqt6
  Data..........: 29/11/2023
- Descrizione...: Gestione delle preferenze di MCnet
+ Descrizione...: Gestione delle preferenze di NetC
  
  Note..........: Il layout è stato creato utilizzando qtdesigner e il file preferences.py è ricavato partendo da preferences_ui.ui 
 
@@ -38,7 +38,7 @@ class preferences_class():
            Lettura del file delle preferenze e caricamento nella classe
         """
         # Se esiste il file delle preferenze...le carico nell'oggetto
-        v_json = QSettings("Marco Valaguzza", "MCnet").value("preferences")                
+        v_json = QSettings("Marco Valaguzza", "NetC").value("preferences")                
         if v_json:
             # posizione finestre        
             if v_json['remember_window_pos']==1:
@@ -134,7 +134,7 @@ class preferences_class():
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
-        Gestione delle preferenze di MCnet
+        Gestione delle preferenze di NetC
     """                
     def __init__(self):
         super(win_preferences_class, self).__init__()        
@@ -231,10 +231,10 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         """
         if message_question_yes_no('Do you want to restore default preferences?') == 'Yes':
              # Se esiste il file delle preferenze...le carico nell'oggetto
-            v_settings = QSettings("Marco Valaguzza", "MCnet")
+            v_settings = QSettings("Marco Valaguzza", "NetC")
             v_settings.remove("preferences")            
             # emetto messaggio di fine
-            message_info('Preferences restored! Restart MCnet to see the changes ;-)')
+            message_info('Preferences restored! Restart NetC to see the changes ;-)')
             # esco dal programma delle preferenze
             self.close()
     
@@ -387,10 +387,10 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                 }
         
         # scrittura delle preferenze (nel registro nel caso di Windows)        
-        v_settings = QSettings("Marco Valaguzza", "MCnet")
+        v_settings = QSettings("Marco Valaguzza", "NetC")
         v_settings.setValue("preferences", v_json)   
         
-        message_info('Preferences saved! Restart MCnet to see the changes ;-)')
+        message_info('Preferences saved! Restart NetC to see the changes ;-)')
 
 # ----------------------------------------
 # TEST APPLICAZIONE

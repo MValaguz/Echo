@@ -36,7 +36,7 @@ class Ui_Program_info(object):
         _translate = QtCore.QCoreApplication.translate
         Program_info.setWindowTitle(_translate("Program_info", "About MChat"))
         self.label.setText(_translate("Program_info", "<html><head/><body><p><img src=\"icons:python.gif\"/></p><p><img src=\"icons:qt.gif\"/></p></body></html>"))
-        self.label_2.setText(_translate("Program_info", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">MCnet</span></p><p><span style=\" font-size:10pt;\">© 2019-2025</span></p><p><span style=\" font-size:10pt;\">MCnet is a little chat program for ethernet network.</span></p><p><span style=\" font-size:10pt;\">Developed by </span><span style=\" font-size:10pt; font-weight:600;\">Marco Valaguzza</span><span style=\" font-size:10pt;\"> (Italy) </span></p><p><span style=\" font-size:10pt;\">with Python 3.13 and QT6</span></p></body></html>"))
+        self.label_2.setText(_translate("Program_info", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">NetC</span></p><p><span style=\" font-size:10pt;\">© 2019-2025</span></p><p><span style=\" font-size:10pt;\">NetC is a little chat program for ethernet network.</span></p><p><span style=\" font-size:10pt;\">Developed by </span><span style=\" font-size:10pt; font-weight:600;\">Marco Valaguzza</span><span style=\" font-size:10pt;\"> (Italy) </span></p><p><span style=\" font-size:10pt;\">with Python 3.13 and QT6</span></p></body></html>"))
 
 
 if __name__ == "__main__":

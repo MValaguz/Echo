@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#  __  __  ____            _   
-# |  \/  |/ ___|_ __   ___| |_ 
-# | |\/| | |   | '_ \ / _ \ __|
-# | |  | | |___| | | |  __/ |_ 
-# |_|  |_|\____|_| |_|\___|\__|
+ _   _      _    ____ 
+| \ | | ___| |_ / ___|
+|  \| |/ _ \ __| |    
+| |\  |  __/ |_| |___ 
+|_| \_|\___|\__|\____|
+                      
                              
 #  Creato da.....: Marco Valaguzza
 #  Piattaforma...: Python3.13 con libreria PyQt6
@@ -42,7 +43,7 @@ from PyQt6.QtWidgets import *
 # Libreria per criptare i messaggi
 import base64
 # Definizione interfaccia QtDesigner
-from MCnet_ui import Ui_MCnet_window
+from NetC_ui import Ui_NetC_window
 from program_info_ui import Ui_Program_info
 from help_ui import Ui_Help
 from preferences import preferences_class, win_preferences_class
@@ -55,10 +56,10 @@ o_global_preferences = preferences_class()
 
 def cripta_messaggio(messaggio):
     """
-       Cripta una stringa con la chiave MCnet. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
+       Cripta una stringa con la chiave NetC. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
        all'invio dei dati su rete
     """
-    key = 'MCnet'
+    key = 'NetC'
     enc = []
     for i in range(len(messaggio)):
         key_c = key[i % len(key)]
@@ -68,10 +69,10 @@ def cripta_messaggio(messaggio):
 
 def decripta_messaggio(messaggio):
     """
-       decripta una stringa con la chiave MCnet. Il valore restituito è di tipo stringa, lo stesso che deve essere 
+       decripta una stringa con la chiave NetC. Il valore restituito è di tipo stringa, lo stesso che deve essere 
        passato ai campi di visualizzazione 
     """
-    key = 'MCnet'
+    key = 'NetC'
     dec = []
     enc = base64.urlsafe_b64decode(messaggio)
     for i in range(len(enc)):
@@ -80,7 +81,7 @@ def decripta_messaggio(messaggio):
         dec.append(dec_c)
     return "".join(dec)
 
-class class_MCnet_thread(QThread):
+class class_NetC_thread(QThread):
     """
        Questa classe serve per creare un thread separato che si metta in ascolto di eventuali messaggi
        al parametro p_tool_chat dovrà essere passata la classe tools_chat (di fatto l'oggetto principale di questo programma
@@ -113,13 +114,13 @@ class class_MCnet_thread(QThread):
             # restituisco il messaggio
             self.signal.emit(message)
 
-class MCnet_window_class(QMainWindow, Ui_MCnet_window):
+class NetC_window_class(QMainWindow, Ui_NetC_window):
     """
         Programma per la gestione di una chat tra utenti
-        Nota Bene: E' stata costruita anche la classe MCnet_thread
+        Nota Bene: E' stata costruita anche la classe NetC_thread
                    Questa classe è quella che si occupa di ricevere i messaggi. Perché una classe?
                    Perchè in questo modo il main del programma rimane sempre attivo e mentre si è in 
-                   attesa di un messaggio se ne può inviare un altro. La classe MCnet_thread riceve 
+                   attesa di un messaggio se ne può inviare un altro. La classe NetC_thread riceve 
                    in ingresso la stessa classe class_tools_chat in modo da avere in pancia le sue variabili.
     """
     def __init__(self, p_arg1, p_arg2):
@@ -130,9 +131,9 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
         self.p_arg2 = p_arg2
         
         # incapsulo la classe grafica da qtdesigner
-        super(MCnet_window_class, self).__init__()        
+        super(NetC_window_class, self).__init__()        
         # creo oggetto settings per salvare posizione della window e delle dock
-        self.settings = QSettings("Marco Valaguzza", "MCnet")
+        self.settings = QSettings("Marco Valaguzza", "NetC")
         self.setupUi(self)
 
         # imposto opacità della window (Valore tra 0 (trasparente) e 1 (opaco))
@@ -373,7 +374,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
         """
         # se la window principale perde il focus, pulisco il titolo; in questo modo all'arrivo 
         # di un messaggio, sarà possibile da parte dell'utente, capire che è cambiato qualcosa
-        if now == None and self.windowTitle().find('MCnet') == -1:
+        if now == None and self.windowTitle().find('NetC') == -1:
             self.imposta_titolo_window(False)
     
     def changeEvent(self, event):
@@ -409,7 +410,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
     def salvo_posizione_window(self):
         """
            Salvo in un file la posizione della window (se richiesto dalle preferenze)
-           Questo salvataggio avviene automaticamente alla chiusura di MCnet
+           Questo salvataggio avviene automaticamente alla chiusura di NetC
         """
         # se utente ha richiesto di salvare la posizione della window...
         if o_global_preferences.remember_window_pos:
@@ -427,12 +428,12 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
         if p_active:
             self.setWindowTitle('_____.._____')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
         else:
             self.setWindowTitle(' ')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:MCnet_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:NetC_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
 
     def reset_minimize_window_timer(self):
@@ -490,15 +491,15 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
         # creo e attivo la systray solo se non è già attiva
         if not self.systray_attiva:            
             self.systray_attiva = True
-            self.systray_icon = QSystemTrayIcon(QIcon("icons:MCnet.ico"), parent=app)
+            self.systray_icon = QSystemTrayIcon(QIcon("icons:NetC.ico"), parent=app)
             self.systray_icon.activated.connect(self.riapri_da_systray)            
             print('c ' + self.tipo_connessione)
             print('s ' + self.alias_server_name)
             print('2' + self.alias_client_name)
             if self.tipo_connessione == 'server':
-                self.systray_icon.setToolTip("MCnet with " + self.alias_server_name)
+                self.systray_icon.setToolTip("NetC with " + self.alias_server_name)
             else:
-                self.systray_icon.setToolTip("MCnet with " + self.alias_client_name)
+                self.systray_icon.setToolTip("NetC with " + self.alias_client_name)
             self.systray_icon.show()
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
@@ -628,7 +629,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
             
             # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
             # viene passato al thread l'oggetto chat
-            self.thread_in_attesa = class_MCnet_thread(self)
+            self.thread_in_attesa = class_NetC_thread(self)
             # collego il thread con la relativa funzione
             self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
             self.thread_in_attesa.start()
@@ -637,7 +638,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
         """
            Si collega ad un PC dove questa stessa applicazione è stata attivata in modalità server
            Da notare come lato cliente deve essere selezionato un server....questo perché su PC di destinazione 
-           MCnet potrebbe essere attivo con più porte server!
+           NetC potrebbe essere attivo con più porte server!
         """
         v_error = False
 
@@ -728,7 +729,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
                     self.tipo_connessione = 'client'
                     # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
                     # viene passato al thread l'oggetto chat
-                    self.thread_in_attesa = class_MCnet_thread(self)
+                    self.thread_in_attesa = class_NetC_thread(self)
                     # collego il thread con la relativa funzione
                     self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
                     self.thread_in_attesa.start()
@@ -750,7 +751,7 @@ class MCnet_window_class(QMainWindow, Ui_MCnet_window):
             
             # se programma è ridotto a systray manda e richiesto di mandare un messaggio...            
             if self.systray_attiva and self.actionMessage_systray.isChecked():
-                self.systray_icon.showMessage('MCnet', 'New message!')
+                self.systray_icon.showMessage('NetC', 'New message!')
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
             self.imposta_titolo_window(True)
@@ -851,8 +852,8 @@ if __name__ == "__main__":
     # eventuale preferenza di zoom di tutto il programma
     os.environ['QT_SCALE_FACTOR'] = str(o_global_preferences.general_zoom / 100)
 
-    # avvio di MCnet    
+    # avvio di NetC    
     app = QApplication([])            
-    application = MCnet_window_class(v_arg1, v_arg2)         
+    application = NetC_window_class(v_arg1, v_arg2)         
     application.show()    
     sys.exit(app.exec())    

@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\source\\MCnet.py'],
+a = Analysis(['..\\source\\NetC.py'],
              pathex=[],
              binaries=[],
              datas=[					
@@ -25,17 +25,17 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='MCnet',
+          name='NetC',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           console=False, 
-		  icon='..\\source\\qtdesigner\\icons\\MCnet.ico')
+		  icon='..\\source\\qtdesigner\\icons\\NetC.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
                a.datas,
                strip=False,
                upx=True,
-               name='MCnet')
+               name='NetC')

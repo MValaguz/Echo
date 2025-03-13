@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\source\\MCnet.py'],
+a = Analysis(['..\\source\\NetC.py'],
              pathex=[],
              binaries=[],
              datas=[					
@@ -27,11 +27,11 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
 		  [],
-          name='MCnet',
+          name='NetC',
           debug=False,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
           console=True,
-		  icon='..\\source\\qtdesigner\\icons\\MCnet.ico')
+		  icon='..\\source\\qtdesigner\\icons\\NetC.ico')
 		  

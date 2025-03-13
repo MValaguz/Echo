@@ -21,7 +21,7 @@ def message_error(p_message):
     msg.setText(p_message)    
     msg.setWindowTitle("Error")
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
+    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
     msg.setWindowIcon(icon)
     msg.exec()
     
@@ -34,7 +34,7 @@ def message_info(p_message):
     msg.setText(p_message)    
     msg.setWindowTitle("Info")
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
+    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
     msg.setWindowIcon(icon)
     msg.exec()    
     
@@ -47,7 +47,7 @@ def message_question_yes_no(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Question")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     
@@ -67,7 +67,7 @@ def message_question_yes_no_cancel(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Question")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
     
@@ -88,7 +88,7 @@ def message_warning_yes_no(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Warning")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:MCnet.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     
