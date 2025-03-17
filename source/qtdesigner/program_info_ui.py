@@ -14,7 +14,7 @@ class Ui_Program_info(object):
         Program_info.setObjectName("Program_info")
         Program_info.resize(514, 254)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons:MCnet.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("icons:Echo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         Program_info.setWindowIcon(icon)
         self.gridLayout_2 = QtWidgets.QGridLayout(Program_info)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -34,9 +34,9 @@ class Ui_Program_info(object):
 
     def retranslateUi(self, Program_info):
         _translate = QtCore.QCoreApplication.translate
-        Program_info.setWindowTitle(_translate("Program_info", "About MChat"))
+        Program_info.setWindowTitle(_translate("Program_info", "Program Info"))
         self.label.setText(_translate("Program_info", "<html><head/><body><p><img src=\"icons:python.gif\"/></p><p><img src=\"icons:qt.gif\"/></p></body></html>"))
-        self.label_2.setText(_translate("Program_info", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">NetC</span></p><p><span style=\" font-size:10pt;\">© 2019-2025</span></p><p><span style=\" font-size:10pt;\">NetC is a little chat program for ethernet network.</span></p><p><span style=\" font-size:10pt;\">Developed by </span><span style=\" font-size:10pt; font-weight:600;\">Marco Valaguzza</span><span style=\" font-size:10pt;\"> (Italy) </span></p><p><span style=\" font-size:10pt;\">with Python 3.13 and QT6</span></p></body></html>"))
+        self.label_2.setText(_translate("Program_info", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Echo</span></p><p><span style=\" font-size:10pt;\">© 2019-2025</span></p><p><span style=\" font-size:10pt;\">NetC is a little chat program for ethernet network.</span></p><p><span style=\" font-size:10pt;\">Developed by </span><span style=\" font-size:10pt; font-weight:600;\">Marco Valaguzza</span><span style=\" font-size:10pt;\"> (Italy) </span></p><p><span style=\" font-size:10pt;\">with Python 3.13 and QT6</span></p></body></html>"))
 
 
 if __name__ == "__main__":

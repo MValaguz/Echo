@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """
  Creato da.....: Marco Valaguzza
  Piattaforma...: Python3.13 con libreria pyqt6
  Data..........: 29/11/2023
- Descrizione...: Gestione delle preferenze di NetC
+ Descrizione...: Gestione delle preferenze di Echo
  
  Note..........: Il layout è stato creato utilizzando qtdesigner e il file preferences.py è ricavato partendo da preferences_ui.ui 
 
@@ -25,9 +23,85 @@ from PyQt6.QtWidgets import *
 #Definizioni interfaccia
 from preferences_ui import Ui_preferences_window
 #Librerie aggiuntive interne
-from utilita import message_info, message_question_yes_no
+from utilita import message_error, message_info, message_question_yes_no, cripta_messaggio, decripta_messaggio
 #Amplifico la pathname per ricercare le icone
 QDir.addSearchPath('icons', 'qtdesigner/icons/')
+#Messaggio che esce come maschera 
+v_global_mask_window_message = """
+<ol>
+    <li>
+        <strong>Controllo delle comunicazioni</strong>
+        <ul>
+            <li>Rivedere e rispondere alle email o ai messaggi su piattaforme come Slack.</li>
+            <li>Partecipare alle riunioni mattutine (stand-up) per condividere aggiornamenti e pianificare la giornata.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Pianificazione</strong>
+        <ul>
+            <li>Rivedere l'elenco delle attività (ad esempio, in uno strumento come Jira).</li>
+            <li>Dare priorità ai compiti più urgenti o importanti.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Scrivere codice</strong>
+        <ul>
+            <li>Implementare nuove funzionalità richieste nel progetto.</li>
+            <li>Correggere bug segnalati durante i test o dagli utenti finali.</li>
+            <li>Ottimizzare il codice esistente per migliorare le prestazioni.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Test e debug</strong>
+        <ul>
+            <li>Scrivere ed eseguire test unitari per garantire il funzionamento del codice.</li>
+            <li>Eseguire il debug per identificare e risolvere i problemi.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Collaborazione</strong>
+        <ul>
+            <li>Discutere soluzioni tecniche con il team o i designer.</li>
+            <li>Rivedere e fornire feedback sui commit e pull request dei colleghi.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Documentazione</strong>
+        <ul>
+            <li>Aggiornare i documenti tecnici relativi al progetto.</li>
+            <li>Scrivere commenti chiari nel codice per aiutare altri sviluppatori.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Apprendimento</strong>
+        <ul>
+            <li>Dedica tempo all'apprendimento di nuove tecnologie, strumenti o framework.</li>
+            <li>Consultare documentazione, guide e tutorial online per risolvere problemi complessi.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Perfezionamento del lavoro</strong>
+        <ul>
+            <li>Testare le funzionalità implementate in ambienti di staging o pre-produzione.</li>
+            <li>Assicurarsi che il lavoro soddisfi i requisiti del progetto e gli standard di qualità.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Consegna</strong>
+        <ul>
+            <li>Preparare e distribuire il codice in produzione.</li>
+            <li>Monitorare il comportamento del sistema dopo il rilascio.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Pausa e rilassamento</strong>
+        <ul>
+            <li>Fare pause per rinfrescare la mente e aumentare la produttività.</li>
+            <li>A volte, le migliori idee nascono durante una pausa!</li>
+        </ul>
+    </li>
+</ol>
+"""
 
 class preferences_class():
     """
@@ -38,7 +112,7 @@ class preferences_class():
            Lettura del file delle preferenze e caricamento nella classe
         """
         # Se esiste il file delle preferenze...le carico nell'oggetto
-        v_json = QSettings("Marco Valaguzza", "NetC").value("preferences")                
+        v_json = QSettings("Echo Utility", "Echo").value("preferences")                
         if v_json:
             # posizione finestre        
             if v_json['remember_window_pos']==1:
@@ -61,9 +135,13 @@ class preferences_class():
             else:
                 self.splash = False
             # server
-            self.elenco_server = v_json['server']
-            # users
-            self.elenco_user = v_json['users']
+            self.elenco_server = []
+            for line in v_json['server']:
+                self.elenco_server.append( ( decripta_messaggio(line[0]), decripta_messaggio(line[1]), line[2] ) )                                
+            # users            
+            self.elenco_user = []
+            for line in v_json['users']:
+                self.elenco_user.append( ( decripta_messaggio(line[0]), decripta_messaggio(line[1]), decripta_messaggio(line[2]), line[3] ) )                                
             # messaggio attivo nella systray                         
             if v_json['message_systray'] == 1:
                 self.message_systray = True
@@ -87,6 +165,13 @@ class preferences_class():
             self.minimize_window_timer = v_json['minimize_window_timer']             
             # timer che maschera la window
             self.mask_window_timer = v_json['mask_window_timer']             
+            # messaggio da far uscire quando compare la maschera
+            self.mask_window_message = v_json['mask_window_message']
+            # indica avvio programma in modalità maschera
+            if v_json['start_in_mask_mode'] == 1:
+                self.start_in_mask_mode = True
+            else:
+                self.start_in_mask_mode = False
             # indica di minimizzare la window nella systray
             if v_json['minimize_window_to_systray'] == 1:
                 self.minimize_window_to_systray = True
@@ -109,8 +194,8 @@ class preferences_class():
             self.elenco_server = [('SERVER ONE','1250','1'),
                                   ('SERVER TWO','1300','0')]
             # elenco users è composto da Titolo, User, Password
-            self.elenco_user = [('PC-MVALAGUZ',';-)','10.0.47.9','1'),
-                                ('pc-aberlend',':-)','10.0.47.1','0'),                                
+            self.elenco_user = [('PORT-MVALAGUZ',';-)','10.0.47.9','1'),
+                                ('PORT-ABERLEND',':-)','10.0.47.1','0'),                                
                                 ('PC-TRAINIM',':-)','10.0.47.17','0'),
                                 ('PC-FDAMIANI',';-)','10.0.47.18','0')]
             # messaggio attivo nella systray
@@ -126,7 +211,11 @@ class preferences_class():
             # timer che minimizza la window (5 minuti)
             self.minimize_window_timer = 300
             # timer che maschera la window come se fosse un programma di top-sessions (1 minuto)
-            self.mask_window_timer = 2
+            self.mask_window_timer = 60
+            # messaggio da far uscire quando compare la maschera
+            self.mask_window_message = v_global_mask_window_message
+            # indica avvio programma in modalità maschera
+            self.start_in_mask_mode = True            
             # indica di minimizzare la window nella systray
             self.minimize_window_to_systray = True            
             # zoom generale
@@ -134,7 +223,7 @@ class preferences_class():
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
-        Gestione delle preferenze di NetC
+        Gestione delle preferenze di Echo
     """                
     def __init__(self):
         super(win_preferences_class, self).__init__()        
@@ -156,6 +245,8 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.e_general_zoom.setValue(self.preferences.general_zoom)
         self.e_minimize_window_to_systray.setChecked(self.preferences.minimize_window_to_systray)
         self.e_mask_window_timer.setValue(self.preferences.mask_window_timer)
+        self.e_mask_window_message.setPlainText(self.preferences.mask_window_message)
+        self.e_start_in_mask_mode.setChecked(self.preferences.start_in_mask_mode)
 
         # preparo elenco server        
         self.o_server.setColumnCount(3)
@@ -186,7 +277,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
 
         # preparo elenco user        
         self.o_users.setColumnCount(4)
-        self.o_users.setHorizontalHeaderLabels(['PC-NAME','Title name','IP','Default (check only one)'])   
+        self.o_users.setHorizontalHeaderLabels(['PC-NAME','User-Name','IP','Default (check only one)'])   
         v_rig = 1                
         for record in self.preferences.elenco_user:                                    
             self.o_users.setRowCount(v_rig) 
@@ -231,10 +322,10 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         """
         if message_question_yes_no('Do you want to restore default preferences?') == 'Yes':
              # Se esiste il file delle preferenze...le carico nell'oggetto
-            v_settings = QSettings("Marco Valaguzza", "NetC")
+            v_settings = QSettings("Echo Utility", "Echo")
             v_settings.remove("preferences")            
             # emetto messaggio di fine
-            message_info('Preferences restored! Restart NetC to see the changes ;-)')
+            message_info('Preferences restored! Restart Echo to see the changes ;-)')
             # esco dal programma delle preferenze
             self.close()
     
@@ -325,8 +416,8 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                 v_default = '1'
             else:
                 v_default = '0'
-            # preparo l'array con la stringa della riga server
-            v_server.append( ( self.o_server.item(i,0).text(), self.o_server.item(i,1).text(), v_default ) )            
+            # preparo l'array con la stringa della riga server (nome, ip-port, default)
+            v_server.append( ( cripta_messaggio(self.o_server.item(i,0).text()), cripta_messaggio(self.o_server.item(i,1).text()), v_default ) )            
 
         # elenco dei users
         v_users = []
@@ -341,8 +432,8 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                 v_default = '1'
             else:
                 v_default = '0'    
-            # preparo l'array con la stringa della riga server
-            v_users.append( ( self.o_users.item(i,0).text(), self.o_users.item(i,1).text() , self.o_users.item(i,2).text(), v_default) )            
+            # preparo l'array con la stringa della riga server (nome-pc, nome-user, ip, default)
+            v_users.append( ( cripta_messaggio(self.o_users.item(i,0).text()), cripta_messaggio(self.o_users.item(i,1).text()) , cripta_messaggio(self.o_users.item(i,2).text()), v_default) )            
 
         # messaggio nella systray
         if self.e_message_systray.isChecked():
@@ -368,6 +459,12 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         else:
             v_minimize_window_to_systray = 0
 
+        # indica avvio programma in modalità maschera
+        if self.e_start_in_mask_mode == 1:
+            v_start_in_mask_mode = True
+        else:
+            v_start_in_mask_mode = False
+
 		# scrivo nel file un elemento json contenente le informazioni inseriti dell'utente
         v_json ={'remember_window_pos': v_remember_window_pos,                 
                  'hide_window_border': v_hide_window_border,                 
@@ -384,13 +481,15 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                  'general_zoom': self.e_general_zoom.value(),
                  'minimize_window_to_systray': v_minimize_window_to_systray,
                  'mask_window_timer': self.e_mask_window_timer.value(),
+                 'mask_window_message': self.e_mask_window_message.toPlainText(),
+                 'start_in_mask_mode': v_start_in_mask_mode
                 }
         
         # scrittura delle preferenze (nel registro nel caso di Windows)        
-        v_settings = QSettings("Marco Valaguzza", "NetC")
+        v_settings = QSettings("Echo Utility", "Echo")
         v_settings.setValue("preferences", v_json)   
         
-        message_info('Preferences saved! Restart NetC to see the changes ;-)')
+        message_info('Preferences saved! Restart Echo to see the changes ;-)')
 
 # ----------------------------------------
 # TEST APPLICAZIONE

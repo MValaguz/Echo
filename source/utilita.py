@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
-
 """
  Creato da.....: Marco Valaguzza
  Piattaforma...: Python3.13 con libreria pyqt6
  Data..........: 09/08/2018 
 """
 
+# Libreria per criptare i messaggi
+import base64
+# Librerie grafiche
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
@@ -21,7 +22,7 @@ def message_error(p_message):
     msg.setText(p_message)    
     msg.setWindowTitle("Error")
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
+    icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
     msg.setWindowIcon(icon)
     msg.exec()
     
@@ -34,7 +35,7 @@ def message_info(p_message):
     msg.setText(p_message)    
     msg.setWindowTitle("Info")
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
+    icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)    
     msg.setWindowIcon(icon)
     msg.exec()    
     
@@ -47,7 +48,7 @@ def message_question_yes_no(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Question")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     
@@ -67,7 +68,7 @@ def message_question_yes_no_cancel(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Question")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
     
@@ -88,7 +89,7 @@ def message_warning_yes_no(p_message):
     msg.setText(p_message)
     msg.setWindowTitle("Warning")    
     icon = QIcon()
-    icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
+    icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)        
     msg.setWindowIcon(icon)
     msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     
@@ -107,4 +108,31 @@ def Freccia_Mouse(p_active):
         QApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))        
     else:
         # ripristino icona freccia del mouse
-        QApplication.restoreOverrideCursor()          
+        QApplication.restoreOverrideCursor()      
+
+def cripta_messaggio(messaggio):
+    """
+       Cripta una stringa con la chiave Echo. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
+       all'invio dei dati su rete
+    """
+    key = 'Echo'
+    enc = []
+    for i in range(len(messaggio)):
+        key_c = key[i % len(key)]
+        enc_c = (ord(messaggio[i]) + ord(key_c)) % 256
+        enc.append(enc_c)
+    return base64.urlsafe_b64encode(bytes(enc))
+
+def decripta_messaggio(messaggio):
+    """
+       decripta una stringa con la chiave Echo. Il valore restituito è di tipo stringa, lo stesso che deve essere 
+       passato ai campi di visualizzazione 
+    """
+    key = 'Echo'
+    dec = []
+    enc = base64.urlsafe_b64decode(messaggio)
+    for i in range(len(enc)):
+        key_c = key[i % len(key)]
+        dec_c = chr((256 + enc[i] - ord(key_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)    

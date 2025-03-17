@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NetC_window</class>
- <widget class="QMainWindow" name="NetC_window">
+ <class>Echo_window</class>
+ <widget class="QMainWindow" name="Echo_window">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,11 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>NetC</string>
+   <string>Echo</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
-    <normaloff>:/icons/icons/NetC.ico</normaloff>:/icons/icons/NetC.ico</iconset>
+    <normaloff>:/icons/icons/Echo.ico</normaloff>:/icons/icons/Echo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -440,8 +440,8 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>o_messaggi</tabstop>
   <tabstop>e_invia_messaggio</tabstop>
+  <tabstop>o_messaggi</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
@@ -450,7 +450,7 @@
   <connection>
    <sender>e_invia_messaggio</sender>
    <signal>returnPressed()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_invia_il_messaggio()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -466,7 +466,7 @@
   <connection>
    <sender>actionProgram_Info</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_program_info()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -482,7 +482,7 @@
   <connection>
    <sender>actionPreferences</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_preferences()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -498,7 +498,7 @@
   <connection>
    <sender>actionClear_my_chat</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_pulisci_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -514,7 +514,7 @@
   <connection>
    <sender>actionStart_as_server</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_crea_server_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -530,7 +530,7 @@
   <connection>
    <sender>actionReduce_to_systray</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_riduci_a_systray()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -546,7 +546,7 @@
   <connection>
    <sender>actionClient_connection</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_crea_client_chat()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -562,7 +562,7 @@
   <connection>
    <sender>actionMinimize</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -578,7 +578,7 @@
   <connection>
    <sender>actionExit</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -594,7 +594,7 @@
   <connection>
    <sender>actionZoom_in</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_zoom_in()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -610,7 +610,7 @@
   <connection>
    <sender>actionZoom_Out</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_zoom_out()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -626,7 +626,7 @@
   <connection>
    <sender>actionHelp</sender>
    <signal>triggered()</signal>
-   <receiver>NetC_window</receiver>
+   <receiver>Echo_window</receiver>
    <slot>slot_help()</slot>
    <hints>
     <hint type="sourcelabel">

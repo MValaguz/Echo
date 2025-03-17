@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\source\\NetC.py'],
+a = Analysis(['..\\source\\Echo.py'],
              pathex=[],
              binaries=[],
              datas=[					
@@ -25,17 +25,17 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='NetC',
+          name='Echo',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           console=False, 
-		  icon='..\\source\\qtdesigner\\icons\\NetC.ico')
+		  icon='..\\source\\qtdesigner\\icons\\Echo.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
                a.datas,
                strip=False,
                upx=True,
-               name='NetC')
+               name='Echo')

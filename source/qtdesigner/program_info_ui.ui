@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About MChat</string>
+   <string>Program Info</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icons/icons/MCnet.ico</normaloff>:/icons/icons/MCnet.ico</iconset>
+   <iconset resource="resource.qrc">
+    <normaloff>:/icons/icons/Echo.ico</normaloff>:/icons/icons/Echo.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -30,7 +30,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;NetC&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;© 2019-2025&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;NetC is a little chat program for ethernet network.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Developed by &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Marco Valaguzza&lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt; (Italy) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;with Python 3.13 and QT6&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Echo&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;© 2019-2025&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;NetC is a little chat program for ethernet network.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Developed by &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Marco Valaguzza&lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt; (Italy) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;with Python 3.13 and QT6&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

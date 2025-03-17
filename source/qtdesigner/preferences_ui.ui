@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>481</width>
-    <height>715</height>
+    <width>515</width>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,440 +18,9 @@
     <normaloff>:/icons/icons/gears.png</normaloff>:/icons/icons/gears.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_7">
-    <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_6">
-      <item row="0" column="0">
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="e_dark_theme">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QSpinBox" name="e_general_zoom">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>300</number>
-          </property>
-          <property name="singleStep">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>General zoom:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Dark theme:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_dark_theme</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string>Remember window position:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_remember_window_pos</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Window opacity:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="3">
-         <widget class="QSpinBox" name="e_minimize_window_timer">
-          <property name="maximum">
-           <number>9999</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Hide toolbar:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_hide_toolbar</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0" colspan="3">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Minimize window after &quot;x&quot; seconds (0 for never):</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Hide window border:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_hide_window_border</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QCheckBox" name="e_remember_window_pos"/>
-        </item>
-        <item row="3" column="3">
-         <widget class="QCheckBox" name="e_hide_toolbar">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QSpinBox" name="e_opacity">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="singleStep">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QCheckBox" name="e_hide_window_border">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="4">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>reduce to systray</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="5">
-         <widget class="QCheckBox" name="e_minimize_window_to_systray">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="0">
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Active alert message when systray is active:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_message_systray</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="e_message_systray">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Blink window border when receive messages:</string>
-          </property>
-          <property name="buddy">
-           <cstring>e_default_splash</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="e_default_splash">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="5" column="0">
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>In client mode, wait for server activation:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="e_loop_when_connect">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="7" column="0">
-       <widget class="Line" name="line_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="e_mask_window_timer"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>Mask the window as &quot;top sessions&quot; after &quot;x&quot; seconds (0 for never):</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Clear chat after &quot;x&quot; seconds (0 for never): </string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="e_clear_chat_timer">
-          <property name="maximum">
-           <number>9999</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>press CTRL-B to end</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="9" column="0">
-       <widget class="Line" name="line_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
+   <layout class="QGridLayout" name="gridLayout_4">
     <item row="1" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>Server:</string>
-          </property>
-          <property name="buddy">
-           <cstring>o_server</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_server_add">
-          <property name="toolTip">
-           <string>Add a server</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_server_remove">
-          <property name="toolTip">
-           <string>Remove selected server</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTableWidget" name="o_server">
-        <property name="selectionMode">
-         <enum>QAbstractItemView::SingleSelection</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Users:</string>
-          </property>
-          <property name="buddy">
-           <cstring>o_users</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_user_add">
-          <property name="toolTip">
-           <string>Add user</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_user_remove">
-          <property name="toolTip">
-           <string>Remove selected user</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTableWidget" name="o_users">
-        <property name="selectionMode">
-         <enum>QAbstractItemView::SingleSelection</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="3" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="b_restore">
         <property name="text">
@@ -476,12 +45,470 @@
       </item>
      </layout>
     </item>
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_1">
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="3" column="0" colspan="2">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Clear chat after &quot;x&quot; seconds (0 for never): </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="e_dark_theme">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QSpinBox" name="e_clear_chat_timer">
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="e_general_zoom">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>300</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>General zoom:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Dark theme:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_dark_theme</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Start in mask mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="e_start_in_mask_mode">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Connections</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>In client mode, wait for server activation:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="e_loop_when_connect">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Server:</string>
+              </property>
+              <property name="buddy">
+               <cstring>o_server</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_server_add">
+              <property name="toolTip">
+               <string>Add a server</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_server_remove">
+              <property name="toolTip">
+               <string>Remove selected server</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="o_server">
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Users:</string>
+              </property>
+              <property name="buddy">
+               <cstring>o_users</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_user_add">
+              <property name="toolTip">
+               <string>Add user</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_user_remove">
+              <property name="toolTip">
+               <string>Remove selected user</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icons/icons/failed.png</normaloff>:/icons/icons/failed.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="o_users">
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Window settings</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Minimize window after &quot;x&quot; seconds (0 for never):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Remember window position:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_remember_window_pos</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Hide window border:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_hide_window_border</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="e_remember_window_pos"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Window opacity:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="e_opacity">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="e_hide_window_border">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Hide toolbar:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_hide_toolbar</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="e_hide_toolbar">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QSpinBox" name="e_minimize_window_timer">
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>reduce to systray</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QCheckBox" name="e_minimize_window_to_systray">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Notify</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Active alert message when systray is active:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_message_systray</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QCheckBox" name="e_default_splash">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="e_message_systray">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Blink window border when receive messages:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_default_splash</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Mask</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Mask the window as &quot;post-it&quot; after &quot;x&quot; seconds (0 for never):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="e_mask_window_timer"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>press CTRL-B to end</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Message on window mask modality (html format):</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QTextEdit" name="e_mask_window_message">
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
  <tabstops>
+  <tabstop>e_start_in_mask_mode</tabstop>
   <tabstop>e_dark_theme</tabstop>
   <tabstop>e_general_zoom</tabstop>
+  <tabstop>e_clear_chat_timer</tabstop>
+  <tabstop>e_loop_when_connect</tabstop>
+  <tabstop>b_server_add</tabstop>
+  <tabstop>b_server_remove</tabstop>
+  <tabstop>o_server</tabstop>
+  <tabstop>b_user_add</tabstop>
+  <tabstop>b_user_remove</tabstop>
+  <tabstop>o_users</tabstop>
   <tabstop>e_remember_window_pos</tabstop>
   <tabstop>e_opacity</tabstop>
   <tabstop>e_hide_window_border</tabstop>
@@ -490,17 +517,11 @@
   <tabstop>e_minimize_window_to_systray</tabstop>
   <tabstop>e_message_systray</tabstop>
   <tabstop>e_default_splash</tabstop>
-  <tabstop>e_loop_when_connect</tabstop>
-  <tabstop>e_clear_chat_timer</tabstop>
   <tabstop>e_mask_window_timer</tabstop>
-  <tabstop>b_server_add</tabstop>
-  <tabstop>b_server_remove</tabstop>
-  <tabstop>o_server</tabstop>
-  <tabstop>b_user_add</tabstop>
-  <tabstop>b_user_remove</tabstop>
-  <tabstop>o_users</tabstop>
-  <tabstop>b_restore</tabstop>
+  <tabstop>e_mask_window_message</tabstop>
   <tabstop>b_save</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>b_restore</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>

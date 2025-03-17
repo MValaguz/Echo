@@ -14,7 +14,7 @@ class Ui_Help(object):
         Help.setObjectName("Help")
         Help.resize(391, 134)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons:NetC.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("icons:Echo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         Help.setWindowIcon(icon)
         self.gridLayout_2 = QtWidgets.QGridLayout(Help)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -31,8 +31,8 @@ class Ui_Help(object):
 
     def retranslateUi(self, Help):
         _translate = QtCore.QCoreApplication.translate
-        Help.setWindowTitle(_translate("Help", "MChat Help"))
-        self.label_2.setText(_translate("Help", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">NetC Help</span></p><p>Parameter options (when start from CLI)</p><p>-s server_name : start immediatly as server (ex. NetC -s &quot;SERVER ONE&quot; )</p><p>-c client_name : start immediatly as client (ex. NetC -c &quot;PC-NAME&quot;)</p></body></html>"))
+        Help.setWindowTitle(_translate("Help", "Help"))
+        self.label_2.setText(_translate("Help", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Echo Help</span></p><p>Parameter options (when start from CLI)</p><p>-s server_name : start immediatly as server (ex. Echo -s &quot;SERVER ONE&quot; )</p><p>-c client_name : start immediatly as client (ex. Echo -c &quot;PC-NAME&quot;)</p></body></html>"))
 
 
 if __name__ == "__main__":

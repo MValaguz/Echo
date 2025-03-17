@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MChat Help</string>
+   <string>Help</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
-    <normaloff>:/icons/icons/NetC.ico</normaloff>:/icons/icons/NetC.ico</iconset>
+    <normaloff>:/icons/icons/Echo.ico</normaloff>:/icons/icons/Echo.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -23,7 +23,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;NetC Help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Parameter options (when start from CLI)&lt;/p&gt;&lt;p&gt;-s server_name : start immediatly as server (ex. NetC -s &amp;quot;SERVER ONE&amp;quot; )&lt;/p&gt;&lt;p&gt;-c client_name : start immediatly as client (ex. NetC -c &amp;quot;PC-NAME&amp;quot;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Echo Help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Parameter options (when start from CLI)&lt;/p&gt;&lt;p&gt;-s server_name : start immediatly as server (ex. Echo -s &amp;quot;SERVER ONE&amp;quot; )&lt;/p&gt;&lt;p&gt;-c client_name : start immediatly as client (ex. Echo -c &amp;quot;PC-NAME&amp;quot;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

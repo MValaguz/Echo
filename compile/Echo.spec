@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['..\\source\\NetC.py'],
+a = Analysis(['..\\source\\Echo.py'],
              pathex=[],
              binaries=[],
              datas=[					
@@ -27,11 +27,11 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
 		  [],
-          name='NetC',
+          name='Echo',
           debug=False,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=True,
-		  icon='..\\source\\qtdesigner\\icons\\NetC.ico')
+          console=False,
+		  icon='..\\source\\qtdesigner\\icons\\Echo.ico')
 		  

@@ -1,24 +1,21 @@
-# -*- coding: utf-8 -*-
-
- _   _      _    ____ 
-| \ | | ___| |_ / ___|
-|  \| |/ _ \ __| |    
-| |\  |  __/ |_| |___ 
-|_| \_|\___|\__|\____|
-                      
-                             
+#  _____     _           
+# | ____|___| |__   ___  
+# |  _| / __| '_ \ / _ \ 
+# | |__| (__| | | | (_) |
+# |_____\___|_| |_|\___/ 
+#                                                                 
 #  Creato da.....: Marco Valaguzza
 #  Piattaforma...: Python3.13 con libreria PyQt6
 #  Data..........: 17/07/2019
 #  Descrizione...: Programma per la gestione di una chat tra due utenti
- 
+#
 #  Note..........: Il programma funziona in questo modo. 
 #                  Uno dei due utenti deve attivarlo come "Server" e l'altro utente si collega come client a quel server.
 #                  Attenzione! L'elenco dei pc deve contenere anche il PC di chi fa da server!
 #                  Il formato è il seguente (nome_pc_nella_rete alias_nome_pc indirizzo_ip):
 #                  PC-MVALAGUZ Marco  10.0.47.9
 #                  PC-SVITALI  Simone 10.0.47.10
-                 
+#                 
 #                  Nel codice del programma si fa riferimento a server per quella parte di programma che si metterà in ascolto
 #                  mentre ci si riferisce a client con quella parte di programma che si mette in comunicazione con il server.
 #                  Client e server sono ruoli svolti da questo codice e non ci sono procedure esterne ad esso.
@@ -28,7 +25,6 @@ import os
 import socket
 import sys
 import time
-import psutil
 # Libreria per pyinstaller che serve per capire dove creata la dir temporanea di esecuzione
 import tempfile
 # Amplifico la pathname dell'applicazione in modo veda il contenuto della directory qtdesigner dove sono contenuti i layout
@@ -40,48 +36,19 @@ sys.path.append('qtdesigner')
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
-# Libreria per criptare i messaggi
-import base64
 # Definizione interfaccia QtDesigner
-from NetC_ui import Ui_NetC_window
+from Echo_ui import Ui_Echo_window
 from program_info_ui import Ui_Program_info
 from help_ui import Ui_Help
 from preferences import preferences_class, win_preferences_class
-from utilita import message_error, message_question_yes_no
+from utilita import message_error, message_question_yes_no, cripta_messaggio, decripta_messaggio
 # Definizione del solo tema dark
 from dark_theme import dark_theme_definition
         
 # carico preferenze
 o_global_preferences = preferences_class()
 
-def cripta_messaggio(messaggio):
-    """
-       Cripta una stringa con la chiave NetC. Il valore restituito è di tipo bytes, lo stesso che deve essere passato
-       all'invio dei dati su rete
-    """
-    key = 'NetC'
-    enc = []
-    for i in range(len(messaggio)):
-        key_c = key[i % len(key)]
-        enc_c = (ord(messaggio[i]) + ord(key_c)) % 256
-        enc.append(enc_c)
-    return base64.urlsafe_b64encode(bytes(enc))
-
-def decripta_messaggio(messaggio):
-    """
-       decripta una stringa con la chiave NetC. Il valore restituito è di tipo stringa, lo stesso che deve essere 
-       passato ai campi di visualizzazione 
-    """
-    key = 'NetC'
-    dec = []
-    enc = base64.urlsafe_b64decode(messaggio)
-    for i in range(len(enc)):
-        key_c = key[i % len(key)]
-        dec_c = chr((256 + enc[i] - ord(key_c)) % 256)
-        dec.append(dec_c)
-    return "".join(dec)
-
-class class_NetC_thread(QThread):
+class class_Echo_thread(QThread):
     """
        Questa classe serve per creare un thread separato che si metta in ascolto di eventuali messaggi
        al parametro p_tool_chat dovrà essere passata la classe tools_chat (di fatto l'oggetto principale di questo programma
@@ -114,13 +81,13 @@ class class_NetC_thread(QThread):
             # restituisco il messaggio
             self.signal.emit(message)
 
-class NetC_window_class(QMainWindow, Ui_NetC_window):
+class Echo_window_class(QMainWindow, Ui_Echo_window):
     """
         Programma per la gestione di una chat tra utenti
-        Nota Bene: E' stata costruita anche la classe NetC_thread
+        Nota Bene: E' stata costruita anche la classe Echo_thread
                    Questa classe è quella che si occupa di ricevere i messaggi. Perché una classe?
                    Perchè in questo modo il main del programma rimane sempre attivo e mentre si è in 
-                   attesa di un messaggio se ne può inviare un altro. La classe NetC_thread riceve 
+                   attesa di un messaggio se ne può inviare un altro. La classe Echo_thread riceve 
                    in ingresso la stessa classe class_tools_chat in modo da avere in pancia le sue variabili.
     """
     def __init__(self, p_arg1, p_arg2):
@@ -131,9 +98,9 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         self.p_arg2 = p_arg2
         
         # incapsulo la classe grafica da qtdesigner
-        super(NetC_window_class, self).__init__()        
+        super(Echo_window_class, self).__init__()        
         # creo oggetto settings per salvare posizione della window e delle dock
-        self.settings = QSettings("Marco Valaguzza", "NetC")
+        self.settings = QSettings("Echo Utility", "Echo")
         self.setupUi(self)
 
         # imposto opacità della window (Valore tra 0 (trasparente) e 1 (opaco))
@@ -216,9 +183,6 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         # imposto icona della preferenza messaggio quando systray attiva
         self.actionMessage_systray.setChecked(o_global_preferences.message_systray)
 
-        # imposto il fuoco sul campo di invio messaggio
-        self.e_invia_messaggio.setFocus()
-
         # definizione dei pennelli per scrivere il testo in diversi colori
         if o_global_preferences.dark_theme:
             self.pennello_blu = QTextCharFormat()
@@ -232,14 +196,18 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             self.pennello_nero.setForeground(QColor("black"))
 
         # label che viene visualizzata quando si attiva la maschera 
-        # che nasconde la chat come se fosse un programma di top-sessions
-        # all'avvio è nascosta!
-        self.mask_window_label = QLabel('', self)
-        self.mask_window_label.setStyleSheet("background-color: black; color: white; font-family: 'Courier'; font-size: 8px;")
-        self.mask_window_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.mask_window_label.resize(self.size())  
-        self.mask_window_label.hide()  
+        # che nasconde la chat come se fosse un programma di to-do
+        # se richiesto viene sovrapposta già all'avvio del programma
+        self.mask_window_message = QTextEdit('', self)
+        self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 12px;")                
+        self.mask_window_message.resize(self.size())  
+        self.mask_window_message.hide()  
         self.mask_window_timer_active = False
+        if o_global_preferences.start_in_mask_mode:
+            self.slot_mask_window_timer()        
+        else:            
+            # imposto il fuoco sul campo di invio messaggio 
+            self.e_invia_messaggio.setFocus()        
 
         # per smistare i segnali che arrivano dal menù, utilizzo un apposito connettore
         # attenzione! eventi come la selezione di info, ecc. passa tramite i segnali standard
@@ -266,7 +234,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             self.minimize_window_timer.setInterval(o_global_preferences.minimize_window_timer*1000) 
             self.minimize_window_timer.timeout.connect(self.slot_minimize_window_timer)            
 
-        # se richiesto dalle preferenze, viene creato un timer per mascherare il contenuto della window, simulando un programma di top-sessions
+        # se richiesto dalle preferenze, viene creato un timer per mascherare il contenuto della window, simulando un programma di to-do
         if o_global_preferences.mask_window_timer != 0:             
             self.mask_window_timer = QTimer(self)
             self.mask_window_timer.setInterval(o_global_preferences.mask_window_timer*1000) 
@@ -277,19 +245,20 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             self.slot_crea_server_chat()
         # se tramite parametri d'ingresso è stato richiesto di avviare in modalità client automatica...
         if self.p_arg1 == '-C' and self.p_arg2 != '':
-            self.slot_crea_client_chat()
+            self.slot_crea_client_chat()        
                     
     def event(self, event):
         """
            Intercetta qualsiasi attività da parte dell'utente e resetta i timer che minimizzano la window, che puliscono la chat e che mascherano la chat
            Tramite questo meccanismo i timer iniziano a conteggiare solo a partire dall'ultima inittività dell'utente dentro la window
         """                
-        # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat
+        # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat portando il focus su invio messaggio
         if event.type() == QEvent.Type.KeyPress:
             if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_B and self.mask_window_timer_active:                                            
                 self.mask_window_timer_active = False
                 self.reset_mask_window_timer()
-                self.mask_window_label.hide()
+                self.mask_window_message.hide()                
+                self.e_invia_messaggio.setFocus()        
                 return super().event(event)    
             
         #if event.type() in (QEvent.Type.MouseMove, QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.WindowActivate):
@@ -374,7 +343,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         """
         # se la window principale perde il focus, pulisco il titolo; in questo modo all'arrivo 
         # di un messaggio, sarà possibile da parte dell'utente, capire che è cambiato qualcosa
-        if now == None and self.windowTitle().find('NetC') == -1:
+        if now == None and self.windowTitle().find('Echo') == -1:
             self.imposta_titolo_window(False)
     
     def changeEvent(self, event):
@@ -410,7 +379,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
     def salvo_posizione_window(self):
         """
            Salvo in un file la posizione della window (se richiesto dalle preferenze)
-           Questo salvataggio avviene automaticamente alla chiusura di NetC
+           Questo salvataggio avviene automaticamente alla chiusura di Echo
         """
         # se utente ha richiesto di salvare la posizione della window...
         if o_global_preferences.remember_window_pos:
@@ -428,12 +397,12 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         if p_active:
             self.setWindowTitle('_____.._____')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:NetC.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
         else:
             self.setWindowTitle(' ')
             v_icon = QIcon()
-            v_icon.addPixmap(QPixmap("icons:NetC_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+            v_icon.addPixmap(QPixmap("icons:Echo_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
 
     def reset_minimize_window_timer(self):
@@ -491,15 +460,15 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         # creo e attivo la systray solo se non è già attiva
         if not self.systray_attiva:            
             self.systray_attiva = True
-            self.systray_icon = QSystemTrayIcon(QIcon("icons:NetC.ico"), parent=app)
+            self.systray_icon = QSystemTrayIcon(QIcon("icons:Echo.ico"), parent=app)
             self.systray_icon.activated.connect(self.riapri_da_systray)            
             print('c ' + self.tipo_connessione)
             print('s ' + self.alias_server_name)
             print('2' + self.alias_client_name)
             if self.tipo_connessione == 'server':
-                self.systray_icon.setToolTip("NetC with " + self.alias_server_name)
+                self.systray_icon.setToolTip("Echo with " + self.alias_server_name)
             else:
-                self.systray_icon.setToolTip("NetC with " + self.alias_client_name)
+                self.systray_icon.setToolTip("Echo with " + self.alias_client_name)
             self.systray_icon.show()
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
@@ -605,6 +574,8 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             self.setWindowTitle('Waiting ' + self.record_server[0] + ' IP=' + str(self.ip) + ', PORT=' + self.record_server[1])
             # sostituisce la freccia del mouse con icona "clessidra"
             QApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))       
+            # attivo la maschera
+            self.slot_mask_window_timer()
             self.repaint()
             # da questo punto il programma entra in attesa di una connessione da parte di un client
             self.connection, self.addr = soc.accept()            
@@ -613,6 +584,8 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             self.client_name = self.client_name.decode()
             # ripristino icona freccia del mouse
             QApplication.restoreOverrideCursor()    
+            # disattivo la maschera
+            self.mask_window_message.hide()
             # se lanciato con parametri di input minimizzo la window
             if self.p_arg1 != '':
                 self.showMinimized()
@@ -629,7 +602,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             
             # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
             # viene passato al thread l'oggetto chat
-            self.thread_in_attesa = class_NetC_thread(self)
+            self.thread_in_attesa = class_Echo_thread(self)
             # collego il thread con la relativa funzione
             self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
             self.thread_in_attesa.start()
@@ -638,7 +611,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
         """
            Si collega ad un PC dove questa stessa applicazione è stata attivata in modalità server
            Da notare come lato cliente deve essere selezionato un server....questo perché su PC di destinazione 
-           NetC potrebbe essere attivo con più porte server!
+           Echo potrebbe essere attivo con più porte server!
         """
         v_error = False
 
@@ -729,7 +702,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
                     self.tipo_connessione = 'client'
                     # creo un job che si mette in attesa di una risposta così da lasciare libera l'applicazione da questo lavoro
                     # viene passato al thread l'oggetto chat
-                    self.thread_in_attesa = class_NetC_thread(self)
+                    self.thread_in_attesa = class_Echo_thread(self)
                     # collego il thread con la relativa funzione
                     self.thread_in_attesa.signal.connect(self.ricevo_il_messaggio)
                     self.thread_in_attesa.start()
@@ -751,7 +724,7 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
             
             # se programma è ridotto a systray manda e richiesto di mandare un messaggio...            
             if self.systray_attiva and self.actionMessage_systray.isChecked():
-                self.systray_icon.showMessage('NetC', 'New message!')
+                self.systray_icon.showMessage('Echo', 'New message!')
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
             self.imposta_titolo_window(True)
@@ -793,39 +766,28 @@ class NetC_window_class(QMainWindow, Ui_NetC_window):
 
     def reset_mask_window_timer(self):
         """
-           Avvia/Riavvia il timer che maschera il contenuto della chat, simulando che sia un programma top-sessions
+           Avvia/Riavvia il timer che maschera il contenuto della chat, simulando che sia un programma di to-do
         """
         try:
-            self.mask_window_timer.start()
+            if not self.mask_window_timer_active:
+                self.mask_window_timer.start()
         except:
             pass
     
     def slot_mask_window_timer(self):
         """
-           Crea sopra la window un sorta di top sessions
+           Crea sopra la window un sorta di programma to-do
         """
-        # ottengo elenco dei processi attivi ...        
-        process_list = []
-        for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
-            try:
-                process_list.append(proc.info)  
-            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                pass
-
-        # ordino per occupazione cpu
-        sorted_processes = sorted(process_list, key=lambda x: x['cpu_percent'], reverse=True)
-
-        # creo un output formattato
-        v_output = f"{'PID':<10}{'Nome Processo':<30}{'CPU (%)':<10}\n"
-        v_output += "-" * 50 + "\n"
-        for proc in sorted_processes:
-            v_output += f"{proc['pid']:<10}{proc['name']:<30}{proc['cpu_percent']:<10}\n"
-
         # indico che la maschera è attiva
         self.mask_window_timer_active = True        
-        # imposto la label che occupa tutta la dimensione della window e la visualizzo
-        self.mask_window_label.setText(v_output)  
-        self.mask_window_label.show()        
+        # imposto item che occupa tutta la dimensione della window e visualizzo il contenuto deciso dall'utente che può essere in codice html
+        self.mask_window_message.setHtml(o_global_preferences.mask_window_message)  
+        self.mask_window_message.show()  
+        # nel caso sia richiesto che all'avvio del programma deve comparire la maschera, il timer non sarà attivo, e stessa cosa anche quando si è in attesa di connessione
+        try:
+            self.mask_window_timer.stop() 
+        except:
+            pass
 
 # -------------------
 # AVVIO APPLICAZIONE
@@ -852,8 +814,8 @@ if __name__ == "__main__":
     # eventuale preferenza di zoom di tutto il programma
     os.environ['QT_SCALE_FACTOR'] = str(o_global_preferences.general_zoom / 100)
 
-    # avvio di NetC    
+    # avvio di Echo    
     app = QApplication([])            
-    application = NetC_window_class(v_arg1, v_arg2)         
+    application = Echo_window_class(v_arg1, v_arg2)         
     application.show()    
     sys.exit(app.exec())    
