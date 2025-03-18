@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/Echo_red.ico</file>
     <file>icons/square.png</file>
     <file>icons/zoom_avanti.png</file>
     <file>icons/zoom_indietro.png</file>

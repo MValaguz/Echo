@@ -461,18 +461,18 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         if not self.systray_attiva:            
             self.systray_attiva = True
             self.systray_icon = QSystemTrayIcon(QIcon("icons:Echo.ico"), parent=app)
-            self.systray_icon.activated.connect(self.riapri_da_systray)            
-            print('c ' + self.tipo_connessione)
-            print('s ' + self.alias_server_name)
-            print('2' + self.alias_client_name)
+            self.systray_icon.activated.connect(self.riapri_da_systray)                        
             if self.tipo_connessione == 'server':
                 self.systray_icon.setToolTip("Echo with " + self.alias_server_name)
             else:
                 self.systray_icon.setToolTip("Echo with " + self.alias_client_name)
             self.systray_icon.show()
+        # forzo icona neutrale nella systray             
+        else:
+            self.systray_icon.setIcon(QIcon("icons:Echo.ico"))
 
         # salvo attuale posizione della window (questo perché si è notato che quando si ripristina da systray, a volte perde il posizionamento)
-        self.systray_pos_window = self.geometry()
+        self.systray_pos_window = self.geometry()        
 
         # nascondo la finestra
         self.hide()
@@ -575,7 +575,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             # sostituisce la freccia del mouse con icona "clessidra"
             QApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))       
             # attivo la maschera
-            self.slot_mask_window_timer()
+            self.mask_window_message.show()
             self.repaint()
             # da questo punto il programma entra in attesa di una connessione da parte di un client
             self.connection, self.addr = soc.accept()            
@@ -722,9 +722,14 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             if self.actionSplash_window.isChecked():
                 self.activateWindow()
             
-            # se programma è ridotto a systray manda e richiesto di mandare un messaggio...            
-            if self.systray_attiva and self.actionMessage_systray.isChecked():
-                self.systray_icon.showMessage('Echo', 'New message!')
+            # se programma è ridotto a systray...
+            if self.systray_attiva:
+                # se richiesto dalle preferenze emetto un messaggio sulla systray
+                if self.actionMessage_systray.isChecked():
+                    self.systray_icon.showMessage('Echo', 'New message!')
+                # cambio il colore dell'icona in systray con icona rossa (così che utente, aprendo la systray vede che c'è messaggio in attesa)            
+                # tornerà icona neutra quando la window verrà riportata in systray
+                self.systray_icon.setIcon(QIcon("icons:Echo_red.ico"))
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
             self.imposta_titolo_window(True)
