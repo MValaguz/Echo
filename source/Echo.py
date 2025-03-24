@@ -199,6 +199,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         # che nasconde la chat come se fosse un programma di to-do
         # se richiesto viene sovrapposta già all'avvio del programma
         self.mask_window_message = QTextEdit('', self)
+        self.mask_window_message.setHtml(o_global_preferences.mask_window_message)  
         self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 12px;")                
         self.mask_window_message.resize(self.size())  
         self.mask_window_message.hide()  
@@ -462,10 +463,15 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.systray_attiva = True
             self.systray_icon = QSystemTrayIcon(QIcon("icons:Echo.ico"), parent=app)
             self.systray_icon.activated.connect(self.riapri_da_systray)                        
-            if self.tipo_connessione == 'server':
-                self.systray_icon.setToolTip("Echo with " + self.alias_server_name)
+            # imposto titolo del tooltip della modalità systray (se richiesto dalla preferenza ci metto il nome utente)
+            if not o_global_preferences.hide_name_in_systray_title:
+                if self.tipo_connessione == 'server':
+                    self.systray_icon.setToolTip("Echo with " + self.alias_server_name)
+                else:
+                    self.systray_icon.setToolTip("Echo with " + self.alias_client_name)
+            # altrimenti solo nome dell'applicazione
             else:
-                self.systray_icon.setToolTip("Echo with " + self.alias_client_name)
+                self.systray_icon.setToolTip("Echo")
             self.systray_icon.show()
         # forzo icona neutrale nella systray             
         else:
@@ -531,7 +537,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """
            Attiva l'applicazione lato server in attesa di connessione da parte di un client                      
         """             
-        # prendo la voce del menu server che è stata selezionata, per capire con quale modalità server mi devo mettere in attesa
+        # prendo la voce del menu server che è stata selezionata, per capire con quale server mi devo mettere in attesa
         v_found = False
         for action in self.action_elenco_server:            
             if action.isChecked():
@@ -569,7 +575,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         soc.bind((self.ip, self.port))
                         
         if not v_error:
-            # try to locate using socket
+            # prova a localizzare usando il socket
             soc.listen(1)            
             self.setWindowTitle('Waiting ' + self.record_server[0] + ' IP=' + str(self.ip) + ', PORT=' + self.record_server[1])
             # sostituisce la freccia del mouse con icona "clessidra"
@@ -578,8 +584,9 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.mask_window_message.show()
             self.repaint()
             # da questo punto il programma entra in attesa di una connessione da parte di un client
-            self.connection, self.addr = soc.accept()            
-            # get a connection from client side
+            # addr è una tupla che contiene due elementi di cui il primo è l'indirizzo ip
+            self.connection, self.addr = soc.accept()                        
+            # ottiene una connessione dal lato client
             self.client_name = self.connection.recv(1024)
             self.client_name = self.client_name.decode()
             # ripristino icona freccia del mouse
@@ -592,6 +599,12 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             # indico l'utente che si è connesso            
             self.setWindowTitle(self.client_name + ' has connected')            
             self.l_invia_messaggio.setText('Send to ' + self.client_name + ':')
+            # dall'indirizzo IP cerco il colore attribuito all'utente e lo imposto nelle label "Messages:" e "Send to:"
+            for rec in o_global_preferences.elenco_user:
+                if self.addr[0] in rec:                    
+                    v_colore_user = rec[4]                    
+                    self.l_messaggi.setStyleSheet("color: " + v_colore_user + ";") 
+                    self.l_invia_messaggio.setStyleSheet("color: " + v_colore_user + ";")                     
             # invio l'alias di chi fa da server
             self.connection.send(self.name.encode())            
             # disattivo i button di server e client
@@ -785,8 +798,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """
         # indico che la maschera è attiva
         self.mask_window_timer_active = True        
-        # imposto item che occupa tutta la dimensione della window e visualizzo il contenuto deciso dall'utente che può essere in codice html
-        self.mask_window_message.setHtml(o_global_preferences.mask_window_message)  
+        # mostro item che maschera
         self.mask_window_message.show()  
         # nel caso sia richiesto che all'avvio del programma deve comparire la maschera, il timer non sarà attivo, e stessa cosa anche quando si è in attesa di connessione
         try:

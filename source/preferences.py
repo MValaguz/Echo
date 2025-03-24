@@ -141,12 +141,17 @@ class preferences_class():
             # users            
             self.elenco_user = []
             for line in v_json['users']:
-                self.elenco_user.append( ( decripta_messaggio(line[0]), decripta_messaggio(line[1]), decripta_messaggio(line[2]), line[3] ) )                                
+                self.elenco_user.append( ( decripta_messaggio(line[0]), decripta_messaggio(line[1]), decripta_messaggio(line[2]), line[3], line[4] ) )                                
             # messaggio attivo nella systray                         
             if v_json['message_systray'] == 1:
                 self.message_systray = True
             else:
                 self.message_systray = False
+            # inserisce il nome dell'utente nel titolo del tooltip quando si è in modalità systray
+            if v_json['hide_name_in_systray_title'] == 1:
+                self.hide_name_in_systray_title = True
+            else:
+                self.hide_name_in_systray_title = False
             # toolbar nascosta
             if v_json['hide_toolbar'] == 1:
                 self.hide_toolbar = True
@@ -194,12 +199,14 @@ class preferences_class():
             self.elenco_server = [('SERVER ONE','1250','1'),
                                   ('SERVER TWO','1300','0')]
             # elenco users è composto da Titolo, User, Password
-            self.elenco_user = [('PORT-MVALAGUZ',';-)','10.0.47.9','1'),
-                                ('PORT-ABERLEND',':-)','10.0.47.1','0'),                                
-                                ('PC-TRAINIM',':-)','10.0.47.17','0'),
-                                ('PC-FDAMIANI',';-)','10.0.47.18','0')]
+            self.elenco_user = [('PORT-MVALAGUZ',';-)','10.0.47.9','1','#0068ad'),
+                                ('PORT-ABERLEND',':-)','10.0.47.1','0','#246c35'),                                
+                                ('PC-TRAINIM',':-)','10.0.47.17','0','#0068ad'),
+                                ('PC-FDAMIANI',';-)','10.0.47.18','0','#246c35')]
             # messaggio attivo nella systray
             self.message_systray = False
+            # inserisce il nome dell'utente nel titolo del tooltip quando si è in modalità systray
+            self.hide_name_in_systray_title = True            
             # toolbar nascosta
             self.hide_toolbar = False
             # loop quando ci si connette come client
@@ -237,6 +244,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.e_default_splash.setChecked(self.preferences.splash)           
         self.e_dark_theme.setChecked(self.preferences.dark_theme)
         self.e_message_systray.setChecked(self.preferences.message_systray)
+        self.e_hide_name_in_systray_title.setChecked(self.preferences.hide_name_in_systray_title)
         self.e_hide_toolbar.setChecked(self.preferences.hide_toolbar)
         self.e_loop_when_connect.setChecked(self.preferences.loop_when_connect)
         self.e_opacity.setValue(self.preferences.opacity)
@@ -254,67 +262,74 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         v_rig = 1                
         for record in self.preferences.elenco_server:                                    
             self.o_server.setRowCount(v_rig) 
-            self.o_server.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
-            self.o_server.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                                                                     
-            # la terza colonna è una check-box per la selezione del server di default
-            # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
-            # attivare la centratura 
-            v_checkbox = QCheckBox()          
-            v_widget = QWidget()      
-            v_layout = QHBoxLayout(v_widget)
-            v_layout.addWidget(v_checkbox)
-            v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            v_layout.setContentsMargins(0,0,0,0)
-            v_widget.setLayout(v_layout)
-            if record[2] == '1':
-                v_checkbox.setChecked(True)                                            
-            else:
-                v_checkbox.setChecked(False)                                                        
-            self.o_server.setCellWidget(v_rig-1,2,v_widget)                               
-            
+            self.carico_riga_server(v_rig,record)
             v_rig += 1
         self.o_server.resizeColumnsToContents()
 
         # preparo elenco user        
-        self.o_users.setColumnCount(4)
-        self.o_users.setHorizontalHeaderLabels(['PC-NAME','User-Name','IP','Default (check only one)'])   
+        self.o_users.setColumnCount(6)
+        self.o_users.setHorizontalHeaderLabels(['PC-NAME','User-Name','IP','Default (check only one)','Label color',''])   
         v_rig = 1                
         for record in self.preferences.elenco_user:                                    
             self.o_users.setRowCount(v_rig) 
-            self.o_users.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
-            self.o_users.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                               
-            self.o_users.setItem(v_rig-1,2,QTableWidgetItem(record[2]))                               
-            # la quarta colonna è una check-box per la selezione del user di default
-            # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
-            # attivare la centratura 
-            v_checkbox = QCheckBox()          
-            v_widget = QWidget()      
-            v_layout = QHBoxLayout(v_widget)
-            v_layout.addWidget(v_checkbox)
-            v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            v_layout.setContentsMargins(0,0,0,0)
-            v_widget.setLayout(v_layout)
-            if record[3] == '1':
-                v_checkbox.setChecked(True)                                            
-            else:
-                v_checkbox.setChecked(False)                                                        
-            self.o_users.setCellWidget(v_rig-1,3,v_widget)                               
-
+            self.carico_riga_user(v_rig,record)
+            # passo alla prossima riga
             v_rig += 1
         self.o_users.resizeColumnsToContents()
 
-    def slot_set_color_server(self):
+    def carico_riga_server(self, v_rig, record):
         """
-           Gestione della scelta dei colori sull'elenco dei server
+           Carica una nuova riga nella tabella server
         """
-        # ottengo un oggetto index-qt della riga selezionata
-        index = self.o_server.currentIndex()           
-        # prendo la cella che contiene il colore in modo da aprire la selezione partendo dal colore corrente
-        v_color_corrente = self.o_server.item( index.row(), 2).text()                        
-        # apro la dialog color
-        color = QColorDialog.getColor(QColor(v_color_corrente))                
-        # imposto il colore
-        self.o_server.setItem( index.row(), 2, QTableWidgetItem(color.name()) )            
+        self.o_server.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
+        self.o_server.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                                                                     
+        # la terza colonna è una check-box per la selezione del server di default
+        # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
+        # attivare la centratura 
+        v_checkbox = QCheckBox()          
+        v_widget = QWidget()      
+        v_layout = QHBoxLayout(v_widget)
+        v_layout.addWidget(v_checkbox)
+        v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        v_layout.setContentsMargins(0,0,0,0)
+        v_widget.setLayout(v_layout)
+        if record[2] == '1':
+            v_checkbox.setChecked(True)                                            
+        else:
+            v_checkbox.setChecked(False)                                                        
+        self.o_server.setCellWidget(v_rig-1,2,v_widget)                               
+        
+    def carico_riga_user(self, v_rig, record):        
+        """
+           Carica una nuova riga nella tabella server
+        """            
+        self.o_users.setItem(v_rig-1,0,QTableWidgetItem(record[0]))       
+        self.o_users.setItem(v_rig-1,1,QTableWidgetItem(record[1]))                               
+        self.o_users.setItem(v_rig-1,2,QTableWidgetItem(record[2]))                               
+        # la quarta colonna è una check-box per la selezione del user di default
+        # da notare come la checkbox viene inserita in un widget di layout in modo che si possa
+        # attivare la centratura 
+        v_checkbox = QCheckBox()          
+        v_widget = QWidget()      
+        v_layout = QHBoxLayout(v_widget)
+        v_layout.addWidget(v_checkbox)
+        v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        v_layout.setContentsMargins(0,0,0,0)
+        v_widget.setLayout(v_layout)
+        if record[3] == '1':
+            v_checkbox.setChecked(True)                                            
+        else:
+            v_checkbox.setChecked(False)                                                        
+        self.o_users.setCellWidget(v_rig-1,3,v_widget)                               
+        # come quinta colonna il nome del colore
+        self.o_users.setItem(v_rig-1,4,QTableWidgetItem(record[4]))                                           
+        # come sesta colonna metto il pulsante per la scelta del colore
+        v_color_button = QPushButton()            
+        v_icon = QIcon()
+        v_icon.addPixmap(QPixmap("icons:color.png"), QIcon.Mode.Normal, QIcon.State.Off)
+        v_color_button.setIcon(v_icon)
+        v_color_button.clicked.connect(self.slot_set_color_user)
+        self.o_users.setCellWidget(v_rig-1,5,v_color_button)                 
     
     def slot_b_restore(self):
         """
@@ -333,18 +348,9 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         """
            Crea una riga vuota dove poter inserire informazioni connessioni al server
         """
-        # aggiungo una riga
-        self.o_server.setRowCount(self.o_server.rowCount()+1)        
-        # inserisce nella terza colonna la checkbox 
-        v_checkbox = QCheckBox()          
-        v_widget = QWidget()      
-        v_layout = QHBoxLayout(v_widget)
-        v_layout.addWidget(v_checkbox)
-        v_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        v_layout.setContentsMargins(0,0,0,0)
-        v_widget.setLayout(v_layout)
-        v_checkbox.setChecked(False)                                                        
-        self.o_server.setCellWidget(self.o_server.rowCount()-1,2,v_widget)                        
+        v_rig = self.o_server.rowCount()+1
+        self.o_server.setRowCount(v_rig)
+        self.carico_riga_server(v_rig, ['','','',0,0,0]) 
 
     def slot_b_server_remove(self):
         """
@@ -356,24 +362,29 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         """
            Crea una riga vuota dove poter inserire informazioni utente di connessione al server
         """
-        # aggiungo una riga
-        self.o_users.setRowCount(self.o_users.rowCount()+1)        
-        # inserisce nella quarta colonna la checkbox 
-        v_checkbox = QCheckBox()          
-        v_widget = QWidget()      
-        v_layout = QHBoxLayout(v_widget)
-        v_layout.addWidget(v_checkbox)
-        v_layout.setAlignment(Qt.AlignCenter)
-        v_layout.setContentsMargins(0,0,0,0)
-        v_widget.setLayout(v_layout)
-        v_checkbox.setChecked(False)                                                        
-        self.o_users.setCellWidget(self.o_users.rowCount()-1,3,v_widget)                        
+        v_rig = self.o_users.rowCount()+1
+        self.o_users.setRowCount(v_rig)
+        self.carico_riga_user(v_rig, ['','','',0,0,0]) 
 
     def slot_b_user_remove(self):
         """
            Toglie la riga selezionata, da elenco user
         """
         self.o_users.removeRow(self.o_users.currentRow())
+    
+    def slot_set_color_user(self):
+        """
+           Gestione della scelta dei colori sull'elenco degli user
+        """
+        # ottengo un oggetto index-qt della riga selezionata
+        index = self.o_users.currentIndex()           
+        # prendo la cella che contiene il colore in modo da aprire la selezione partendo dal colore corrente
+        v_color_corrente = self.o_users.item( index.row(), 4).text()                        
+        # apro la dialog color
+        color = QColorDialog.getColor(QColor(v_color_corrente))                
+        # imposto il colore
+        if color.isValid():
+            self.o_users.setItem( index.row(), 4, QTableWidgetItem(color.name()) )            
 
     def slot_b_save(self):
         """
@@ -433,13 +444,19 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
             else:
                 v_default = '0'    
             # preparo l'array con la stringa della riga server (nome-pc, nome-user, ip, default)
-            v_users.append( ( cripta_messaggio(self.o_users.item(i,0).text()), cripta_messaggio(self.o_users.item(i,1).text()) , cripta_messaggio(self.o_users.item(i,2).text()), v_default) )            
+            v_users.append( ( cripta_messaggio(self.o_users.item(i,0).text()), cripta_messaggio(self.o_users.item(i,1).text()) , cripta_messaggio(self.o_users.item(i,2).text()), v_default, self.o_users.item(i,4).text()) )            
 
         # messaggio nella systray
         if self.e_message_systray.isChecked():
             v_message_systray = 1
         else:
             v_message_systray = 0
+                
+        # messaggio nella systray
+        if self.e_hide_name_in_systray_title.isChecked():
+            v_hide_name_in_systray_title = 1
+        else:
+            v_hide_name_in_systray_title = 0
         
         # toolbar nascosta
         if self.e_hide_toolbar.isChecked():
@@ -473,6 +490,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                  'server': v_server,
                  'users': v_users,
                  'message_systray':v_message_systray,
+                 'hide_name_in_systray_title': v_hide_name_in_systray_title,
                  'hide_toolbar':v_hide_toolbar,
                  'loop_when_connect':v_loop_when_connect,
                  'opacity':self.e_opacity.value(),

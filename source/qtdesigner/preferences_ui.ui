@@ -408,6 +408,30 @@
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>and hide user name when is in systray mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Blink window border when receive messages:</string>
+            </property>
+            <property name="buddy">
+             <cstring>e_default_splash</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="e_message_systray">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
@@ -425,20 +449,13 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QCheckBox" name="e_message_systray">
+          <item row="1" column="4">
+           <widget class="QCheckBox" name="e_hide_name_in_systray_title">
+            <property name="toolTip">
+             <string>Hide the connection user name in window title, when the systray modality is active.</string>
+            </property>
             <property name="text">
              <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Blink window border when receive messages:</string>
-            </property>
-            <property name="buddy">
-             <cstring>e_default_splash</cstring>
             </property>
            </widget>
           </item>
@@ -516,12 +533,13 @@ p, li { white-space: pre-wrap; }
   <tabstop>e_minimize_window_timer</tabstop>
   <tabstop>e_minimize_window_to_systray</tabstop>
   <tabstop>e_message_systray</tabstop>
+  <tabstop>e_hide_name_in_systray_title</tabstop>
   <tabstop>e_default_splash</tabstop>
   <tabstop>e_mask_window_timer</tabstop>
   <tabstop>e_mask_window_message</tabstop>
-  <tabstop>b_save</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>b_restore</tabstop>
+  <tabstop>b_save</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
