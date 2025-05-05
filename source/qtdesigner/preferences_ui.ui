@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>516</width>
     <height>352</height>
    </rect>
   </property>
@@ -48,7 +48,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_1">
        <attribute name="title">
@@ -467,45 +467,86 @@
        <attribute name="title">
         <string>Mask</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_9">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Mask the window as &quot;post-it&quot; after &quot;x&quot; seconds (0 for never):</string>
-            </property>
-           </widget>
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>Mask the window as &quot;post-it&quot; after &quot;x&quot; seconds (0 for never):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="e_mask_window_timer">
+              <property name="maximum">
+               <number>999</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="text">
+               <string>press CTRL-B to end</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item>
-           <widget class="QSpinBox" name="e_mask_window_timer"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>press CTRL-B to end</string>
-            </property>
-           </widget>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>and open this text file:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="e_mask_filename"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_mask_filename">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icons/icons/folder.png</normaloff>:/icons/icons/folder.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Message on window mask modality (html format):</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0">
-         <widget class="QTextEdit" name="e_mask_window_message">
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -536,10 +577,11 @@ p, li { white-space: pre-wrap; }
   <tabstop>e_hide_name_in_systray_title</tabstop>
   <tabstop>e_default_splash</tabstop>
   <tabstop>e_mask_window_timer</tabstop>
-  <tabstop>e_mask_window_message</tabstop>
+  <tabstop>e_mask_filename</tabstop>
+  <tabstop>b_mask_filename</tabstop>
+  <tabstop>b_save</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>b_restore</tabstop>
-  <tabstop>b_save</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
@@ -552,8 +594,8 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>468</x>
-     <y>543</y>
+     <x>505</x>
+     <y>341</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -568,8 +610,8 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_restore()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>203</x>
-     <y>543</y>
+     <x>213</x>
+     <y>341</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -584,8 +626,8 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_server_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>147</y>
+     <x>457</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -600,8 +642,8 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_server_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>467</x>
-     <y>147</y>
+     <x>491</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
      <x>442</x>
@@ -616,8 +658,8 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_user_add()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>345</y>
+     <x>457</x>
+     <y>206</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -632,12 +674,28 @@ p, li { white-space: pre-wrap; }
    <slot>slot_b_user_remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>467</x>
-     <y>345</y>
+     <x>491</x>
+     <y>206</y>
     </hint>
     <hint type="destinationlabel">
      <x>443</x>
      <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_mask_filename</sender>
+   <signal>clicked()</signal>
+   <receiver>preferences_window</receiver>
+   <slot>slot_b_file_mask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>286</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>513</x>
+     <y>260</y>
     </hint>
    </hints>
   </connection>
@@ -650,5 +708,6 @@ p, li { white-space: pre-wrap; }
   <slot>slot_b_user_add()</slot>
   <slot>slot_b_user_remove()</slot>
   <slot>slot_b_open_pref_dir()</slot>
+  <slot>slot_b_file_mask()</slot>
  </slots>
 </ui>

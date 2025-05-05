@@ -42,8 +42,9 @@ from program_info_ui import Ui_Program_info
 from help_ui import Ui_Help
 from preferences import preferences_class, win_preferences_class
 from utilita import message_error, message_question_yes_no, cripta_messaggio, decripta_messaggio
-# Definizione del solo tema dark
+# Definizione dei temi (è stato definito anche il tema normal perché non venivano prese le dimensioni corrette dei font)
 from dark_theme import dark_theme_definition
+from normal_theme import normal_theme_definition
         
 # carico preferenze
 o_global_preferences = preferences_class()
@@ -195,12 +196,18 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.pennello_nero = QTextCharFormat()
             self.pennello_nero.setForeground(QColor("black"))
 
-        # label che viene visualizzata quando si attiva la maschera 
-        # che nasconde la chat come se fosse un programma di to-do
+        # label (in formato html) che viene visualizzata quando si attiva la maschera che nasconde la chat come se fosse un programma di to-do
         # se richiesto viene sovrapposta già all'avvio del programma
+        # e se richiesto, il contenuto viene preso da un file dove premendo ctrl-s verrà salvato (formato testo!)
         self.mask_window_message = QTextEdit('', self)
-        self.mask_window_message.setHtml(o_global_preferences.mask_window_message)  
-        self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 12px;")                
+        if o_global_preferences.mask_filename != '':
+            self.mask_window_message.setText(open(o_global_preferences.mask_filename,'r').read())      
+        else:
+            self.mask_window_message.setText('Please select a text file for the mask ;-)')      
+        if o_global_preferences.dark_theme:
+            self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 10px;")                
+        else:
+            self.mask_window_message.setStyleSheet("background-color: white; color: black; font-size: 10px;")                
         self.mask_window_message.resize(self.size())  
         self.mask_window_message.hide()  
         self.mask_window_timer_active = False
@@ -218,7 +225,9 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         # Attenzione! La parte principale del tema colori rispetta il meccanismo di QT library
         #             Mentre per la parte di QScintilla ho dovuto fare le impostazioni manuali (v. definizione del lexer)
         if o_global_preferences.dark_theme:                    
-            self.setStyleSheet(dark_theme_definition())     
+            self.setStyleSheet(dark_theme_definition())    
+        else:
+            self.setStyleSheet(normal_theme_definition())    
 
         # attivo evento di cambiamento di focus sulla window 
         QApplication.instance().focusChanged.connect(self.on_focusChanged)   
@@ -252,15 +261,21 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """
            Intercetta qualsiasi attività da parte dell'utente e resetta i timer che minimizzano la window, che puliscono la chat e che mascherano la chat
            Tramite questo meccanismo i timer iniziano a conteggiare solo a partire dall'ultima inittività dell'utente dentro la window
-        """                
-        # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat portando il focus su invio messaggio
+        """                        
         if event.type() == QEvent.Type.KeyPress:
+            # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat portando il focus su invio messaggio
             if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_B and self.mask_window_timer_active:                                            
+                # se la maschera era un file di testo --> lo salvo (nel caso sia stato modificato)
+                if o_global_preferences.mask_filename != '':                                            
+                    open(o_global_preferences.mask_filename,'w').write(self.mask_window_message.toPlainText())
                 self.mask_window_timer_active = False
                 self.reset_mask_window_timer()
                 self.mask_window_message.hide()                
                 self.e_invia_messaggio.setFocus()        
                 return super().event(event)    
+            # premuta combinazione CTRL+S e maschera della window è attiva -->  
+            if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_S and self.mask_window_timer_active and o_global_preferences.mask_filename != '':                                            
+                open(o_global_preferences.mask_filename,'w').write(self.mask_window_message.toPlainText())
             
         #if event.type() in (QEvent.Type.MouseMove, QEvent.Type.KeyPress, QEvent.Type.MouseButtonPress, QEvent.Type.WindowActivate):
         if o_global_preferences.minimize_window_timer != 0:                    
@@ -317,7 +332,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
                 self.toolBar.show()           
         
         if str(p_slot.text()) == 'Show/Hide window border':            
-            # mostra o nasconde la toolbar        
+            # mostra o nasconde i bordi della window        
             if o_global_preferences.hide_window_border:                
                 o_global_preferences.hide_window_border = False
                 self.setWindowFlags(Qt.WindowType.WindowTitleHint) 
@@ -485,11 +500,11 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
 
     def riapri_da_systray(self):
         """
-           Rende nuovamente visibile la finestra della chat
+           Rende nuovamente visibile la finestra della chat (riportando l'icona a colore neutro)
         """
         self.show()
-
-        self.setGeometry(self.systray_pos_window)
+        self.setGeometry(self.systray_pos_window)        
+        self.systray_icon.setIcon(QIcon("icons:Echo.ico"))
 
     def slot_program_info(self):
         """

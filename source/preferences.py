@@ -26,82 +26,6 @@ from preferences_ui import Ui_preferences_window
 from utilita import message_error, message_info, message_question_yes_no, cripta_messaggio, decripta_messaggio
 #Amplifico la pathname per ricercare le icone
 QDir.addSearchPath('icons', 'qtdesigner/icons/')
-#Messaggio che esce come maschera 
-v_global_mask_window_message = """
-<ol>
-    <li>
-        <strong>Controllo delle comunicazioni</strong>
-        <ul>
-            <li>Rivedere e rispondere alle email o ai messaggi su piattaforme come Slack.</li>
-            <li>Partecipare alle riunioni mattutine (stand-up) per condividere aggiornamenti e pianificare la giornata.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Pianificazione</strong>
-        <ul>
-            <li>Rivedere l'elenco delle attività (ad esempio, in uno strumento come Jira).</li>
-            <li>Dare priorità ai compiti più urgenti o importanti.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Scrivere codice</strong>
-        <ul>
-            <li>Implementare nuove funzionalità richieste nel progetto.</li>
-            <li>Correggere bug segnalati durante i test o dagli utenti finali.</li>
-            <li>Ottimizzare il codice esistente per migliorare le prestazioni.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Test e debug</strong>
-        <ul>
-            <li>Scrivere ed eseguire test unitari per garantire il funzionamento del codice.</li>
-            <li>Eseguire il debug per identificare e risolvere i problemi.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Collaborazione</strong>
-        <ul>
-            <li>Discutere soluzioni tecniche con il team o i designer.</li>
-            <li>Rivedere e fornire feedback sui commit e pull request dei colleghi.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Documentazione</strong>
-        <ul>
-            <li>Aggiornare i documenti tecnici relativi al progetto.</li>
-            <li>Scrivere commenti chiari nel codice per aiutare altri sviluppatori.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Apprendimento</strong>
-        <ul>
-            <li>Dedica tempo all'apprendimento di nuove tecnologie, strumenti o framework.</li>
-            <li>Consultare documentazione, guide e tutorial online per risolvere problemi complessi.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Perfezionamento del lavoro</strong>
-        <ul>
-            <li>Testare le funzionalità implementate in ambienti di staging o pre-produzione.</li>
-            <li>Assicurarsi che il lavoro soddisfi i requisiti del progetto e gli standard di qualità.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Consegna</strong>
-        <ul>
-            <li>Preparare e distribuire il codice in produzione.</li>
-            <li>Monitorare il comportamento del sistema dopo il rilascio.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Pausa e rilassamento</strong>
-        <ul>
-            <li>Fare pause per rinfrescare la mente e aumentare la produttività.</li>
-            <li>A volte, le migliori idee nascono durante una pausa!</li>
-        </ul>
-    </li>
-</ol>
-"""
 
 class preferences_class():
     """
@@ -170,8 +94,6 @@ class preferences_class():
             self.minimize_window_timer = v_json['minimize_window_timer']             
             # timer che maschera la window
             self.mask_window_timer = v_json['mask_window_timer']             
-            # messaggio da far uscire quando compare la maschera
-            self.mask_window_message = v_json['mask_window_message']
             # indica avvio programma in modalità maschera
             if v_json['start_in_mask_mode'] == 1:
                 self.start_in_mask_mode = True
@@ -183,7 +105,9 @@ class preferences_class():
             else:
                 self.minimize_window_to_systray = False
             # zoom generale
-            self.general_zoom = v_json['general_zoom']             
+            self.general_zoom = v_json['general_zoom']   
+            # eventuale nome file da usare come contenuto con cui si presenta la maschera
+            self.mask_filename = v_json['mask_filename']             
 
         # imposto valori di default senza presenza dello specifico file
         else:            
@@ -219,14 +143,14 @@ class preferences_class():
             self.minimize_window_timer = 300
             # timer che maschera la window come se fosse un programma di top-sessions (1 minuto)
             self.mask_window_timer = 60
-            # messaggio da far uscire quando compare la maschera
-            self.mask_window_message = v_global_mask_window_message
             # indica avvio programma in modalità maschera
             self.start_in_mask_mode = True            
             # indica di minimizzare la window nella systray
             self.minimize_window_to_systray = True            
             # zoom generale
             self.general_zoom = 100
+            # eventuale nome file da usare come contenuto con cui si presenta la maschera
+            self.mask_filename = ''
        
 class win_preferences_class(QMainWindow, Ui_preferences_window):
     """
@@ -235,6 +159,7 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
     def __init__(self):
         super(win_preferences_class, self).__init__()        
         self.setupUi(self)
+        self.tabWidget.setCurrentIndex(0)          
 
         # creo l'oggetto preferenze che automaticamente carica dal registro le preferenze o se non presenti, quelle di default
         self.preferences = preferences_class()        
@@ -252,9 +177,9 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         self.e_minimize_window_timer.setValue(self.preferences.minimize_window_timer)
         self.e_general_zoom.setValue(self.preferences.general_zoom)
         self.e_minimize_window_to_systray.setChecked(self.preferences.minimize_window_to_systray)
-        self.e_mask_window_timer.setValue(self.preferences.mask_window_timer)
-        self.e_mask_window_message.setPlainText(self.preferences.mask_window_message)
+        self.e_mask_window_timer.setValue(self.preferences.mask_window_timer)        
         self.e_start_in_mask_mode.setChecked(self.preferences.start_in_mask_mode)
+        self.e_mask_filename.setText(self.preferences.mask_filename)
 
         # preparo elenco server        
         self.o_server.setColumnCount(3)
@@ -386,6 +311,18 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
         if color.isValid():
             self.o_users.setItem( index.row(), 4, QTableWidgetItem(color.name()) )            
 
+    def slot_b_file_mask(self):
+        """
+           Apre dialog file per scegliere il file che va a sostituire la maschera           
+        """
+        # dialog box per richiesta file
+        v_tupla_filename = QFileDialog.getOpenFileName(self, "Open File", "" ,"Txt files (*.txt);;All files (*.*)")                            
+		# prendo il nome del file e lo normalizzo
+        v_filename = os.path.normpath(v_tupla_filename[0])
+        # reimposto la dir di default in modo che in questa sessione del programma rimanga quella che l'utente ha scelto per aprire il file                        
+        if v_filename != '':                                           
+            self.e_mask_filename.setText(v_filename)
+    
     def slot_b_save(self):
         """
            Salvataggio
@@ -499,8 +436,8 @@ class win_preferences_class(QMainWindow, Ui_preferences_window):
                  'general_zoom': self.e_general_zoom.value(),
                  'minimize_window_to_systray': v_minimize_window_to_systray,
                  'mask_window_timer': self.e_mask_window_timer.value(),
-                 'mask_window_message': self.e_mask_window_message.toPlainText(),
-                 'start_in_mask_mode': v_start_in_mask_mode
+                 'start_in_mask_mode': v_start_in_mask_mode,
+                 'mask_filename': self.e_mask_filename.text()
                 }
         
         # scrittura delle preferenze (nel registro nel caso di Windows)        

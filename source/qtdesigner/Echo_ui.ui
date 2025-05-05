@@ -16,6 +16,11 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>7</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Echo</string>
   </property>
@@ -105,6 +110,11 @@
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -142,11 +152,12 @@
      <x>0</x>
      <y>0</y>
      <width>240</width>
-     <height>18</height>
+     <height>17</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <family>MS Shell Dlg 2</family>
      <pointsize>7</pointsize>
     </font>
    </property>
@@ -175,6 +186,7 @@
    <widget class="QMenu" name="menuFile">
     <property name="font">
      <font>
+      <family>MS Shell Dlg 2</family>
       <pointsize>7</pointsize>
      </font>
     </property>
@@ -205,7 +217,7 @@
     <property name="font">
      <font>
       <family>MS Shell Dlg 2</family>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
      </font>
     </property>
     <property name="title">

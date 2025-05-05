@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_preferences_window(object):
     def setupUi(self, preferences_window):
         preferences_window.setObjectName("preferences_window")
-        preferences_window.resize(515, 352)
+        preferences_window.resize(516, 352)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons:gears.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         preferences_window.setWindowIcon(icon)
@@ -230,26 +230,44 @@ class Ui_preferences_window(object):
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QtWidgets.QWidget()
         self.tab_5.setObjectName("tab_5")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.tab_5)
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.tab_5)
+        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.gridLayout_9 = QtWidgets.QGridLayout()
         self.gridLayout_9.setObjectName("gridLayout_9")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.label_15 = QtWidgets.QLabel(parent=self.tab_5)
         self.label_15.setObjectName("label_15")
-        self.horizontalLayout_4.addWidget(self.label_15)
+        self.horizontalLayout_5.addWidget(self.label_15)
         self.e_mask_window_timer = QtWidgets.QSpinBox(parent=self.tab_5)
+        self.e_mask_window_timer.setMaximum(999)
         self.e_mask_window_timer.setObjectName("e_mask_window_timer")
-        self.horizontalLayout_4.addWidget(self.e_mask_window_timer)
+        self.horizontalLayout_5.addWidget(self.e_mask_window_timer)
         self.label_16 = QtWidgets.QLabel(parent=self.tab_5)
         self.label_16.setObjectName("label_16")
-        self.horizontalLayout_4.addWidget(self.label_16)
-        self.gridLayout_9.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
-        self.label_17 = QtWidgets.QLabel(parent=self.tab_5)
-        self.label_17.setObjectName("label_17")
-        self.gridLayout_9.addWidget(self.label_17, 1, 0, 1, 1)
-        self.e_mask_window_message = QtWidgets.QTextEdit(parent=self.tab_5)
-        self.e_mask_window_message.setObjectName("e_mask_window_message")
-        self.gridLayout_9.addWidget(self.e_mask_window_message, 2, 0, 1, 1)
+        self.horizontalLayout_5.addWidget(self.label_16)
+        self.gridLayout_9.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.label_20 = QtWidgets.QLabel(parent=self.tab_5)
+        self.label_20.setObjectName("label_20")
+        self.horizontalLayout_4.addWidget(self.label_20)
+        self.e_mask_filename = QtWidgets.QLineEdit(parent=self.tab_5)
+        self.e_mask_filename.setObjectName("e_mask_filename")
+        self.horizontalLayout_4.addWidget(self.e_mask_filename)
+        self.b_mask_filename = QtWidgets.QPushButton(parent=self.tab_5)
+        self.b_mask_filename.setText("")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("icons:folder.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.b_mask_filename.setIcon(icon5)
+        self.b_mask_filename.setObjectName("b_mask_filename")
+        self.horizontalLayout_4.addWidget(self.b_mask_filename)
+        self.gridLayout_9.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
+        self.gridLayout_10.addLayout(self.gridLayout_9, 1, 0, 1, 1)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.gridLayout_10.addItem(spacerItem3, 2, 0, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.gridLayout_10.addItem(spacerItem4, 0, 0, 1, 1)
         self.tabWidget.addTab(self.tab_5, "")
         self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
         preferences_window.setCentralWidget(self.centralwidget)
@@ -263,13 +281,14 @@ class Ui_preferences_window(object):
         self.label_3.setBuddy(self.e_message_systray)
 
         self.retranslateUi(preferences_window)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(4)
         self.b_save.clicked.connect(preferences_window.slot_b_save) # type: ignore
         self.b_restore.clicked.connect(preferences_window.slot_b_restore) # type: ignore
         self.b_server_add.clicked.connect(preferences_window.slot_b_server_add) # type: ignore
         self.b_server_remove.clicked.connect(preferences_window.slot_b_server_remove) # type: ignore
         self.b_user_add.clicked.connect(preferences_window.slot_b_user_add) # type: ignore
         self.b_user_remove.clicked.connect(preferences_window.slot_b_user_remove) # type: ignore
+        self.b_mask_filename.clicked.connect(preferences_window.slot_b_file_mask) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(preferences_window)
         preferences_window.setTabOrder(self.e_start_in_mask_mode, self.e_dark_theme)
         preferences_window.setTabOrder(self.e_dark_theme, self.e_general_zoom)
@@ -291,10 +310,11 @@ class Ui_preferences_window(object):
         preferences_window.setTabOrder(self.e_message_systray, self.e_hide_name_in_systray_title)
         preferences_window.setTabOrder(self.e_hide_name_in_systray_title, self.e_default_splash)
         preferences_window.setTabOrder(self.e_default_splash, self.e_mask_window_timer)
-        preferences_window.setTabOrder(self.e_mask_window_timer, self.e_mask_window_message)
-        preferences_window.setTabOrder(self.e_mask_window_message, self.tabWidget)
+        preferences_window.setTabOrder(self.e_mask_window_timer, self.e_mask_filename)
+        preferences_window.setTabOrder(self.e_mask_filename, self.b_mask_filename)
+        preferences_window.setTabOrder(self.b_mask_filename, self.b_save)
+        preferences_window.setTabOrder(self.b_save, self.tabWidget)
         preferences_window.setTabOrder(self.tabWidget, self.b_restore)
-        preferences_window.setTabOrder(self.b_restore, self.b_save)
 
     def retranslateUi(self, preferences_window):
         _translate = QtCore.QCoreApplication.translate
@@ -328,12 +348,7 @@ class Ui_preferences_window(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("preferences_window", "Notify"))
         self.label_15.setText(_translate("preferences_window", "Mask the window as \"post-it\" after \"x\" seconds (0 for never):"))
         self.label_16.setText(_translate("preferences_window", "press CTRL-B to end"))
-        self.label_17.setText(_translate("preferences_window", "Message on window mask modality (html format):"))
-        self.e_mask_window_message.setHtml(_translate("preferences_window", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.label_20.setText(_translate("preferences_window", "and open this text file:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("preferences_window", "Mask"))
 
 
