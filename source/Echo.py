@@ -6,7 +6,7 @@
 #                                                                 
 #  Creato da.....: Marco Valaguzza
 #  Piattaforma...: Python3.13 con libreria PyQt6
-#  Data..........: 17/07/2019
+#  Data inizio...: 17/07/2019
 #  Descrizione...: Programma per la gestione di una chat tra due utenti
 #
 #  Note..........: Il programma funziona in questo modo. 
@@ -82,6 +82,16 @@ class class_Echo_thread(QThread):
             # restituisco il messaggio
             self.signal.emit(message)
 
+class MyPlainTextEdit(QPlainTextEdit):
+    """
+        Questa classe modifica il comportamento del widget qplaintextedit disattivando lo zoom con il mouse, perché
+        lo zoom viene gestito in altro modo con CTRL++ e CTRL+- tramite voci di menu
+    """
+    def wheelEvent(self, event):
+        if event.modifiers() == Qt.KeyboardModifier.ControlModifier:            
+            return
+        super().wheelEvent(event)
+
 class Echo_window_class(QMainWindow, Ui_Echo_window):
     """
         Programma per la gestione di una chat tra utenti
@@ -104,6 +114,12 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         self.settings = QSettings("Echo Utility", "Echo")
         self.setupUi(self)
 
+        # il widget dei messaggi viene sostituito con un widget personalizzato che disattiva lo zoom tramite ctrl+rotella del mouse
+        self.custom_editor = MyPlainTextEdit(self)        
+        self.verticalLayout_2.replaceWidget(self.o_messaggi, self.custom_editor)  # Sostituzione nel layout
+        self.o_messaggi.deleteLater()  # Rimuovi il vecchio widget        
+        self.o_messaggi = self.custom_editor
+
         # imposto opacità della window (Valore tra 0 (trasparente) e 1 (opaco))
         if o_global_preferences.opacity != 100:            
             self.setWindowOpacity(o_global_preferences.opacity/100)  
@@ -123,9 +139,12 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.setWindowFlags(Qt.WindowType.FramelessWindowHint) 
 
         # nascondo la toolbar se richiesto
-        if o_global_preferences.hide_toolbar:
+        if o_global_preferences.hide_toolbar:            
             self.actionHide_toolbar.setChecked(True)
             self.toolBar.hide()
+        else:
+            self.actionHide_toolbar.setChecked(False)
+            self.toolBar.show()
                                    
         ###
         # Dalle preferenze carico il menu con elenco dei server e degli user        
@@ -200,15 +219,6 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         # se richiesto viene sovrapposta già all'avvio del programma
         # e se richiesto, il contenuto viene preso da un file dove premendo ctrl-s verrà salvato (formato testo!)
         self.mask_window_message = QTextEdit('', self)
-        if o_global_preferences.mask_filename != '':
-            self.mask_window_message.setText(open(o_global_preferences.mask_filename,'r').read())      
-        else:
-            self.mask_window_message.setText('Please select a text file for the mask ;-)')      
-        if o_global_preferences.dark_theme:
-            self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 10px;")                
-        else:
-            self.mask_window_message.setStyleSheet("background-color: white; color: black; font-size: 10px;")                
-        self.mask_window_message.resize(self.size())  
         self.mask_window_message.hide()  
         self.mask_window_timer_active = False
         if o_global_preferences.start_in_mask_mode:
@@ -284,7 +294,8 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.reset_clear_chat_timer()
         if o_global_preferences.mask_window_timer != 0:                    
             self.reset_mask_window_timer()
-        
+            
+        # esco rilasciando l'evento normalmente
         return super().event(event)    
     
     def smistamento_voci_menu(self, p_slot):
@@ -369,10 +380,12 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """        
         if event.type() == QEvent.Type.WindowStateChange:            
             if event.type() == QEvent.Type.WindowStateChange:
-                # da minimizzata passa a massimizzata...cambio il titolo
+                # da minimizzata passa a massimizzata...cambio il titolo e azzero eventuale icona sulla systray
                 if event.oldState() and Qt.WindowState.WindowMinimized:
                     if self.windowTitle() == '_____.._____':
                         self.imposta_titolo_window(False)
+                    if self.systray_attiva:     
+                        self.systray_icon.setIcon(QIcon("icons:Echo.ico"))
                 # da massimizzata passa a minimizzata....azzero il titolo (utente capisce che sono in attesa e non ci sono messaggi)
                 elif event.oldState() == Qt.WindowState.WindowNoState or self.windowState() == Qt.WindowState.WindowMaximized:
                     self.imposta_titolo_window(False)
@@ -414,12 +427,23 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.setWindowTitle('_____.._____')
             v_icon = QIcon()
             v_icon.addPixmap(QPixmap("icons:Echo.ico"), QIcon.Mode.Normal, QIcon.State.Off)
-            self.setWindowIcon(v_icon)            
+            self.setWindowIcon(v_icon)                                    
+            # se programma è ridotto a systray...
+            if self.systray_attiva:
+                # se richiesto dalle preferenze emetto un messaggio sulla systray
+                if self.actionMessage_systray.isChecked():
+                    self.systray_icon.showMessage('Echo', 'New message!')
+                # cambio il colore dell'icona in systray con icona rossa 
+                self.systray_icon.setIcon(QIcon("icons:Echo_red.ico"))
         else:
             self.setWindowTitle(' ')
             v_icon = QIcon()
             v_icon.addPixmap(QPixmap("icons:Echo_grey.ico"), QIcon.Mode.Normal, QIcon.State.Off)
             self.setWindowIcon(v_icon)            
+            # se programma è ridotto a systray...
+            if self.systray_attiva:
+                # cambio il colore dell'icona in systray con icona neutra
+                self.systray_icon.setIcon(QIcon("icons:Echo.ico"))
 
     def reset_minimize_window_timer(self):
         """
@@ -451,7 +475,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """        
         v_font = self.o_messaggi.font()
         v_font.setPointSize(v_font.pointSize()+1)        
-        self.o_messaggi.setFont(v_font)
+        self.o_messaggi.setFont(v_font)        
 
         v_font = self.e_invia_messaggio.font()
         v_font.setPointSize(v_font.pointSize()+1)        
@@ -744,20 +768,16 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.imposta_titolo_window(False)
             self.attiva_disattiva_voci_menu_connessione(True)
         elif p_messaggio != '':
+            # nettifico il cursore nel testo, cambio il pennello e inserisco il messaggio
+            v_cursor = self.o_messaggi.textCursor()
+            v_cursor.clearSelection()            
+            v_cursor.movePosition(QTextCursor.MoveOperation.End)
+            self.o_messaggi.setTextCursor(v_cursor)
             self.o_messaggi.setCurrentCharFormat(self.pennello_blu)
             self.o_messaggi.appendPlainText(p_messaggio)
             # se richiesto, faccio lampeggiare la finestra 
             if self.actionSplash_window.isChecked():
                 self.activateWindow()
-            
-            # se programma è ridotto a systray...
-            if self.systray_attiva:
-                # se richiesto dalle preferenze emetto un messaggio sulla systray
-                if self.actionMessage_systray.isChecked():
-                    self.systray_icon.showMessage('Echo', 'New message!')
-                # cambio il colore dell'icona in systray con icona rossa (così che utente, aprendo la systray vede che c'è messaggio in attesa)            
-                # tornerà icona neutra quando la window verrà riportata in systray
-                self.systray_icon.setIcon(QIcon("icons:Echo_red.ico"))
             
             # in qualsiasi caso cambio il titolo per far capire che è arrivato un nuovo messaggio             
             self.imposta_titolo_window(True)
@@ -774,7 +794,11 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
                 except:
                     message_error('Connection lost!')
                     self.attiva_disattiva_voci_menu_connessione(True)
-
+                # nettifico il cursore nel testo, cambio il pennello e inserisco il messaggio
+                v_cursor = self.o_messaggi.textCursor()
+                v_cursor.clearSelection()
+                v_cursor.movePosition(QTextCursor.MoveOperation.End)
+                self.o_messaggi.setTextCursor(v_cursor)
                 self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
                 self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
                 self.e_invia_messaggio.clear()
@@ -785,7 +809,11 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
                 except:
                     message_error('Connection lost!')
                     self.attiva_disattiva_voci_menu_connessione(True)
-
+                # nettifico il cursore nel testo, cambio il pennello e inserisco il messaggio
+                v_cursor = self.o_messaggi.textCursor()
+                v_cursor.clearSelection()
+                v_cursor.movePosition(QTextCursor.MoveOperation.End)
+                self.o_messaggi.setTextCursor(v_cursor)
                 self.o_messaggi.setCurrentCharFormat(self.pennello_nero)
                 self.o_messaggi.appendPlainText(self.e_invia_messaggio.text())
                 self.e_invia_messaggio.clear()        
@@ -813,8 +841,24 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """
         # indico che la maschera è attiva
         self.mask_window_timer_active = True        
-        # mostro item che maschera
+        
+        # carico il contenuto dal file se indicato
+        if o_global_preferences.mask_filename != '':
+            try:
+                self.mask_window_message.setText(open(o_global_preferences.mask_filename,'r').read())      
+            except:
+                pass
+        else:
+            self.mask_window_message.setText('Please select a text file for the mask ;-)')      
+        
+        if o_global_preferences.dark_theme:
+            self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 10px;")                
+        else:
+            self.mask_window_message.setStyleSheet("background-color: white; color: black; font-size: 10px;")                
+        
+        self.mask_window_message.resize(self.size())          
         self.mask_window_message.show()  
+
         # nel caso sia richiesto che all'avvio del programma deve comparire la maschera, il timer non sarà attivo, e stessa cosa anche quando si è in attesa di connessione
         try:
             self.mask_window_timer.stop() 

@@ -132,7 +132,7 @@ class preferences_class():
             # inserisce il nome dell'utente nel titolo del tooltip quando si è in modalità systray
             self.hide_name_in_systray_title = True            
             # toolbar nascosta
-            self.hide_toolbar = False
+            self.hide_toolbar = True
             # loop quando ci si connette come client
             self.loop_when_connect = True
             # livello di opacità della window

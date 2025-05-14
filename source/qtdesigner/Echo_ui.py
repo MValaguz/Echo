@@ -18,6 +18,9 @@ class Ui_Echo_window(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Echo_window.sizePolicy().hasHeightForWidth())
         Echo_window.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(7)
+        Echo_window.setFont(font)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons:Echo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         Echo_window.setWindowIcon(icon)
@@ -40,6 +43,7 @@ class Ui_Echo_window(object):
         font = QtGui.QFont()
         font.setPointSize(7)
         self.o_messaggi.setFont(font)
+        self.o_messaggi.setReadOnly(True)
         self.o_messaggi.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.TextSelectableByKeyboard|QtCore.Qt.TextInteractionFlag.TextSelectableByMouse)
         self.o_messaggi.setObjectName("o_messaggi")
         self.verticalLayout_2.addWidget(self.o_messaggi)
@@ -192,6 +196,11 @@ class Ui_Echo_window(object):
         icon16.addPixmap(QtGui.QPixmap("icons:square.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionHide_window_border.setIcon(icon16)
         self.actionHide_window_border.setObjectName("actionHide_window_border")
+        self.actionMask = QtGui.QAction(parent=Echo_window)
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(QtGui.QPixmap("icons:mask.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.actionMask.setIcon(icon17)
+        self.actionMask.setObjectName("actionMask")
         self.toolBar.addAction(self.actionExit)
         self.toolBar.addAction(self.actionMinimize)
         self.toolBar.addSeparator()
@@ -209,15 +218,16 @@ class Ui_Echo_window(object):
         self.menuFile.addAction(self.actionStart_as_server)
         self.menuFile.addAction(self.actionClient_connection)
         self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionMinimize)
         self.menuFile.addAction(self.actionClear_my_chat)
         self.menuFile.addAction(self.actionReduce_to_systray)
         self.menuFile.addAction(self.actionSplash_window)
+        self.menuFile.addAction(self.actionMask)
         self.menuFile.addAction(self.actionMessage_systray)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionZoom_in)
         self.menuFile.addAction(self.actionZoom_Out)
         self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionMinimize)
         self.menuFile.addAction(self.actionReset_window_position)
         self.menuFile.addAction(self.actionHide_window_border)
         self.menuFile.addAction(self.actionHide_toolbar)
@@ -245,6 +255,7 @@ class Ui_Echo_window(object):
         self.actionZoom_in.triggered.connect(Echo_window.slot_zoom_in) # type: ignore
         self.actionZoom_Out.triggered.connect(Echo_window.slot_zoom_out) # type: ignore
         self.actionHelp.triggered.connect(Echo_window.slot_help) # type: ignore
+        self.actionMask.triggered.connect(Echo_window.slot_mask_window_timer) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Echo_window)
         Echo_window.setTabOrder(self.e_invia_messaggio, self.o_messaggi)
 
@@ -282,8 +293,8 @@ class Ui_Echo_window(object):
         self.actionMinimize.setShortcut(_translate("Echo_window", "F1"))
         self.actionExit.setText(_translate("Echo_window", "Quit"))
         self.actionReset_window_position.setText(_translate("Echo_window", "Reset window position"))
-        self.actionMessage_systray.setText(_translate("Echo_window", "Message when MCnet is on systray"))
-        self.actionMessage_systray.setToolTip(_translate("Echo_window", "Message when MCnet is on systray"))
+        self.actionMessage_systray.setText(_translate("Echo_window", "Message when Echo is on systray"))
+        self.actionMessage_systray.setToolTip(_translate("Echo_window", "Message when Echo is on systray"))
         self.actionHide_toolbar.setText(_translate("Echo_window", "Show/Hide toolbar"))
         self.actionZoom_in.setText(_translate("Echo_window", "Zoom In"))
         self.actionZoom_in.setShortcut(_translate("Echo_window", "Ctrl++"))
@@ -291,6 +302,8 @@ class Ui_Echo_window(object):
         self.actionZoom_Out.setShortcut(_translate("Echo_window", "Ctrl+-"))
         self.actionHelp.setText(_translate("Echo_window", "Help"))
         self.actionHide_window_border.setText(_translate("Echo_window", "Show/Hide window border"))
+        self.actionMask.setText(_translate("Echo_window", "Mask"))
+        self.actionMask.setShortcut(_translate("Echo_window", "F5"))
 
 
 if __name__ == "__main__":

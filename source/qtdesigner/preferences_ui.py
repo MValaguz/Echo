@@ -281,7 +281,7 @@ class Ui_preferences_window(object):
         self.label_3.setBuddy(self.e_message_systray)
 
         self.retranslateUi(preferences_window)
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(0)
         self.b_save.clicked.connect(preferences_window.slot_b_save) # type: ignore
         self.b_restore.clicked.connect(preferences_window.slot_b_restore) # type: ignore
         self.b_server_add.clicked.connect(preferences_window.slot_b_server_add) # type: ignore

@@ -72,6 +72,9 @@
           <pointsize>7</pointsize>
          </font>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
         <property name="textInteractionFlags">
          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
         </property>
@@ -198,15 +201,16 @@
     <addaction name="actionStart_as_server"/>
     <addaction name="actionClient_connection"/>
     <addaction name="separator"/>
+    <addaction name="actionMinimize"/>
     <addaction name="actionClear_my_chat"/>
     <addaction name="actionReduce_to_systray"/>
     <addaction name="actionSplash_window"/>
+    <addaction name="actionMask"/>
     <addaction name="actionMessage_systray"/>
     <addaction name="separator"/>
     <addaction name="actionZoom_in"/>
     <addaction name="actionZoom_Out"/>
     <addaction name="separator"/>
-    <addaction name="actionMinimize"/>
     <addaction name="actionReset_window_position"/>
     <addaction name="actionHide_window_border"/>
     <addaction name="actionHide_toolbar"/>
@@ -385,10 +389,10 @@
      <normaloff>:/icons/icons/message.png</normaloff>:/icons/icons/message.png</iconset>
    </property>
    <property name="text">
-    <string>Message when MCnet is on systray</string>
+    <string>Message when Echo is on systray</string>
    </property>
    <property name="toolTip">
-    <string>Message when MCnet is on systray</string>
+    <string>Message when Echo is on systray</string>
    </property>
   </action>
   <action name="actionHide_toolbar">
@@ -450,6 +454,18 @@
     <string>Show/Hide window border</string>
    </property>
   </action>
+  <action name="actionMask">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/mask.png</normaloff>:/icons/icons/mask.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mask</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>e_invia_messaggio</tabstop>
@@ -466,8 +482,8 @@
    <slot>slot_invia_il_messaggio()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>181</y>
+     <x>191</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
@@ -651,6 +667,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionMask</sender>
+   <signal>triggered()</signal>
+   <receiver>Echo_window</receiver>
+   <slot>slot_mask_window_timer()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_program_info()</slot>
@@ -663,5 +695,6 @@
   <slot>slot_zoom_in()</slot>
   <slot>slot_zoom_out()</slot>
   <slot>slot_help()</slot>
+  <slot>slot_mask_window_timer()</slot>
  </slots>
 </ui>
