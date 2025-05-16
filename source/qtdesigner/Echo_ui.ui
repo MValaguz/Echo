@@ -455,6 +455,9 @@
    </property>
   </action>
   <action name="actionMask">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/icons/mask.png</normaloff>:/icons/icons/mask.png</iconset>
@@ -463,7 +466,7 @@
     <string>Mask</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

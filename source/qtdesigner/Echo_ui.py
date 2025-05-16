@@ -197,6 +197,7 @@ class Ui_Echo_window(object):
         self.actionHide_window_border.setIcon(icon16)
         self.actionHide_window_border.setObjectName("actionHide_window_border")
         self.actionMask = QtGui.QAction(parent=Echo_window)
+        self.actionMask.setCheckable(True)
         icon17 = QtGui.QIcon()
         icon17.addPixmap(QtGui.QPixmap("icons:mask.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionMask.setIcon(icon17)
@@ -303,7 +304,7 @@ class Ui_Echo_window(object):
         self.actionHelp.setText(_translate("Echo_window", "Help"))
         self.actionHide_window_border.setText(_translate("Echo_window", "Show/Hide window border"))
         self.actionMask.setText(_translate("Echo_window", "Mask"))
-        self.actionMask.setShortcut(_translate("Echo_window", "F5"))
+        self.actionMask.setShortcut(_translate("Echo_window", "Ctrl+B"))
 
 
 if __name__ == "__main__":

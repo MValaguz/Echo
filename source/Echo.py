@@ -272,17 +272,7 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
            Intercetta qualsiasi attività da parte dell'utente e resetta i timer che minimizzano la window, che puliscono la chat e che mascherano la chat
            Tramite questo meccanismo i timer iniziano a conteggiare solo a partire dall'ultima inittività dell'utente dentro la window
         """                        
-        if event.type() == QEvent.Type.KeyPress:
-            # premuta combinazione CTRL+B e maschera della window è attiva --> esco dalla maschera e torno alla chat portando il focus su invio messaggio
-            if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_B and self.mask_window_timer_active:                                            
-                # se la maschera era un file di testo --> lo salvo (nel caso sia stato modificato)
-                if o_global_preferences.mask_filename != '':                                            
-                    open(o_global_preferences.mask_filename,'w').write(self.mask_window_message.toPlainText())
-                self.mask_window_timer_active = False
-                self.reset_mask_window_timer()
-                self.mask_window_message.hide()                
-                self.e_invia_messaggio.setFocus()        
-                return super().event(event)    
+        if event.type() == QEvent.Type.KeyPress:            
             # premuta combinazione CTRL+S e maschera della window è attiva -->  
             if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_S and self.mask_window_timer_active and o_global_preferences.mask_filename != '':                                            
                 open(o_global_preferences.mask_filename,'w').write(self.mask_window_message.toPlainText())
@@ -620,7 +610,8 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             # sostituisce la freccia del mouse con icona "clessidra"
             QApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))       
             # attivo la maschera
-            self.mask_window_message.show()
+            self.actionMask.setChecked(True)
+            self.slot_mask_window_timer()            
             self.repaint()
             # da questo punto il programma entra in attesa di una connessione da parte di un client
             # addr è una tupla che contiene due elementi di cui il primo è l'indirizzo ip
@@ -630,8 +621,9 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
             self.client_name = self.client_name.decode()
             # ripristino icona freccia del mouse
             QApplication.restoreOverrideCursor()    
-            # disattivo la maschera
-            self.mask_window_message.hide()
+            # disattivo la maschera            
+            self.actionMask.setChecked(False)
+            self.slot_mask_window_timer()            
             # se lanciato con parametri di input minimizzo la window
             if self.p_arg1 != '':
                 self.showMinimized()
@@ -839,31 +831,40 @@ class Echo_window_class(QMainWindow, Ui_Echo_window):
         """
            Crea sopra la window un sorta di programma to-do
         """
-        # indico che la maschera è attiva
-        self.mask_window_timer_active = True        
-        
-        # carico il contenuto dal file se indicato
-        if o_global_preferences.mask_filename != '':
+        if not self.actionMask.isChecked():                                            
+            # se la maschera era un file di testo --> lo salvo (nel caso sia stato modificato)
+            if o_global_preferences.mask_filename != '':                                            
+                open(o_global_preferences.mask_filename,'w').write(self.mask_window_message.toPlainText())
+            self.mask_window_timer_active = False
+            self.reset_mask_window_timer()
+            self.mask_window_message.hide()                
+            self.e_invia_messaggio.setFocus()                        
+        else:
+            # indico che la maschera è attiva
+            self.mask_window_timer_active = True                    
+            
+            # carico il contenuto dal file se indicato
+            if o_global_preferences.mask_filename != '':
+                try:
+                    self.mask_window_message.setText(open(o_global_preferences.mask_filename,'r').read())      
+                except:
+                    pass
+            else:
+                self.mask_window_message.setText('Please select a text file for the mask ;-)')      
+            
+            if o_global_preferences.dark_theme:
+                self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 10px;")                
+            else:
+                self.mask_window_message.setStyleSheet("background-color: white; color: black; font-size: 10px;")                
+            
+            self.mask_window_message.resize(self.size())          
+            self.mask_window_message.show()  
+
+            # nel caso sia richiesto che all'avvio del programma deve comparire la maschera, il timer non sarà attivo, e stessa cosa anche quando si è in attesa di connessione
             try:
-                self.mask_window_message.setText(open(o_global_preferences.mask_filename,'r').read())      
+                self.mask_window_timer.stop() 
             except:
                 pass
-        else:
-            self.mask_window_message.setText('Please select a text file for the mask ;-)')      
-        
-        if o_global_preferences.dark_theme:
-            self.mask_window_message.setStyleSheet("background-color: black; color: white; font-size: 10px;")                
-        else:
-            self.mask_window_message.setStyleSheet("background-color: white; color: black; font-size: 10px;")                
-        
-        self.mask_window_message.resize(self.size())          
-        self.mask_window_message.show()  
-
-        # nel caso sia richiesto che all'avvio del programma deve comparire la maschera, il timer non sarà attivo, e stessa cosa anche quando si è in attesa di connessione
-        try:
-            self.mask_window_timer.stop() 
-        except:
-            pass
 
 # -------------------
 # AVVIO APPLICAZIONE
